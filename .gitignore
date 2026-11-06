@@ -1,0 +1,6 @@
+# Working notes for whoever maintains this repo; not published.
+PROJECT.md
+CLAUDE.md
+.DS_Store
+__pycache__/
+out/
