@@ -131,7 +131,7 @@ def notebook(cells):
         "nbformat": 4,
         "nbformat_minor": 0,
         "metadata": {
-            "colab": {"provenance": [], "gpuType": "T4"},
+            "colab": {"provenance": [], "gpuType": "L4"},
             "kernelspec": {"name": "python3", "display_name": "Python 3"},
             "language_info": {"name": "python"},
             "accelerator": "GPU",
