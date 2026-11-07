@@ -12,9 +12,9 @@ Each notebook comes with a 6-second sample clip, so you can press Run before try
 
 ## Quality
 
-![The same frame, close up: the original resized the ordinary way, then FlashVSR+ Turbo, RelayVSR 2x and SeedVR2](close-up.jpg)
+![The same frame, close up: the original resized the ordinary way, then FlashVSR+ Turbo, RelayVSR 4x and SeedVR2](close-up.jpg)
 
-The sample clip (360x640) upscaled to 1152x2048 (FlashVSR+), 720x1280 (RelayVSR 2x) and 1080x1920 (SeedVR2), the same frame cropped and enlarged. Every notebook ends with this comparison for your own video.
+The sample clip (360x640) upscaled to 1152x2048 by FlashVSR+ Turbo and by RelayVSR's 4x model run at 3.2x, and to 1080x1920 by SeedVR2: the same frame, cropped and enlarged. RelayVSR's 2x model, the notebook's default, makes 720x1280 from this clip, so beside the others it looks softer. Every notebook ends with this comparison for your own video.
 
 ## Time and cost
 
