@@ -1,0 +1,1730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MiniOS</title>
+<style>
+  :root {
+    --bg-wallpaper: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 50%, #fdbb2d 100%);
+    --glass: rgba(24, 26, 35, 0.78);
+    --glass-light: rgba(255, 255, 255, 0.1);
+    --win-bg: #1e2029;
+    --win-header: #161820;
+    --win-border: rgba(255, 255, 255, 0.14);
+    --text: #eef0f6;
+    --text-muted: #9aa0b4;
+    --accent: #4f8cff;
+    --accent-hover: #6ba0ff;
+    --danger: #ff5c5c;
+    --warning: #ffbd44;
+    --success: #3cd070;
+    --taskbar-h: 48px;
+    --radius: 10px;
+  }
+
+  * {
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+    background: #000;
+  }
+
+  input, textarea {
+    user-select: text;
+    -webkit-user-select: text;
+    font-family: inherit;
+  }
+
+  /* Desktop */
+  #desktop {
+    position: relative;
+    width: 100vw;
+    height: calc(100vh - var(--taskbar-h));
+    background: var(--bg-wallpaper);
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+  }
+
+  #desktop-icons {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 8px;
+    padding: 14px;
+    height: 100%;
+    width: fit-content;
+  }
+
+  .desktop-icon {
+    width: 84px;
+    padding: 10px 6px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background 0.12s, border-color 0.12s;
+    text-align: center;
+  }
+
+  .desktop-icon:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .desktop-icon.selected {
+    background: rgba(79, 140, 255, 0.28);
+    border-color: rgba(79, 140, 255, 0.6);
+  }
+
+  .desktop-icon svg {
+    width: 38px;
+    height: 38px;
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.4));
+    pointer-events: none;
+  }
+
+  .desktop-icon span {
+    font-size: 12px;
+    line-height: 1.2;
+    color: #fff;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.85);
+    word-break: break-word;
+    pointer-events: none;
+  }
+
+  /* Windows */
+  .window {
+    position: absolute;
+    background: var(--win-bg);
+    border: 1px solid var(--win-border);
+    border-radius: var(--radius);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.55), 0 2px 10px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    min-width: 260px;
+    min-height: 180px;
+    overflow: hidden;
+    animation: popIn 0.14s ease-out;
+  }
+
+  .window.focused {
+    border-color: rgba(79, 140, 255, 0.5);
+    box-shadow: 0 22px 60px rgba(0, 0, 0, 0.68), 0 0 0 1px rgba(79, 140, 255, 0.25);
+  }
+
+  .window.minimized {
+    display: none !important;
+  }
+
+  .window.maximized {
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0;
+  }
+
+  @keyframes popIn {
+    from { transform: scale(0.96); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .titlebar {
+    height: 38px;
+    background: var(--win-header);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px 0 12px;
+    cursor: default;
+    flex-shrink: 0;
+  }
+
+  .titlebar-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    pointer-events: none;
+  }
+
+  .titlebar-info svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  .win-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .win-btn {
+    width: 26px;
+    height: 24px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.12s, color 0.12s;
+  }
+
+  .win-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+  }
+
+  .win-btn.close:hover {
+    background: var(--danger);
+    color: #fff;
+  }
+
+  .win-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    background: #232632;
+  }
+
+  /* Resize Handles */
+  .resizer-r { position: absolute; right: 0; top: 38px; bottom: 10px; width: 6px; cursor: ew-resize; z-index: 10; }
+  .resizer-b { position: absolute; bottom: 0; left: 0; right: 10px; height: 6px; cursor: ns-resize; z-index: 10; }
+  .resizer-br { position: absolute; right: 0; bottom: 0; width: 14px; height: 14px; cursor: nwse-resize; z-index: 11; }
+  .window.maximized .resizer-r, .window.maximized .resizer-b, .window.maximized .resizer-br { display: none; }
+
+  /* Taskbar */
+  #taskbar {
+    position: relative;
+    height: var(--taskbar-h);
+    width: 100vw;
+    background: var(--glass);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-top: 1px solid rgba(255,255,255,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    z-index: 9999;
+  }
+
+  .taskbar-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  #start-btn {
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.07);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.15s;
+    flex-shrink: 0;
+  }
+
+  #start-btn:hover, #start-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  #start-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  #taskbar-apps {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  #taskbar-apps::-webkit-scrollbar { display: none; }
+
+  .task-tab {
+    height: 36px;
+    max-width: 165px;
+    min-width: 90px;
+    padding: 0 10px;
+    border-radius: 7px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.05);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: all 0.12s;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .task-tab:hover {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+  }
+
+  .task-tab.active {
+    background: rgba(79, 140, 255, 0.25);
+    border-color: rgba(79, 140, 255, 0.55);
+    color: #fff;
+  }
+
+  .task-tab svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  .task-tab span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  #tray {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 8px;
+    flex-shrink: 0;
+  }
+
+  #clock {
+    text-align: right;
+    font-size: 12px;
+    line-height: 1.25;
+    color: var(--text);
+  }
+
+  #clock-date {
+    font-size: 10.5px;
+    color: var(--text-muted);
+  }
+
+  /* Start Menu */
+  #start-menu {
+    position: fixed;
+    left: 10px;
+    bottom: calc(var(--taskbar-h) + 8px);
+    width: 310px;
+    background: rgba(24, 27, 38, 0.92);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.65);
+    padding: 14px;
+    z-index: 10000;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    animation: slideUp 0.14s ease-out;
+  }
+
+  #start-menu.open {
+    display: flex;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(12px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .start-header {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    padding: 2px 6px;
+    font-weight: 600;
+  }
+
+  .start-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .start-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.12s;
+    color: var(--text);
+    font-size: 13.5px;
+  }
+
+  .start-item:hover {
+    background: rgba(255,255,255,0.1);
+  }
+
+  .start-item svg {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  .start-item-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .start-footer {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .btn-small {
+    background: rgba(255,255,255,0.08);
+    color: var(--text);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .btn-small:hover {
+    background: rgba(255,255,255,0.16);
+  }
+  .btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background: var(--accent-hover);
+  }
+
+  /* App 1: Notepad */
+  .app-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: #1b1d27;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    flex-wrap: wrap;
+    flex-shrink: 0;
+  }
+
+  .notepad-area {
+    flex: 1;
+    width: 100%;
+    background: #232632;
+    color: #f0f2f8;
+    border: none;
+    outline: none;
+    resize: none;
+    padding: 14px;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .notepad-status {
+    height: 24px;
+    background: #181a23;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  /* App 2: Paint */
+  .paint-canvas-wrap {
+    flex: 1;
+    overflow: auto;
+    background: #15171f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+  }
+
+  .paint-canvas {
+    background: #ffffff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+    cursor: crosshair;
+    touch-action: none;
+  }
+
+  .tool-btn {
+    padding: 4px 9px;
+    border-radius: 5px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.05);
+    color: var(--text);
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .tool-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  .color-swatch {
+    width: 24px;
+    height: 24px;
+    border: none;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  /* App 3: Calculator */
+  .calc-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    gap: 10px;
+    background: #1b1d26;
+  }
+
+  .calc-screen {
+    background: #12141b;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 10px 14px;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 74px;
+  }
+
+  .calc-expr {
+    font-size: 12px;
+    color: var(--text-muted);
+    min-height: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .calc-val {
+    font-size: 28px;
+    font-weight: 600;
+    color: #fff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .calc-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 7px;
+  }
+
+  .calc-btn {
+    border: none;
+    border-radius: 8px;
+    background: #2a2e3d;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.1s, transform 0.05s;
+  }
+  .calc-btn:hover { background: #353a4d; }
+  .calc-btn:active { transform: scale(0.96); }
+  .calc-btn.op { background: #363e57; color: #8ab4ff; }
+  .calc-btn.op:hover { background: #434d6c; }
+  .calc-btn.eq { background: var(--accent); color: #fff; }
+  .calc-btn.eq:hover { background: var(--accent-hover); }
+  .calc-btn.fn { background: #232633; color: #ff8e8e; }
+  .calc-btn.span2 { grid-column: span 2; }
+
+  /* App 4: File Browser */
+  .fb-layout {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+  }
+
+  .fb-sidebar {
+    width: 145px;
+    background: #191b24;
+    border-right: 1px solid rgba(255,255,255,0.07);
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex-shrink: 0;
+  }
+
+  .fb-nav {
+    padding: 7px 9px;
+    border-radius: 6px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .fb-nav:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .fb-nav.active { background: rgba(79,140,255,0.2); color: #8ab4ff; font-weight: 500; }
+
+  .fb-main {
+    flex: 1;
+    padding: 12px;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+    grid-auto-rows: min-content;
+    gap: 10px;
+    align-content: flex-start;
+  }
+
+  .fb-item {
+    padding: 10px 6px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid transparent;
+  }
+  .fb-item:hover { background: rgba(255,255,255,0.06); }
+  .fb-item.selected { background: rgba(79,140,255,0.22); border-color: rgba(79,140,255,0.5); }
+  .fb-item svg { width: 34px; height: 34px; }
+  .fb-item span { font-size: 12px; word-break: break-word; line-height: 1.2; }
+
+  .fb-path {
+    flex: 1;
+    background: #12141c;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 5px;
+    padding: 4px 8px;
+    font-size: 12px;
+    color: var(--text);
+  }
+
+  /* App 5: Settings */
+  .settings-body {
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .wp-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .wp-card {
+    height: 64px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid rgba(255,255,255,0.15);
+    transition: transform 0.12s, border-color 0.12s;
+  }
+  .wp-card:hover { transform: scale(1.03); }
+  .wp-card.active { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(79,140,255,0.4); }
+
+  /* Inline Modal inside apps */
+  .inline-prompt {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: #272b3a;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-size: 12px;
+  }
+  .inline-prompt input {
+    flex: 1;
+    background: #151720;
+    border: 1px solid rgba(255,255,255,0.18);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+
+<div id="desktop">
+  <div id="desktop-icons"></div>
+  <div id="windows-container"></div>
+</div>
+
+<div id="start-menu">
+  <div class="start-header">Applications</div>
+  <div class="start-list" id="start-app-list"></div>
+  <div class="start-footer">
+    <span>MiniOS v1.0</span>
+    <button class="btn-small" id="reset-os-btn" title="Reset saved files and settings">Reset OS</button>
+  </div>
+</div>
+
+<div id="taskbar">
+  <div class="taskbar-left">
+    <button id="start-btn">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <rect x="3" y="3" width="8" height="8" rx="1.5"/>
+        <rect x="13" y="3" width="8" height="8" rx="1.5"/>
+        <rect x="3" y="13" width="8" height="8" rx="1.5"/>
+        <rect x="13" y="13" width="8" height="8" rx="1.5"/>
+      </svg>
+      Start
+    </button>
+    <div id="taskbar-apps"></div>
+  </div>
+  <div id="tray">
+    <div id="clock">
+      <div id="clock-time">12:00</div>
+      <div id="clock-date">Jan 1</div>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  /* --- Safe Storage Wrapper --- */
+  const memStore = {};
+  const Store = {
+    get(k, fallback = null) {
+      try {
+        const v = localStorage.getItem(k);
+        return v !== null ? v : fallback;
+      } catch {
+        return k in memStore ? memStore[k] : fallback;
+      }
+    },
+    set(k, v) {
+      try { localStorage.setItem(k, v); } catch { memStore[k] = v; }
+    },
+    clearAll() {
+      try {
+        Object.keys(localStorage).forEach(k => {
+          if (k.startsWith('minios_')) localStorage.removeItem(k);
+        });
+      } catch {}
+    }
+  };
+
+  /* --- SVG Icons --- */
+  const ICONS = {
+    notepad: `<svg viewBox="0 0 48 48" fill="none"><rect x="8" y="6" width="32" height="36" rx="4" fill="#4F8CFF"/><rect x="12" y="10" width="24" height="28" rx="2" fill="#F8FAFC"/><path d="M16 17h16M16 23h16M16 29h10" stroke="#64748B" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+    paint: `<svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" fill="#F59E0B"/><path d="M24 6C14.06 6 6 14.06 6 24c0 6.2 3.1 11.6 7.9 14.8 2.1 1.4 4.9-.1 4.9-2.6v-2.1c0-2.2 1.8-4 4-4h3.2c8.8 0 16-6.3 16-14.1C42 10.6 33.9 6 24 6z" fill="#FBBF24"/><circle cx="16" cy="19" r="3" fill="#EF4444"/><circle cx="24" cy="14" r="3" fill="#3B82F6"/><circle cx="32" cy="18" r="3" fill="#10B981"/><circle cx="15" cy="28" r="2.8" fill="#8B5CF6"/></svg>`,
+    calc: `<svg viewBox="0 0 48 48" fill="none"><rect x="9" y="5" width="30" height="38" rx="5" fill="#334155"/><rect x="14" y="10" width="20" height="8" rx="2" fill="#94A3B8"/><circle cx="16.5" cy="25" r="2.5" fill="#E2E8F0"/><circle cx="24" cy="25" r="2.5" fill="#E2E8F0"/><circle cx="31.5" cy="25" r="2.5" fill="#F59E0B"/><circle cx="16.5" cy="33" r="2.5" fill="#E2E8F0"/><circle cx="24" cy="33" r="2.5" fill="#E2E8F0"/><rect x="29" y="30.5" width="5" height="8" rx="2.5" fill="#3B82F6"/></svg>`,
+    files: `<svg viewBox="0 0 48 48" fill="none"><path d="M6 13a4 4 0 014-4h10l4 5h14a4 4 0 014 4v18a4 4 0 01-4 4H10a4 4 0 01-4-4V13z" fill="#FBBF24"/><path d="M6 19h36v17a4 4 0 01-4 4H10a4 4 0 01-4-4V19z" fill="#F59E0B"/></svg>`,
+    settings: `<svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="16" fill="#64748B"/><path d="M24 16a8 8 0 100 16 8 8 0 000-16z" fill="#1E293B"/><circle cx="24" cy="24" r="4" fill="#CBD5E1"/></svg>`,
+    folder: `<svg viewBox="0 0 48 48" fill="none"><path d="M5 12a4 4 0 014-4h11l4 5h15a4 4 0 014 4v19a4 4 0 01-4 4H9a4 4 0 01-4-4V12z" fill="#60A5FA"/></svg>`,
+    fileTxt: `<svg viewBox="0 0 48 48" fill="none"><path d="M10 6h18l10 10v26a2 2 0 01-2 2H10a2 2 0 01-2-2V8a2 2 0 012-2z" fill="#E2E8F0"/><path d="M28 6v10h10" fill="#94A3B8"/><path d="M15 24h18M15 30h18M15 36h11" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+    fileImg: `<svg viewBox="0 0 48 48" fill="none"><rect x="7" y="9" width="34" height="30" rx="4" fill="#A78BFA"/><circle cx="17" cy="19" r="3.5" fill="#FEF08A"/><path d="M9 36l10-11 7 7 5-5 8 9H9z" fill="#4C1D95"/></svg>`
+  };
+
+  /* --- Virtual File System --- */
+  const DEFAULT_FS = {
+    '/Documents': { type: 'dir' },
+    '/Documents/Welcome.txt': {
+      type: 'file',
+      content: 'Welcome to MiniOS!\n\nFeatures:\n- Drag, resize, minimize, maximize & close windows\n- Persistent Notepad (automatically keeps your text!)\n- Paint Studio (draw & save images directly to /Pictures)\n- Calculator with keyboard & button support\n- Virtual File Browser (create folders, files, double-click to open)\n- Wallpaper customization in Settings'
+    },
+    '/Documents/Ideas.txt': {
+      type: 'file',
+      content: 'Project Checklist:\n[x] Boot MiniOS\n[x] Persist Notepad notes\n[ ] Paint a masterpiece\n[ ] Try changing desktop wallpaper'
+    },
+    '/Pictures': { type: 'dir' },
+    '/System': { type: 'dir' },
+    '/System/About_OS.txt': {
+      type: 'file',
+      content: 'MiniOS Kernel 1.0.0\nSingle-file HTML5 Desktop Operating System\nZero external dependencies.'
+    }
+  };
+
+  let VFS = {};
+  try {
+    const savedFS = Store.get('minios_vfs');
+    VFS = savedFS ? JSON.parse(savedFS) : JSON.parse(JSON.stringify(DEFAULT_FS));
+  } catch {
+    VFS = JSON.parse(JSON.stringify(DEFAULT_FS));
+  }
+
+  function saveVFS() {
+    Store.set('minios_vfs', JSON.stringify(VFS));
+    window.dispatchEvent(new CustomEvent('vfs-change'));
+  }
+
+  function getChildren(dirPath) {
+    const prefix = dirPath === '/' ? '/' : dirPath + '/';
+    const items = [];
+    for (const path of Object.keys(VFS)) {
+      if (path.startsWith(prefix)) {
+        const rest = path.slice(prefix.length);
+        if (rest && !rest.includes('/')) {
+          items.push({ name: rest, path, ...VFS[path] });
+        }
+      }
+    }
+    return items.sort((a, b) => (a.type === b.type ? a.name.localeCompare(b.name) : a.type === 'dir' ? -1 : 1));
+  }
+
+  /* --- Wallpapers --- */
+  const WALLPAPERS = [
+    'linear-gradient(135deg, #1a2a6c 0%, #b21f1f 50%, #fdbb2d 100%)',
+    'linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)',
+    'linear-gradient(135deg, #2b5876 0%, #4e4376 100%)',
+    'linear-gradient(135deg, #134e5e 0%, #71b280 100%)',
+    'linear-gradient(135deg, #3a1c71 0%, #d76d77 50%, #ffaf7b 100%)',
+    'radial-gradient(circle at 20% 20%, #3b82f6 0%, #1e1b4b 55%, #09090b 100%)'
+  ];
+
+  const savedWp = Store.get('minios_wallpaper');
+  if (savedWp) document.documentElement.style.setProperty('--bg-wallpaper', savedWp);
+
+  /* --- Window Manager --- */
+  let zCounter = 100;
+  let winIdCounter = 1;
+  const windows = new Map(); // id -> { id, appId, el, tabEl, minimized, maximized }
+
+  const winContainer = document.getElementById('windows-container');
+  const taskbarApps = document.getElementById('taskbar-apps');
+
+  function focusWindow(id) {
+    windows.forEach((w, wid) => {
+      const isTarget = wid === id && !w.minimized;
+      w.el.classList.toggle('focused', isTarget);
+      w.tabEl.classList.toggle('active', isTarget);
+      if (isTarget) {
+        w.el.style.zIndex = ++zCounter;
+      }
+    });
+  }
+
+  function toggleMinimize(id) {
+    const w = windows.get(id);
+    if (!w) return;
+    if (w.minimized) {
+      w.minimized = false;
+      w.el.classList.remove('minimized');
+      focusWindow(id);
+    } else {
+      w.minimized = true;
+      w.el.classList.add('minimized');
+      w.el.classList.remove('focused');
+      w.tabEl.classList.remove('active');
+      // Focus topmost remaining visible window
+      let topWin = null, topZ = -1;
+      windows.forEach(other => {
+        if (!other.minimized) {
+          const z = parseInt(other.el.style.zIndex || 0, 10);
+          if (z > topZ) { topZ = z; topWin = other; }
+        }
+      });
+      if (topWin) focusWindow(topWin.id);
+    }
+  }
+
+  function toggleMaximize(id) {
+    const w = windows.get(id);
+    if (!w) return;
+    w.maximized = !w.maximized;
+    w.el.classList.toggle('maximized', w.maximized);
+    focusWindow(id);
+  }
+
+  function closeWindow(id) {
+    const w = windows.get(id);
+    if (!w) return;
+    if (w.cleanup) w.cleanup();
+    w.el.remove();
+    w.tabEl.remove();
+    windows.delete(id);
+    // Focus next highest window
+    let topWin = null, topZ = -1;
+    windows.forEach(other => {
+      if (!other.minimized) {
+        const z = parseInt(other.el.style.zIndex || 0, 10);
+        if (z > topZ) { topZ = z; topWin = other; }
+      }
+    });
+    if (topWin) focusWindow(topWin.id);
+  }
+
+  function createWindow(app, options = {}) {
+    const id = winIdCounter++;
+    const offset = ((id - 1) % 6) * 26;
+    const width = options.width || app.width || 560;
+    const height = options.height || app.height || 420;
+    const maxW = window.innerWidth;
+    const maxH = window.innerHeight - 48;
+    const left = Math.max(10, Math.min(90 + offset, maxW - Math.min(width, maxW) - 10));
+    const top = Math.max(10, Math.min(45 + offset, maxH - Math.min(height, maxH) - 10));
+
+    const winEl = document.createElement('div');
+    winEl.className = 'window';
+    winEl.style.width = Math.min(width, maxW - 20) + 'px';
+    winEl.style.height = Math.min(height, maxH - 20) + 'px';
+    winEl.style.left = left + 'px';
+    winEl.style.top = top + 'px';
+
+    const titleText = options.title || app.name;
+
+    winEl.innerHTML = `
+      <div class="titlebar">
+        <div class="titlebar-info">
+          ${app.icon}
+          <span class="win-title-text"></span>
+        </div>
+        <div class="win-controls">
+          <button class="win-btn min" title="Minimize">&#8211;</button>
+          <button class="win-btn max" title="Maximize">&#9633;</button>
+          <button class="win-btn close" title="Close">&#10005;</button>
+        </div>
+      </div>
+      <div class="win-content"></div>
+      <div class="resizer-r"></div>
+      <div class="resizer-b"></div>
+      <div class="resizer-br"></div>
+    `;
+    winEl.querySelector('.win-title-text').textContent = titleText;
+
+    winEl.addEventListener('pointerdown', () => focusWindow(id));
+
+    const titlebar = winEl.querySelector('.titlebar');
+    titlebar.addEventListener('dblclick', (e) => {
+      if (!e.target.closest('.win-controls')) toggleMaximize(id);
+    });
+
+    winEl.querySelector('.win-btn.min').addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMinimize(id);
+    });
+    winEl.querySelector('.win-btn.max').addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMaximize(id);
+    });
+    winEl.querySelector('.win-btn.close').addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeWindow(id);
+    });
+
+    // Taskbar tab
+    const tabEl = document.createElement('button');
+    tabEl.className = 'task-tab';
+    tabEl.innerHTML = `${app.icon}<span></span>`;
+    tabEl.querySelector('span').textContent = titleText;
+    tabEl.addEventListener('click', () => {
+      const w = windows.get(id);
+      if (!w) return;
+      if (w.minimized) {
+        toggleMinimize(id);
+      } else if (w.el.classList.contains('focused')) {
+        toggleMinimize(id);
+      } else {
+        focusWindow(id);
+      }
+    });
+
+    winContainer.appendChild(winEl);
+    taskbarApps.appendChild(tabEl);
+
+    const winObj = {
+      id,
+      appId: app.id,
+      el: winEl,
+      tabEl,
+      minimized: false,
+      maximized: false,
+      setTitle(newTitle) {
+        winEl.querySelector('.win-title-text').textContent = newTitle;
+        tabEl.querySelector('span').textContent = newTitle;
+      },
+      cleanup: null
+    };
+    windows.set(id, winObj);
+
+    setupDragAndResize(winObj);
+
+    const contentEl = winEl.querySelector('.win-content');
+    app.mount(contentEl, winObj, options);
+
+    focusWindow(id);
+    return winObj;
+  }
+
+  function setupDragAndResize(winObj) {
+    const el = winObj.el;
+    const titlebar = el.querySelector('.titlebar');
+
+    titlebar.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('.win-controls') || winObj.maximized) return;
+      e.preventDefault();
+      const startX = e.clientX;
+      const startY = e.clientY;
+      const startLeft = el.offsetLeft;
+      const startTop = el.offsetTop;
+
+      const onMove = (ev) => {
+        const dx = ev.clientX - startX;
+        const dy = ev.clientY - startY;
+        const maxTop = window.innerHeight - 48 - 38;
+        el.style.left = Math.max(-el.offsetWidth + 80, Math.min(window.innerWidth - 80, startLeft + dx)) + 'px';
+        el.style.top = Math.max(0, Math.min(maxTop, startTop + dy)) + 'px';
+      };
+      const onUp = () => {
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+      };
+      window.addEventListener('pointermove', onMove);
+      window.addEventListener('pointerup', onUp);
+    });
+
+    const bindResize = (selector, resizeW, resizeH) => {
+      el.querySelector(selector).addEventListener('pointerdown', (e) => {
+        if (winObj.maximized) return;
+        e.preventDefault();
+        e.stopPropagation();
+        focusWindow(winObj.id);
+        const startX = e.clientX;
+        const startY = e.clientY;
+        const startW = el.offsetWidth;
+        const startH = el.offsetHeight;
+
+        const onMove = (ev) => {
+          if (resizeW) {
+            const newW = Math.max(260, Math.min(window.innerWidth - el.offsetLeft, startW + (ev.clientX - startX)));
+            el.style.width = newW + 'px';
+          }
+          if (resizeH) {
+            const newH = Math.max(180, Math.min(window.innerHeight - 48 - el.offsetTop, startH + (ev.clientY - startY)));
+            el.style.height = newH + 'px';
+          }
+        };
+        const onUp = () => {
+          window.removeEventListener('pointermove', onMove);
+          window.removeEventListener('pointerup', onUp);
+        };
+        window.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', onUp);
+      });
+    };
+
+    bindResize('.resizer-r', true, false);
+    bindResize('.resizer-b', false, true);
+    bindResize('.resizer-br', true, true);
+  }
+
+  /* --- Applications --- */
+  const APPS = [
+    {
+      id: 'notepad',
+      name: 'Notepad',
+      desc: 'Persistent text editor',
+      icon: ICONS.notepad,
+      width: 540,
+      height: 400,
+      mount(container, winObj, options) {
+        let currentFilePath = options.filePath || null;
+        const defaultSaved = Store.get('minios_notepad_text', 'Welcome to Notepad!\n\nEverything you type here is automatically saved and stays here even when you close the window or reload the browser.');
+
+        const initialText = currentFilePath && VFS[currentFilePath]
+          ? VFS[currentFilePath].content
+          : defaultSaved;
+
+        if (currentFilePath) {
+          winObj.setTitle('Notepad — ' + currentFilePath.split('/').pop());
+        }
+
+        container.innerHTML = `
+          <div class="app-toolbar">
+            <button class="btn-small np-scratch">Scratchpad</button>
+            <button class="btn-small btn-primary np-save-vfs">Save to Files</button>
+            <button class="btn-small np-clear">Clear</button>
+          </div>
+          <div class="inline-prompt np-prompt" style="display:none;">
+            <span>Save path:</span>
+            <input type="text" class="np-path-in" value="/Documents/Note.txt" />
+            <button class="btn-small btn-primary np-confirm-save">Save</button>
+            <button class="btn-small np-cancel-save">Cancel</button>
+          </div>
+          <textarea class="notepad-area" spellcheck="false" placeholder="Start typing..."></textarea>
+          <div class="notepad-status">
+            <span class="np-mode"></span>
+            <span class="np-stats">0 chars</span>
+          </div>
+        `;
+
+        const textarea = container.querySelector('.notepad-area');
+        const statsEl = container.querySelector('.np-stats');
+        const modeEl = container.querySelector('.np-mode');
+        const promptRow = container.querySelector('.np-prompt');
+        const pathInput = container.querySelector('.np-path-in');
+
+        textarea.value = initialText;
+
+        const updateMeta = () => {
+          const val = textarea.value;
+          const words = val.trim() ? val.trim().split(/\s+/).length : 0;
+          statsEl.textContent = `${words} words · ${val.length} chars`;
+          modeEl.textContent = currentFilePath ? `File: ${currentFilePath} (Auto-saved)` : 'Persistent Scratchpad (Auto-saved)';
+        };
+
+        textarea.addEventListener('input', () => {
+          if (currentFilePath && VFS[currentFilePath]) {
+            VFS[currentFilePath].content = textarea.value;
+            saveVFS();
+          } else {
+            Store.set('minios_notepad_text', textarea.value);
+          }
+          updateMeta();
+        });
+
+        container.querySelector('.np-scratch').addEventListener('click', () => {
+          currentFilePath = null;
+          winObj.setTitle('Notepad');
+          textarea.value = Store.get('minios_notepad_text', '');
+          updateMeta();
+        });
+
+        container.querySelector('.np-save-vfs').addEventListener('click', () => {
+          pathInput.value = currentFilePath || '/Documents/Note.txt';
+          promptRow.style.display = 'flex';
+          pathInput.focus();
+        });
+
+        const doSaveFile = () => {
+          let p = pathInput.value.trim();
+          if (!p) return;
+          if (!p.startsWith('/')) p = '/Documents/' + p;
+          if (!p.endsWith('.txt')) p += '.txt';
+          const dir = p.substring(0, p.lastIndexOf('/')) || '/';
+          if (dir !== '/' && !VFS[dir]) VFS[dir] = { type: 'dir' };
+          VFS[p] = { type: 'file', content: textarea.value };
+          saveVFS();
+          currentFilePath = p;
+          winObj.setTitle('Notepad — ' + p.split('/').pop());
+          promptRow.style.display = 'none';
+          updateMeta();
+        };
+
+        container.querySelector('.np-confirm-save').addEventListener('click', doSaveFile);
+        pathInput.addEventListener('keydown', e => { if (e.key === 'Enter') doSaveFile(); });
+        container.querySelector('.np-cancel-save').addEventListener('click', () => {
+          promptRow.style.display = 'none';
+        });
+
+        container.querySelector('.np-clear').addEventListener('click', () => {
+          textarea.value = '';
+          textarea.dispatchEvent(new Event('input'));
+          textarea.focus();
+        });
+
+        updateMeta();
+      }
+    },
+    {
+      id: 'paint',
+      name: 'Paint',
+      desc: 'Canvas drawing studio',
+      icon: ICONS.paint,
+      width: 640,
+      height: 490,
+      mount(container, winObj, options) {
+        container.innerHTML = `
+          <div class="app-toolbar">
+            <button class="tool-btn active" data-tool="brush">Brush</button>
+            <button class="tool-btn" data-tool="line">Line</button>
+            <button class="tool-btn" data-tool="rect">Rect</button>
+            <button class="tool-btn" data-tool="eraser">Eraser</button>
+            <input type="color" class="color-swatch p-color" value="#4f8cff" title="Brush color">
+            <label style="font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:4px;">
+              Size <input type="range" class="p-size" min="1" max="32" value="5" style="width:65px;">
+            </label>
+            <button class="btn-small p-clear">Clear</button>
+            <button class="btn-small btn-primary p-save">Save to Pictures</button>
+          </div>
+          <div class="inline-prompt p-prompt" style="display:none;">
+            <span>Image name:</span>
+            <input type="text" class="p-name-in" value="Artwork.png" />
+            <button class="btn-small btn-primary p-confirm">Save</button>
+            <button class="btn-small p-cancel">Cancel</button>
+          </div>
+          <div class="paint-canvas-wrap">
+            <canvas class="paint-canvas" width="560" height="360"></canvas>
+          </div>
+        `;
+
+        const canvas = container.querySelector('.paint-canvas');
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        if (options.filePath && VFS[options.filePath] && VFS[options.filePath].content) {
+          winObj.setTitle('Paint — ' + options.filePath.split('/').pop());
+          const img = new Image();
+          img.onload = () => ctx.drawImage(img, 0, 0);
+          img.src = VFS[options.filePath].content;
+        }
+
+        let tool = 'brush';
+        let drawing = false;
+        let startX = 0, startY = 0;
+        let snapshot = null;
+
+        const colorIn = container.querySelector('.p-color');
+        const sizeIn = container.querySelector('.p-size');
+
+        container.querySelectorAll('.tool-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            container.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            tool = btn.dataset.tool;
+          });
+        });
+
+        const getCoords = (e) => {
+          const rect = canvas.getBoundingClientRect();
+          return {
+            x: (e.clientX - rect.left) * (canvas.width / rect.width),
+            y: (e.clientY - rect.top) * (canvas.height / rect.height)
+          };
+        };
+
+        canvas.addEventListener('pointerdown', (e) => {
+          drawing = true;
+          canvas.setPointerCapture(e.pointerId);
+          const pos = getCoords(e);
+          startX = pos.x;
+          startY = pos.y;
+          snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+          ctx.beginPath();
+          ctx.moveTo(startX, startY);
+          ctx.strokeStyle = tool === 'eraser' ? '#ffffff' : colorIn.value;
+          ctx.lineWidth = Number(sizeIn.value);
+
+          if (tool === 'brush' || tool === 'eraser') {
+            ctx.lineTo(startX + 0.01, startY + 0.01);
+            ctx.stroke();
+          }
+        });
+
+        canvas.addEventListener('pointermove', (e) => {
+          if (!drawing) return;
+          const pos = getCoords(e);
+          if (tool === 'brush' || tool === 'eraser') {
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+          } else if (tool === 'line') {
+            ctx.putImageData(snapshot, 0, 0);
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+          } else if (tool === 'rect') {
+            ctx.putImageData(snapshot, 0, 0);
+            ctx.strokeRect(startX, startY, pos.x - startX, pos.y - startY);
+          }
+        });
+
+        const stopDraw = () => { drawing = false; };
+        canvas.addEventListener('pointerup', stopDraw);
+        canvas.addEventListener('pointercancel', stopDraw);
+
+        container.querySelector('.p-clear').addEventListener('click', () => {
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        });
+
+        const promptEl = container.querySelector('.p-prompt');
+        const nameIn = container.querySelector('.p-name-in');
+
+        container.querySelector('.p-save').addEventListener('click', () => {
+          promptEl.style.display = 'flex';
+          nameIn.focus();
+        });
+
+        const saveImg = () => {
+          let name = nameIn.value.trim() || 'Drawing.png';
+          if (!name.endsWith('.png')) name += '.png';
+          if (!VFS['/Pictures']) VFS['/Pictures'] = { type: 'dir' };
+          const fullPath = '/Pictures/' + name.replace(/\//g, '_');
+          VFS[fullPath] = { type: 'file', content: canvas.toDataURL('image/png') };
+          saveVFS();
+          winObj.setTitle('Paint — ' + name);
+          promptEl.style.display = 'none';
+        };
+
+        container.querySelector('.p-confirm').addEventListener('click', saveImg);
+        nameIn.addEventListener('keydown', e => { if (e.key === 'Enter') saveImg(); });
+        container.querySelector('.p-cancel').addEventListener('click', () => { promptEl.style.display = 'none'; });
+      }
+    },
+    {
+      id: 'calc',
+      name: 'Calculator',
+      desc: 'Standard arithmetic calculator',
+      icon: ICONS.calc,
+      width: 300,
+      height: 410,
+      mount(container, winObj) {
+        container.innerHTML = `
+          <div class="calc-wrap">
+            <div class="calc-screen">
+              <div class="calc-expr"></div>
+              <div class="calc-val">0</div>
+            </div>
+            <div class="calc-grid">
+              <button class="calc-btn fn" data-act="clear">C</button>
+              <button class="calc-btn fn" data-act="back">&#9003;</button>
+              <button class="calc-btn op" data-act="percent">%</button>
+              <button class="calc-btn op" data-op="/">&#247;</button>
+
+              <button class="calc-btn" data-num="7">7</button>
+              <button class="calc-btn" data-num="8">8</button>
+              <button class="calc-btn" data-num="9">9</button>
+              <button class="calc-btn op" data-op="*">&#215;</button>
+
+              <button class="calc-btn" data-num="4">4</button>
+              <button class="calc-btn" data-num="5">5</button>
+              <button class="calc-btn" data-num="6">6</button>
+              <button class="calc-btn op" data-op="-">&#8722;</button>
+
+              <button class="calc-btn" data-num="1">1</button>
+              <button class="calc-btn" data-num="2">2</button>
+              <button class="calc-btn" data-num="3">3</button>
+              <button class="calc-btn op" data-op="+">+</button>
+
+              <button class="calc-btn span2" data-num="0">0</button>
+              <button class="calc-btn" data-num=".">.</button>
+              <button class="calc-btn eq" data-act="eq">=</button>
+            </div>
+          </div>
+        `;
+
+        const exprEl = container.querySelector('.calc-expr');
+        const valEl = container.querySelector('.calc-val');
+
+        let current = '0';
+        let prev = null;
+        let op = null;
+        let resetNext = false;
+
+        const opSymbols = { '+': '+', '-': '−', '*': '×', '/': '÷' };
+
+        const render = () => {
+          valEl.textContent = current;
+          exprEl.textContent = prev !== null && op ? `${prev} ${opSymbols[op]}` : '';
+        };
+
+        const compute = (a, b, operator) => {
+          const x = parseFloat(a), y = parseFloat(b);
+          if (isNaN(x) || isNaN(y)) return 0;
+          if (operator === '+') return x + y;
+          if (operator === '-') return x - y;
+          if (operator === '*') return x * y;
+          if (operator === '/') return y === 0 ? 'Error' : x / y;
+          return y;
+        };
+
+        const inputNum = (d) => {
+          if (current === 'Error') current = '0';
+          if (resetNext) {
+            current = d === '.' ? '0.' : d;
+            resetNext = false;
+          } else {
+            if (d === '.' && current.includes('.')) return;
+            current = current === '0' && d !== '.' ? d : current + d;
+          }
+          render();
+        };
+
+        const inputOp = (nextOp) => {
+          if (current === 'Error') current = '0';
+          if (op && !resetNext && prev !== null) {
+            const res = compute(prev, current, op);
+            current = res === 'Error' ? 'Error' : String(Number(res.toPrecision(12)));
+          }
+          prev = current === 'Error' ? null : current;
+          op = current === 'Error' ? null : nextOp;
+          resetNext = true;
+          render();
+        };
+
+        const doAction = (act) => {
+          if (act === 'clear') {
+            current = '0'; prev = null; op = null; resetNext = false;
+          } else if (act === 'back') {
+            if (!resetNext && current !== 'Error') {
+              current = current.length > 1 ? current.slice(0, -1) : '0';
+            }
+          } else if (act === 'percent') {
+            if (current !== 'Error') current = String(parseFloat(current) / 100);
+          } else if (act === 'eq') {
+            if (op && prev !== null) {
+              const res = compute(prev, current, op);
+              exprEl.textContent = `${prev} ${opSymbols[op]} ${current} =`;
+              current = res === 'Error' ? 'Error' : String(Number(res.toPrecision(12)));
+              prev = null; op = null; resetNext = true;
+              valEl.textContent = current;
+              return;
+            }
+          }
+          render();
+        };
+
+        container.querySelectorAll('.calc-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (btn.dataset.num) inputNum(btn.dataset.num);
+            else if (btn.dataset.op) inputOp(btn.dataset.op);
+            else if (btn.dataset.act) doAction(btn.dataset.act);
+          });
+        });
+
+        const onKey = (e) => {
+          if (!winObj.el.classList.contains('focused')) return;
+          if (/^[0-9.]$/.test(e.key)) inputNum(e.key);
+          else if (['+', '-', '*', '/'].includes(e.key)) inputOp(e.key);
+          else if (e.key === 'Enter' || e.key === '=') { e.preventDefault(); doAction('eq'); }
+          else if (e.key === 'Backspace') doAction('back');
+          else if (e.key === 'Escape') doAction('clear');
+        };
+        window.addEventListener('keydown', onKey);
+        winObj.cleanup = () => window.removeEventListener('keydown', onKey);
+      }
+    },
+    {
+      id: 'files',
+      name: 'File Browser',
+      desc: 'Explore & manage virtual files',
+      icon: ICONS.files,
+      width: 600,
+      height: 410,
+      mount(container, winObj, options) {
+        let currentDir = options.startDir || '/Documents';
+        let selectedPath = null;
+        let promptMode = null;
+
+        container.innerHTML = `
+          <div class="app-toolbar">
+            <button class="btn-small fb-up" title="Up one folder">&#8593; Up</button>
+            <div class="fb-path"></div>
+            <button class="btn-small fb-new-file">+ File</button>
+            <button class="btn-small fb-new-dir">+ Folder</button>
+            <button class="btn-small fb-del" style="color:#ff8e8e;">Delete</button>
+          </div>
+          <div class="inline-prompt fb-prompt" style="display:none;">
+            <span class="fb-prompt-label">Name:</span>
+            <input type="text" class="fb-prompt-in" />
+            <button class="btn-small btn-primary fb-prompt-ok">Create</button>
+            <button class="btn-small fb-prompt-cancel">Cancel</button>
+          </div>
+          <div class="fb-layout">
+            <div class="fb-sidebar">
+              <div class="fb-nav" data-dir="/">Root (/)</div>
+              <div class="fb-nav" data-dir="/Documents">Documents</div>
+              <div class="fb-nav" data-dir="/Pictures">Pictures</div>
+              <div class="fb-nav" data-dir="/System">System</div>
+            </div>
+            <div class="fb-main"></div>
+          </div>
+        `;
+
+        const pathBar = container.querySelector('.fb-path');
+        const mainArea = container.querySelector('.fb-main');
+        const promptEl = container.querySelector('.fb-prompt');
+        const promptIn = container.querySelector('.fb-prompt-in');
+        const promptLabel = container.querySelector('.fb-prompt-label');
+
+        const navigate = (dir) => {
+          currentDir = dir;
+          selectedPath = null;
+          renderFiles();
+        };
+
+        const openItem = (item) => {
+          if (item.type === 'dir') {
+            navigate(item.path);
+          } else if (item.name.endsWith('.png')) {
+            const paintApp = APPS.find(a => a.id === 'paint');
+            createWindow(paintApp, { filePath: item.path });
+          } else {
+            const notepadApp = APPS.find(a => a.id === 'notepad');
+            createWindow(notepadApp, { filePath: item.path });
+          }
+        };
+
+        const renderFiles = () => {
+          pathBar.textContent = currentDir;
+          container.querySelectorAll('.fb-nav').forEach(n => {
+            n.classList.toggle('active', n.dataset.dir === currentDir);
+          });
+
+          mainArea.innerHTML = '';
+          const children = getChildren(currentDir);
+          if (children.length === 0) {
+            mainArea.innerHTML = `<div style="grid-column:1/-1;color:var(--text-muted);font-size:13px;padding:18px;">This folder is empty.</div>`;
+            return;
+          }
+
+          children.forEach(item => {
+            const el = document.createElement('div');
+            el.className = 'fb-item' + (selectedPath === item.path ? ' selected' : '');
+            const icon = item.type === 'dir' ? ICONS.folder : (item.name.endsWith('.png') ? ICONS.fileImg : ICONS.fileTxt);
+            el.innerHTML = `${icon}<span></span>`;
+            el.querySelector('span').textContent = item.name;
+
+            el.addEventListener('click', (e) => {
+              e.stopPropagation();
+              selectedPath = item.path;
+              mainArea.querySelectorAll('.fb-item').forEach(i => i.classList.remove('selected'));
+              el.classList.add('selected');
+            });
+
+            el.addEventListener('dblclick', () => openItem(item));
+            mainArea.appendChild(el);
+          });
+        };
+
+        mainArea.addEventListener('click', () => {
+          selectedPath = null;
+          mainArea.querySelectorAll('.fb-item').forEach(i => i.classList.remove('selected'));
+        });
+
+        container.querySelectorAll('.fb-nav').forEach(nav => {
+          nav.addEventListener('click', () => navigate(nav.dataset.dir));
+        });
+
+        container.querySelector('.fb-up').addEventListener('click', () => {
+          if (currentDir === '/') return;
+          const parent = currentDir.substring(0, currentDir.lastIndexOf('/')) || '/';
+          navigate(parent);
+        });
+
+        const showPrompt = (mode) => {
+          promptMode = mode;
+          promptLabel.textContent = mode === 'file' ? 'New file:' : 'New folder:';
+          promptIn.value = mode === 'file' ? 'Untitled.txt' : 'New Folder';
+          promptEl.style.display = 'flex';
+          promptIn.focus();
+          promptIn.select();
+        };
+
+        container.querySelector('.fb-new-file').addEventListener('click', () => showPrompt('file'));
+        container.querySelector('.fb-new-dir').addEventListener('click', () => showPrompt('dir'));
+
+        const confirmCreate = () => {
+          let name = promptIn.value.trim().replace(/\//g, '');
+          if (!name) return;
+          if (promptMode === 'file' && !name.includes('.')) name += '.txt';
+          const full = (currentDir === '/' ? '' : currentDir) + '/' + name;
+          if (promptMode === 'dir') {
+            VFS[full] = { type: 'dir' };
+          } else {
+            VFS[full] = { type: 'file', content: '' };
+          }
+          promptEl.style.display = 'none';
+          saveVFS();
+        };
+
+        container.querySelector('.fb-prompt-ok').addEventListener('click', confirmCreate);
+        promptIn.addEventListener('keydown', e => { if (e.key === 'Enter') confirmCreate(); });
+        container.querySelector('.fb-prompt-cancel').addEventListener('click', () => { promptEl.style.display = 'none'; });
+
+        container.querySelector('.fb-del').addEventListener('click', () => {
+          if (!selectedPath) return;
+          Object.keys(VFS).forEach(k => {
+            if (k === selectedPath || k.startsWith(selectedPath + '/')) delete VFS[k];
+          });
+          selectedPath = null;
+          saveVFS();
+        });
+
+        const onVfsChange = () => renderFiles();
+        window.addEventListener('vfs-change', onVfsChange);
+        winObj.cleanup = () => window.removeEventListener('vfs-change', onVfsChange);
+
+        renderFiles();
+      }
+    },
+    {
+      id: 'settings',
+      name: 'Settings',
+      desc: 'Personalize wallpaper & OS',
+      icon: ICONS.settings,
+      width: 420,
+      height: 320,
+      mount(container) {
+        container.innerHTML = `
+          <div class="settings-body">
+            <div>
+              <div style="font-size:13px;font-weight:600;margin-bottom:8px;">Desktop Wallpaper</div>
+              <div class="wp-grid"></div>
+            </div>
+            <div style="font-size:12px;color:var(--text-muted);line-height:1.5;">
+              Tip: Double-click window titlebars to maximize, drag edges or corners to resize, and click taskbar tabs to minimize or restore windows.
+            </div>
+          </div>
+        `;
+        const grid = container.querySelector('.wp-grid');
+        const curWp = getComputedStyle(document.documentElement).getPropertyValue('--bg-wallpaper').trim();
+
+        WALLPAPERS.forEach(wp => {
+          const card = document.createElement('div');
+          card.className = 'wp-card' + (curWp === wp ? ' active' : '');
+          card.style.background = wp;
+          card.addEventListener('click', () => {
+            document.documentElement.style.setProperty('--bg-wallpaper', wp);
+            Store.set('minios_wallpaper', wp);
+            grid.querySelectorAll('.wp-card').forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+          });
+          grid.appendChild(card);
+        });
+      }
+    }
+  ];
+
+  /* --- Render Desktop Icons & Start Menu --- */
+  const desktopIconsEl = document.getElementById('desktop-icons');
+  const startListEl = document.getElementById('start-app-list');
+  const startMenu = document.getElementById('start-menu');
+  const startBtn = document.getElementById('start-btn');
+
+  APPS.forEach(app => {
+    // Desktop Icon
+    const dIcon = document.createElement('div');
+    dIcon.className = 'desktop-icon';
+    dIcon.innerHTML = `${app.icon}<span>${app.name}</span>`;
+
+    dIcon.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.querySelectorAll('.desktop-icon').forEach(i => i.classList.remove('selected'));
+      dIcon.classList.add('selected');
+    });
+
+    dIcon.addEventListener('dblclick', () => {
+      dIcon.classList.remove('selected');
+      createWindow(app);
+    });
+
+    desktopIconsEl.appendChild(dIcon);
+
+    // Start Menu Entry
+    const sItem = document.createElement('div');
+    sItem.className = 'start-item';
+    sItem.innerHTML = `
+      ${app.icon}
+      <div>
+        <div>${app.name}</div>
+        <div class="start-item-sub">${app.desc}</div>
+      </div>
+    `;
+    sItem.addEventListener('click', () => {
+      closeStartMenu();
+      createWindow(app);
+    });
+    startListEl.appendChild(sItem);
+  });
+
+  document.getElementById('desktop').addEventListener('click', () => {
+    document.querySelectorAll('.desktop-icon').forEach(i => i.classList.remove('selected'));
+  });
+
+  /* --- Start Menu Toggle --- */
+  function closeStartMenu() {
+    startMenu.classList.remove('open');
+    startBtn.classList.remove('active');
+  }
+
+  startBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = startMenu.classList.toggle('open');
+    startBtn.classList.toggle('active', isOpen);
+  });
+
+  window.addEventListener('pointerdown', (e) => {
+    if (!e.target.closest('#start-menu') && !e.target.closest('#start-btn')) {
+      closeStartMenu();
+    }
+  });
+
+  document.getElementById('reset-os-btn').addEventListener('click', () => {
+    Store.clearAll();
+    location.reload();
+  });
+
+  /* --- Live Clock --- */
+  const clockTimeEl = document.getElementById('clock-time');
+  const clockDateEl = document.getElementById('clock-date');
+
+  function updateClock() {
+    const now = new Date();
+    clockTimeEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    clockDateEl.textContent = now.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  /* --- Open Welcome Notepad on initial boot --- */
+  createWindow(APPS[0]);
+})();
+</script>
+</body>
+</html>

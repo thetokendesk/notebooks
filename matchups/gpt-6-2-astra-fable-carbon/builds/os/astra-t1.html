@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#234b51">
+<title>Fieldwork OS</title>
+<style>
+:root{color-scheme:light;--ink:#213b40;--paper:#fff9e9;--cream:#f3ecd8;--line:#c8c5ae;--gold:#f5c65e;--teal:#286562;--bar:52px;font-family:Verdana,Geneva,sans-serif;color:var(--ink)}
+*{box-sizing:border-box}
+body{margin:0;overflow:hidden;background:#82b9af}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #147e88;outline-offset:2px}
+button:disabled{cursor:default;opacity:.38}
+button svg{pointer-events:none}
+[hidden]{display:none!important}
+#desktop{position:fixed;inset:0 0 var(--bar);overflow:hidden;isolation:isolate}
+.wallpaper{position:absolute;width:100%;height:100%;z-index:-2;inset:0;pointer-events:none}
+#shortcuts{display:flex;position:absolute;left:18px;top:22px;flex-direction:column;gap:12px}
+.shortcut{width:86px;min-height:78px;display:grid;justify-items:center;align-content:center;gap:6px;background:transparent;border:1px solid transparent;border-radius:4px;color:#fffdf0;text-shadow:0 1px 3px #163c3c,1px 1px #234b51;font-size:12px;font-weight:bold}
+.shortcut:hover,.shortcut:focus-visible{background:#20484a42;border:1px dashed #fff7de}
+.icon{width:30px;height:30px;display:block;flex:none}
+.shortcut .icon{width:44px;height:44px;filter:drop-shadow(2px 3px 0 #183e422f)}
+.win{position:absolute;display:flex;flex-direction:column;background:var(--paper);border:2px solid var(--ink);border-radius:7px;box-shadow:5px 6px 0 #163d4547;overflow:hidden;min-width:0;min-height:0}
+.win.active{box-shadow:6px 7px 0 #163d4557}
+.titlebar{height:37px;flex:none;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:8px;padding:0 7px 0 10px;background:#c3cbb8;touch-action:none;cursor:grab;user-select:none}
+.active .titlebar{background:var(--gold)}
+.titlebar:active{cursor:grabbing}
+.titlebar>.icon{width:22px;height:22px}
+.titlebar strong{font: bold 13px/1 monospace;letter-spacing:.03em}
+.title-lines{height:8px;flex:1;margin:0 5px;background:repeating-linear-gradient(to bottom,#795e2c75 0 1px,transparent 1px 3px)}
+.controls{display:flex;gap:4px}
+.controls button,.bevel{display:grid;place-items:center;border:1.5px solid var(--ink);border-radius:3px;background:var(--paper);box-shadow:1px 1px 0 var(--ink)}
+.controls button{width:23px;height:22px;padding:3px}
+.controls svg,.tiny{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:square;stroke-linejoin:miter}
+.controls button:hover,.bevel:hover{background:#fff}
+.controls button:active,.bevel:active{transform:translate(1px,1px);box-shadow:none}
+.winbody{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.grip{position:absolute;bottom:1px;right:1px;width:17px;height:17px;touch-action:none;cursor:nwse-resize;z-index:2;background:repeating-linear-gradient(135deg,transparent 0 3px,#69807a 3px 4px);clip-path:polygon(100% 0,100% 100%,0 100%)}
+.maximized .grip{display:none}
+.status{height:27px;flex:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 22px 0 12px;border-top:1px solid var(--line);background:var(--cream);font:11px monospace;letter-spacing:.02em}
+.toolbar{display:flex;gap:7px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--line);background:#f8f3e4;flex:none}
+.navbtn{width:29px;height:27px;padding:4px}
+.path{height:28px;display:flex;align-items:center;gap:8px;min-width:0;flex:1;border:1px solid #a8ad9c;border-radius:3px;padding:0 9px;background:#fffdf4;font:12px monospace;overflow:hidden;white-space:nowrap}
+.path .icon{width:19px;height:19px}
+.filelayout{flex:1;min-height:0;display:flex}
+.sidebar{background:#edead8;border-right:1px solid var(--line);width:137px;flex:none;padding:20px 8px;overflow:auto}
+.eyebrow{font:bold 10px monospace;letter-spacing:.14em;text-transform:uppercase;color:#586e65}
+.sidebar .eyebrow{margin:0 7px 12px}
+.place{width:100%;display:flex;align-items:center;gap:8px;background:none;border:1px solid transparent;border-radius:4px;padding:6px;text-align:left;font-size:12px;margin-bottom:3px}
+.place .icon{width:22px;height:22px}
+.place:hover{background:#e0e3ce}
+.place.selected{background:#cfddc9;border-color:#9caf99;font-weight:bold}
+.filesmain{flex:1;min-width:0;overflow:auto;padding:20px}
+.filehead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:16px}
+h1{font:normal 30px/1 Georgia,serif;letter-spacing:-1.1px;margin:0}
+.views{display:flex;gap:1px;border:1px solid #acb09e;background:#acb09e;border-radius:4px;overflow:hidden;flex:none}
+.views button{display:grid;place-items:center;border:0;background:#fbf7e9;width:27px;height:23px}
+.views button[aria-pressed=true]{background:#d5dfce}
+.items{display:grid;grid-template-columns:repeat(auto-fill,minmax(93px,1fr));gap:9px}
+.item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;min-height:86px;border:1px solid #cbcbb7;border-radius:4px;background:#faf5e5;font-size:12px}
+.item .icon{width:39px;height:39px}
+.item:hover{border-color:#748d7b;background:#e8eddb}
+.items.list{display:flex;flex-direction:column;gap:4px}
+.list .item{flex-direction:row;min-height:34px;justify-content:start;padding:4px 10px}
+.list .item .icon{width:25px;height:25px}
+.filegroup{margin:17px 0 8px}
+.filegroup:first-child{margin-top:0}
+.note{width:100%;flex:1;min-height:0;resize:none;border:0;outline:0;padding:18px 21px;font:15px/1.65 "Courier New",monospace;color:#263c39;background:#fffdf2;tab-size:4}
+.docview{margin:0;flex:1;overflow:auto;white-space:pre-wrap;padding:22px;font:15px/1.65 Georgia,serif}
+.painttools{flex-wrap:wrap;gap:6px;padding:7px 9px}
+.swatch{width:21px;height:21px;border:1px solid var(--ink);border-radius:50%}
+.swatch[aria-pressed=true]{outline:2px solid var(--ink);outline-offset:1px}
+.painttools select,.textbtn{border:1px solid #929f90;background:var(--paper);border-radius:3px;padding:4px 6px;font:12px monospace}
+.painttools select{margin-left:4px}
+.paintarea{display:flex;align-items:center;justify-content:center;flex:1;min-height:0;overflow:hidden;padding:12px;background-color:#d2dbca;background-image:radial-gradient(#a5b2a1 1px,transparent 1px);background-size:6px 6px}
+.canvasbox{position:relative;width:100%;height:100%;display:grid;place-items:center;container-type:size}
+canvas{display:block;width:min(100cqw,160cqh);height:auto;aspect-ratio:8/5;max-width:100%;touch-action:none;background:white;border:1px solid #8b9b8f;cursor:crosshair}
+.calc{flex:1;min-height:0;padding:13px;display:flex;flex-direction:column;gap:10px;background:#ebe7d4;overflow:auto}
+.display{flex:none;background:#d9e4c9;border:2px solid var(--ink);border-radius:3px;padding:9px 12px;text-align:right;box-shadow:inset 2px 2px #bac8ab;overflow:auto}
+.expression{height:16px;font:12px monospace;color:#506653}
+.answer{font:30px/1.2 monospace;white-space:nowrap}
+.keys{flex:1;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(5,minmax(24px,1fr));gap:6px}
+.keys button{font:bold 17px monospace}
+.keys .op{background:#d1dfcd}
+.keys .equals{background:var(--gold)}
+#taskbar{position:fixed;bottom:0;left:0;right:0;height:var(--bar);background:#efe9d4;border-top:2px solid var(--ink);display:flex;align-items:center;gap:10px;padding:6px 12px;z-index:100000;box-shadow:inset 0 2px #fff9e7}
+#start{height:34px;display:flex;align-items:center;gap:8px;background:var(--gold);padding:0 14px 0 9px;font:bold 15px monospace;flex:none}
+#start .icon{width:23px;height:23px}
+#tasks{display:flex;flex:1;gap:5px;min-width:0;border-left:1px solid #acaf9e;padding-left:10px;overflow:auto;scrollbar-width:none}
+.task{display:flex;align-items:center;gap:6px;min-width:34px;max-width:140px;padding:3px 10px;height:31px;border:1px solid #a8ae9b;border-radius:3px;background:#f8f2df;font:12px monospace;white-space:nowrap;overflow:hidden}
+.task.on{background:#d5dfc9;border-color:#728878;box-shadow:inset 0 -2px #587466}
+.task span{overflow:hidden;text-overflow:ellipsis}
+.task .icon{width:21px;height:21px}
+.tray{border-left:1px solid #acaf9e;padding:0 4px 0 12px;display:flex;align-items:center;gap:9px;flex:none}
+.tray svg{width:15px;height:15px}
+#clock{font:bold 13px monospace;white-space:nowrap}
+#menu{position:fixed;z-index:100001;bottom:calc(var(--bar) + 4px);left:10px;width:224px;border:2px solid var(--ink);border-radius:5px;box-shadow:4px 4px 0 #163d4557;overflow:hidden;background:var(--paper);padding-bottom:6px}
+.menutitle{background:var(--gold);border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:9px;padding:11px;font:bold 16px monospace;margin-bottom:5px}
+.launch{display:flex;width:calc(100% - 10px);align-items:center;gap:11px;margin:0 5px;padding:7px 9px;background:none;border:0;border-radius:3px;text-align:left;font-size:13px}
+.launch:hover,.launch:focus-visible{background:#d8e4cf}
+.launch .icon{width:27px;height:27px}
+.win.compact .sidebar{display:none}
+@media(max-width:600px){#shortcuts{top:9px;left:7px;right:7px;flex-direction:row;justify-content:space-around;gap:1px}.shortcut{width:70px;min-height:68px;font-size:11px}.shortcut .icon{width:36px;height:36px}.filesmain{padding:14px}.items{grid-template-columns:repeat(auto-fill,minmax(82px,1fr))}#taskbar{gap:6px;padding:6px}.task{padding:4px 6px}.task span{display:none}#tasks{padding-left:6px}.tray{padding-left:7px;gap:4px}#start{padding:0 8px}.toolbar{padding:7px}.win{border-radius:5px}}
+</style>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true" style="position:absolute;overflow:hidden">
+<defs>
+<symbol id="i-files" viewBox="0 0 40 40"><g stroke="#253e40" stroke-width="1.8" stroke-linejoin="round"><path fill="#dc9e46" d="M3 12V8h12l4 4h16v20H3z"/><path fill="#fff1ba" d="M7 14h24v14H7z"/><path fill="#f5c75c" d="M3 17h34l-4 16H4z"/></g><path d="M7 20h25" stroke="#fff0a3" stroke-width="2"/></symbol>
+<symbol id="i-notes" viewBox="0 0 40 40"><g stroke="#253e40" stroke-width="1.7" stroke-linejoin="round"><path fill="#88aba3" d="M7 5h26v31H7z"/><path fill="#fff3c9" d="M10 4h21v29H10z"/><path d="M8 9h5m-5 6h5m-5 6h5m-5 6h5" stroke-width="2.5"/><path d="M16 11h11m-11 5h11m-11 5h9m-9 5h7" stroke="#82988b"/></g></symbol>
+<symbol id="i-paint" viewBox="0 0 40 40"><g stroke="#253e40" stroke-width="1.7" stroke-linejoin="round"><path fill="#e9bd83" d="M31 14c-4-7-15-7-22-1C0 21 4 33 15 35c5 1 7-2 6-5-1-3 0-4 4-4 8 1 11-5 6-12z"/><path fill="#ac6d46" d="m16 26 4-8L34 3l3 2-13 17z"/><path fill="#e8e6cc" d="m18 20 3-4 5 4-4 4z"/><path fill="#326c68" d="M20 21c-6-1-4 6-9 7 6 3 13-1 9-7z"/></g><circle fill="#e3674d" cx="11" cy="16" r="2.7"/><circle fill="#edcf62" cx="8" cy="23" r="2.5"/><circle fill="#71999b" cx="16" cy="12" r="2.3"/></symbol>
+<symbol id="i-calc" viewBox="0 0 40 40"><g stroke="#253e40" stroke-width="1.8" stroke-linejoin="round"><rect fill="#88a6a0" x="8" y="3" width="25" height="34" rx="3"/><path fill="#dce9c4" d="M12 7h17v8H12z"/></g><path fill="#304e4e" d="M12 19h4v4h-4zm7 0h4v4h-4zm7 0h4v4h-4zm-14 8h4v4h-4zm7 0h4v4h-4z"/><path fill="#f8ce72" d="M26 26h4v6h-4z"/></symbol>
+<symbol id="i-home" viewBox="0 0 40 40"><g stroke="#253e40" stroke-width="2" stroke-linejoin="round"><path fill="#f3dfac" d="M8 17h24v17H8z"/><path fill="#cc7959" d="m3 18 17-14 17 14-3 3-14-11L6 21z"/><path fill="#8eb2a2" d="M17 22h7v12h-7z"/></g></symbol>
+<symbol id="i-doc" viewBox="0 0 40 40"><g stroke="#253e40" stroke-width="1.7" stroke-linejoin="round"><path fill="#fff6d9" d="M9 3h16l7 7v26H9z"/><path fill="#d1d8bb" d="M25 3v8h7"/><path d="M14 16h13m-13 5h13m-13 5h9" stroke="#83968b"/></g></symbol>
+<symbol id="i-picture" viewBox="0 0 40 40"><g stroke="#253e40" stroke-width="1.7" stroke-linejoin="round"><path fill="#fff3cb" d="M3 6h34v29H3z"/><path fill="#a5cec1" d="M7 10h26v20H7z"/><path fill="#679389" d="m7 27 9-10 6 6 5-4 6 6v5H7z"/></g><circle cx="26" cy="15" r="3" fill="#f4ce6b"/></symbol>
+<symbol id="i-brand" viewBox="0 0 40 40"><rect x="3" y="3" width="34" height="34" rx="5" fill="#26474a"/><circle cx="26" cy="13" r="5" fill="#f6d16e"/><path d="m6 30 11-16 6 9 4-5 7 12z" fill="#b9d4af"/><path d="m11 30 7-9 6 9z" fill="#80afa1"/></symbol>
+<symbol id="i-clock" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.3"/><path d="M8 4v4l3 2"/></symbol>
+<symbol id="i-grid" viewBox="0 0 16 16"><path fill="currentColor" stroke="none" d="M2 2h5v5H2zm7 0h5v5H9zM2 9h5v5H2zm7 0h5v5H9z"/></symbol>
+<symbol id="i-list" viewBox="0 0 16 16"><path d="M2 4h1m3 0h8M2 8h1m3 0h8M2 12h1m3 0h8"/></symbol>
+</defs></svg>
+<main id="desktop" aria-label="Desktop">
+<svg class="wallpaper" viewBox="0 0 1600 950" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<defs>
+<linearGradient id="sky" x2=".22" y2="1" gradientUnits="objectBoundingBox"><stop stop-color="#75aaa4"/><stop offset=".64" stop-color="#c6d7b7"/><stop offset="1" stop-color="#e5d7ab"/></linearGradient>
+<pattern id="dots" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="#173f43" opacity=".14"/></pattern>
+<pattern id="hatch" width="9" height="9" patternUnits="userSpaceOnUse"><path d="m0 9 9-9" stroke="#c7d3ae" opacity=".12"/></pattern>
+<g id="pine"><path d="m0 0-9 17h5l-10 16h7l-11 18h14v12h8V51h14L7 33h7L4 17h5z"/></g>
+</defs>
+<path fill="url(#sky)" d="M0 0h1600v950H0z"/>
+<circle cx="1282" cy="206" r="87" fill="#f8db8b"/>
+<g fill="#f7e9bd" opacity=".65"><path d="M1030 173h113v3h-113zm19-8h53v2h-53zm288 104h123v3h-123zm30-8h54v2h-54zM176 212h105v2H176z"/></g>
+<path fill="#9fbfaf" d="m0 477 90-65 54 22 94-66 62 26 117-94 95 74 81-47 107 72 88-54 77 42 91-81 55 27 79-67 102 79 94-47 85 41 102-81 127 71v621H0z"/>
+<path fill="#82aaa0" d="m0 522 123-52 66-57 75 33 79-67 94 52 60-30 124 83 85-44 99 61 98-79 67 20 101-84 62 25 117-105 37-20 62 49 75 74 47 15 77 65v489H0z"/>
+<path fill="#d6d8b7" d="m1173 355 77-77 37-20 43 34-37-14-19 23-14-5-26 32 3-19z"/>
+<path fill="#69958c" d="m0 574 127-73 101 31 138-77 76 40 94-28 112 71 128-31 82 37 134-51 75-76 102 48 65-13 125-91 82 38 57-23 102 75v499H0z"/>
+<path fill="#bfd0ab" d="m0 623 160-50 190-25 177 14 113-19 183 17 202-31 139 13 153-33 283 29v412H0z"/>
+<path fill="#7da49a" d="m1600 472-108 25-66 26-162 33-124 47-148 38-130 76 738 233z"/>
+<path fill="#55867f" d="m0 500 124 35 126 66 155 28 123 66 146 22 106 60L0 950z"/>
+<path fill="#3c706d" d="m1600 515-112 39-103 58-163 36-99 60-137 33-181 80-159 129h954z"/>
+<path fill="#2c5e60" d="m0 592 154 67 95 73 121 47 100 66 202 105H0z"/>
+<path fill="url(#hatch)" d="m0 592 154 67 95 73 121 47 100 66 202 105H0z"/>
+<path fill="#244f54" d="m1600 651-155 63-102 62-154 42-108 57-148 75h667z"/>
+<g fill="#244f54"><use href="#pine" transform="translate(1430 663) scale(1.2)"/><use href="#pine" transform="translate(1472 624) scale(1.5)"/><use href="#pine" transform="translate(1518 625) scale(1.1)"/><use href="#pine" transform="translate(1350 737) scale(.8)"/></g>
+<g fill="#20494e"><use href="#pine" transform="translate(48 654) scale(2.3)"/><use href="#pine" transform="translate(111 706) scale(1.7)"/><use href="#pine" transform="translate(8 678) scale(1.6)"/><path d="m0 782 97 6 161 91 147 71H0z"/></g>
+<path fill="url(#dots)" d="M0 0h1600v950H0z"/>
+</svg>
+<nav id="shortcuts" aria-label="Desktop applications"></nav>
+</main>
+<footer id="taskbar">
+<button id="start" class="bevel" aria-expanded="false" aria-controls="menu"><svg class="icon" aria-hidden="true"><use href="#i-brand"/></svg>Start</button>
+<nav id="tasks" aria-label="Open windows"></nav>
+<div class="tray"><svg class="tiny" aria-hidden="true"><use href="#i-clock"/></svg><time id="clock"></time></div>
+</footer>
+<nav id="menu" aria-label="Start menu" hidden><div class="menutitle"><svg class="icon" aria-hidden="true"><use href="#i-brand"/></svg>Fieldwork OS</div></nav>
+<script>
+(() => {
+"use strict";
+const $ = s => document.querySelector(s);
+const desk = $("#desktop"), menu = $("#menu"), start = $("#start");
+const apps = {
+  files:{name:"Files",w:660,h:425}, notes:{name:"Notepad",w:505,h:370},
+  paint:{name:"Paint",w:600,h:460}, calc:{name:"Calculator",w:295,h:370},
+  doc:{name:"Welcome.txt",w:430,h:310}
+};
+const appIds = ["files","notes","paint","calc"];
+const windows = new Map();
+let topLayer = 1, active = null, cascade = 0;
+const clamp = (v,min,max) => Math.max(min,Math.min(v,max));
+const icon = (id,cls="icon") => `<svg class="${cls}" aria-hidden="true"><use href="#i-${id}"/></svg>`;
+const glyph = path => `<svg class="tiny" viewBox="0 0 16 16" aria-hidden="true"><path d="${path}"/></svg>`;
+const keyFor = name => "fieldwork.desktop."+name;
+function read(name){try{return localStorage.getItem(keyFor(name))}catch{return null}}
+function save(name,value){try{localStorage.setItem(keyFor(name),value);return true}catch{return false}}
+let noteText = read("notes") || "", painting = read("painting") || "";
+function menuOpen(open){menu.hidden=!open;start.setAttribute("aria-expanded",String(open))}
+for(const id of appIds){
+  for(const [parent,cls] of [[$("#shortcuts"),"shortcut"],[menu,"launch"]]){
+    const b=document.createElement("button");
+    b.className=cls;b.innerHTML=icon(id)+`<span>${apps[id].name}</span>`;
+    b.onclick=()=>openApp(id);parent.append(b);
+  }
+}
+start.onclick=()=>{menuOpen(menu.hidden);if(!menu.hidden)menu.querySelector("button").focus()};
+document.addEventListener("pointerdown",e=>{if(!menu.contains(e.target)&&!start.contains(e.target))menuOpen(false)});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!menu.hidden){menuOpen(false);start.focus()}});
+function tick(){const d=new Date(),el=$("#clock");el.textContent=d.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});el.dateTime=d.toISOString();el.title=d.toLocaleDateString(undefined,{dateStyle:"full"})}
+tick();setInterval(tick,1000);
+function activate(w){
+  if(active&&active!==w){active.el.classList.remove("active");active.task.classList.remove("on")}
+  active=w;w.el.hidden=false;w.el.style.zIndex=++topLayer;w.el.classList.add("active");w.task.classList.add("on");
+}
+function pickNext(){
+  active=null;
+  const visible=[...windows.values()].filter(w=>!w.el.hidden).sort((a,b)=>b.el.style.zIndex-a.el.style.zIndex);
+  if(visible.length){activate(visible[0]);visible[0].el.focus({preventScroll:true})}
+}
+function minimize(w){w.el.hidden=true;w.el.classList.remove("active");w.task.classList.remove("on");if(active===w)pickNext()}
+function closeWin(w){
+  if(w.cleanup)w.cleanup();
+  windows.delete(w.id);w.el.remove();w.task.remove();if(active===w)pickNext();
+}
+function layout(w){
+  const W=desk.clientWidth,H=desk.clientHeight,b=w.bounds;
+  b.width=clamp(b.width,Math.min(W,w.id==="calc"?225:275),W);
+  b.height=clamp(b.height,Math.min(H,185),H);
+  b.x=clamp(b.x,0,W-b.width);b.y=clamp(b.y,0,H-b.height);
+  const r=w.max?{x:0,y:0,width:W,height:H}:b;
+  Object.assign(w.el.style,{left:r.x+"px",top:r.y+"px",width:r.width+"px",height:r.height+"px"});
+  w.el.classList.toggle("compact",r.width<485);w.el.classList.toggle("maximized",w.max);
+}
+function maximize(w){w.max=!w.max;layout(w);const btn=w.el.querySelector(".maximize");btn.title=btn.ariaLabel=w.max?"Restore size":"Maximize"}
+function gesture(handle,w,resize){
+  handle.addEventListener("pointerdown",e=>{
+    if(e.button!==0||w.max||e.target.closest("button"))return;
+    e.preventDefault();handle.setPointerCapture(e.pointerId);
+    const initial={...w.bounds},sx=e.clientX,sy=e.clientY;
+    function move(ev){
+      if(ev.pointerId!==e.pointerId)return;
+      const dx=ev.clientX-sx,dy=ev.clientY-sy;
+      if(resize){
+        w.bounds.width=clamp(initial.width+dx,Math.min(275,desk.clientWidth,w.id==="calc"?225:275),desk.clientWidth-initial.x);
+        w.bounds.height=clamp(initial.height+dy,Math.min(185,desk.clientHeight),desk.clientHeight-initial.y);
+      }else{w.bounds.x=initial.x+dx;w.bounds.y=initial.y+dy}
+      layout(w);
+    }
+    function end(ev){if(ev.pointerId!==e.pointerId)return;handle.removeEventListener("pointermove",move);handle.removeEventListener("lostpointercapture",end)}
+    handle.addEventListener("pointermove",move);handle.addEventListener("lostpointercapture",end);
+  });
+}
+function openApp(id){
+  menuOpen(false);
+  if(windows.has(id)){const w=windows.get(id);activate(w);(w.el.querySelector("textarea")||w.el).focus({preventScroll:true});return}
+  const app=apps[id],el=document.createElement("section"),task=document.createElement("button");
+  el.className="win";el.tabIndex=-1;el.setAttribute("role","dialog");el.setAttribute("aria-label",app.name);
+  el.innerHTML=`<header class="titlebar">${icon(id)}<strong>${app.name}</strong><div class="title-lines"></div><div class="controls"><button class="minimize" title="Minimize" aria-label="Minimize">${glyph("M3 12h10")}</button><button class="maximize" title="Maximize" aria-label="Maximize">${glyph("M3 3h10v10H3z")}</button><button class="close" title="Close" aria-label="Close">${glyph("m4 4 8 8m0-8-8 8")}</button></div></header><div class="winbody"></div><div class="grip" title="Drag to resize"></div>`;
+  const W=desk.clientWidth,H=desk.clientHeight,n=cascade++%5;
+  const width=Math.min(app.w,W-12),height=Math.min(app.h,H-(W<600&&H>360?94:14));
+  const x=W<600?(W-width)/2:(W-width)*.48+n*18;
+  const y=W<600&&H>360?82+n*3:(H-height)*.38+n*17;
+  const w={id,el,task,body:el.querySelector(".winbody"),bounds:{x,y,width,height},max:false};
+  task.className="task";task.title=app.name;task.innerHTML=icon(id)+`<span>${app.name}</span>`;
+  task.onclick=()=>{if(active===w&&!el.hidden)minimize(w);else{activate(w);el.focus({preventScroll:true})}};
+  windows.set(id,w);desk.append(el);$("#tasks").append(task);
+  el.addEventListener("pointerdown",()=>activate(w),true);
+  el.addEventListener("focusin",()=>{if(active!==w)activate(w)});
+  el.querySelector(".minimize").onclick=()=>minimize(w);
+  el.querySelector(".maximize").onclick=()=>maximize(w);
+  el.querySelector(".close").onclick=()=>closeWin(w);
+  const title=el.querySelector(".titlebar");
+  title.ondblclick=e=>{if(!e.target.closest("button"))maximize(w)};
+  gesture(title,w,false);gesture(el.querySelector(".grip"),w,true);
+  layout(w);activate(w);
+  ({files:buildFiles,notes:buildNotes,paint:buildPaint,calc:buildCalc,doc:buildDoc})[id](w);
+  (el.querySelector("textarea")||el).focus({preventScroll:true});
+}
+window.addEventListener("resize",()=>windows.forEach(layout));
+const folders={
+  Home:[["Documents","files","folder"],["Pictures","files","folder"],["Applications","files","folder"],["Welcome.txt","doc","doc"]],
+  Documents:[["Notepad.txt","notes","notes"],["Welcome.txt","doc","doc"]],
+  Pictures:[["Sketch.png","picture","paint"]],
+  Applications:appIds.map(id=>[apps[id].name,id,id])
+};
+function buildFiles(w){
+  let folder="Home",list=false,history=["Home"],index=0;
+  const body=w.body;
+  body.innerHTML=`<div class="toolbar"><button class="bevel navbtn back" title="Back" aria-label="Back">${glyph("m9 3-5 5 5 5")}</button><button class="bevel navbtn forward" title="Forward" aria-label="Forward">${glyph("m6 3 5 5-5 5")}</button><button class="bevel navbtn up" title="Parent folder" aria-label="Parent folder">${glyph("m3 8 5-5 5 5M8 3v10")}</button><div class="path"></div></div><div class="filelayout"><nav class="sidebar" aria-label="Places"><div class="eyebrow">Places</div></nav><div class="filesmain"><div class="filehead"><h1></h1><div class="views"><button title="Grid view" aria-label="Grid view">${icon("grid","tiny")}</button><button title="List view" aria-label="List view">${icon("list","tiny")}</button></div></div><div class="contents"></div></div></div><div class="status"><span class="count"></span><span>Local disk</span></div>`;
+  const q=s=>body.querySelector(s);
+  function go(name){if(folder===name)return;history.splice(index+1);history.push(name);index++;render()}
+  for(const [name,symbol] of [["Home","home"],["Documents","notes"],["Pictures","picture"],["Applications","brand"]]){
+    const b=document.createElement("button");b.className="place";b.dataset.name=name;b.innerHTML=icon(symbol)+name;b.onclick=()=>go(name);q(".sidebar").append(b);
+  }
+  q(".back").onclick=()=>{if(index>0){index--;render()}};
+  q(".forward").onclick=()=>{if(index<history.length-1){index++;render()}};
+  q(".up").onclick=()=>go("Home");
+  const viewButtons=[...body.querySelectorAll(".views button")];
+  viewButtons.forEach((b,i)=>b.onclick=()=>{list=Boolean(i);render()});
+  function render(){
+    folder=history[index];q("h1").textContent=folder;
+    q(".path").innerHTML=icon("home")+`<span>Home${folder==="Home"?"":" / "+folder}</span>`;
+    q(".back").disabled=index===0;q(".forward").disabled=index===history.length-1;q(".up").disabled=folder==="Home";
+    body.querySelectorAll(".place").forEach(b=>b.classList.toggle("selected",b.dataset.name===folder));
+    viewButtons.forEach((b,i)=>b.setAttribute("aria-pressed",String(Boolean(i)===list)));
+    const entries=folders[folder],contents=q(".contents");contents.replaceChildren();
+    for(const [label,subset] of [["Folders",entries.filter(a=>a[2]==="folder")],[folder==="Applications"?"Apps":"Files",entries.filter(a=>a[2]!=="folder")]]){
+      if(!subset.length)continue;
+      const h=document.createElement("div");h.className="eyebrow filegroup";h.textContent=label;
+      const items=document.createElement("div");items.className="items"+(list?" list":"");
+      subset.forEach(([name,symbol,target])=>{const b=document.createElement("button");b.className="item";b.innerHTML=icon(symbol)+`<span>${name}</span>`;b.onclick=()=>target==="folder"?go(name):openApp(target);items.append(b)});
+      contents.append(h,items);
+    }
+    q(".count").textContent=entries.length+(entries.length===1?" item":" items");
+  }
+  render();
+}
+function buildDoc(w){
+  w.body.innerHTML=`<article class="docview">Welcome to Fieldwork OS.
+
+Open an app from the desktop or Start menu. Drag a title bar to move its window, or double-click it to maximize. Drag the striped corner to resize.
+
+Your notepad lives in Documents. Your drawing lives in Pictures. Both save in this browser.</article><div class="status">Welcome.txt</div>`;
+}
+function buildNotes(w){
+  w.body.innerHTML=`<div class="toolbar">${icon("doc")}<span style="font:13px monospace">Notepad.txt</span></div><textarea class="note" aria-label="Notepad text" placeholder="Start writing…" spellcheck="true"></textarea><div class="status"><span class="saved"></span><span class="chars"></span></div>`;
+  const area=w.body.querySelector("textarea");area.value=noteText;
+  function status(msg){w.body.querySelector(".saved").textContent=msg;w.body.querySelector(".chars").textContent=area.value.length+" characters"}
+  status("Local document");
+  area.oninput=()=>{noteText=area.value;status(save("notes",noteText)?"Saved locally":"Saved for this session")};
+}
+function buildPaint(w){
+  w.body.innerHTML=`<div class="toolbar painttools"></div><div class="paintarea"><div class="canvasbox"><canvas width="800" height="500" aria-label="Drawing canvas"></canvas></div></div><div class="status"><span class="paintstatus">Sketch.png</span><span>800 × 500</span></div>`;
+  const bar=w.body.querySelector(".painttools"),c=w.body.querySelector("canvas"),ctx=c.getContext("2d");
+  let color="#243e42",pointer=null,undo=[],ready=true;
+  for(const [name,value] of [["Ink","#243e42"],["Teal","#43887e"],["Moss","#86a166"],["Ochre","#edbb58"],["Coral","#d97758"],["Blue","#699ac1"],["White","#ffffff"]]){
+    const b=document.createElement("button");b.className="swatch";b.style.background=value;b.title=b.ariaLabel=name;b.setAttribute("aria-pressed",String(color===value));
+    b.onclick=()=>{color=value;bar.querySelectorAll(".swatch").forEach(s=>s.setAttribute("aria-pressed",String(s===b)))};bar.append(b);
+  }
+  const size=document.createElement("select");size.ariaLabel="Brush size";[3,8,16,30].forEach(n=>size.add(new Option(n+" px",n)));size.value="8";
+  const undoBtn=document.createElement("button"),clear=document.createElement("button");
+  undoBtn.className=clear.className="textbtn";undoBtn.textContent="Undo";clear.textContent="Clear";undoBtn.disabled=true;bar.append(size,undoBtn,clear);
+  function blank(){ctx.fillStyle="white";ctx.fillRect(0,0,c.width,c.height)}
+  function remember(){if(undo.length>=12)undo.shift();undo.push(ctx.getImageData(0,0,c.width,c.height));undoBtn.disabled=false}
+  function persist(){painting=c.toDataURL("image/png");w.body.querySelector(".paintstatus").textContent=save("painting",painting)?"Sketch.png · Saved":"Sketch.png · Session only"}
+  blank();
+  if(painting){ready=false;clear.disabled=true;const img=new Image();img.onload=()=>{ctx.drawImage(img,0,0);ready=true;clear.disabled=false};img.onerror=()=>{ready=true;clear.disabled=false};img.src=painting}
+  clear.onclick=()=>{if(!ready||pointer!==null)return;remember();blank();persist()};
+  undoBtn.onclick=()=>{if(!undo.length||pointer!==null)return;ctx.putImageData(undo.pop(),0,0);undoBtn.disabled=!undo.length;persist()};
+  function point(e){const r=c.getBoundingClientRect();return [(e.clientX-r.left)*c.width/r.width,(e.clientY-r.top)*c.height/r.height]}
+  c.onpointerdown=e=>{
+    if(!ready||e.button!==0||pointer!==null)return;
+    e.preventDefault();pointer=e.pointerId;c.setPointerCapture(pointer);remember();
+    const [x,y]=point(e);ctx.fillStyle=color;ctx.strokeStyle=color;ctx.lineWidth=Number(size.value);ctx.lineCap=ctx.lineJoin="round";
+    ctx.beginPath();ctx.arc(x,y,ctx.lineWidth/2,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.moveTo(x,y);
+  };
+  c.onpointermove=e=>{if(pointer!==e.pointerId)return;const p=point(e);ctx.lineTo(...p);ctx.stroke();ctx.beginPath();ctx.moveTo(...p)};
+  c.onlostpointercapture=e=>{if(pointer===e.pointerId){pointer=null;persist()}};
+  w.cleanup=()=>{if(pointer!==null){pointer=null;persist()}};
+}
+function buildCalc(w){
+  w.body.innerHTML=`<div class="calc"><div class="display"><div class="expression"></div><output class="answer">0</output></div><div class="keys"></div></div>`;
+  let display="0",stored=null,op="",fresh=true,replace=true,lastOp="",lastNum=0,expr="";
+  const ops=["+","−","×","÷"],keys=["AC","±","%","÷","7","8","9","×","4","5","6","−","1","2","3","+","⌫","0",".","="];
+  function fmt(n){return Number.isFinite(n)?String(Number(n.toPrecision(12))):"Error"}
+  function compute(a,b,o){return o==="+"?a+b:o==="−"?a-b:o==="×"?a*b:a/b}
+  function reset(){display="0";stored=null;op=lastOp=expr="";fresh=replace=true}
+  function press(k){
+    if(k==="AC")reset();
+    else{
+      if(display==="Error")reset();
+      if(/^\d$/.test(k)||k==="."){
+        if(fresh&&!op){expr=lastOp=""}
+        if(replace){display=k==="."?"0.":k;replace=false}
+        else if(k==="."?!display.includes("."):display.length<15)display=display==="0"&&k!=="."?k:display+k;
+        fresh=false;
+      }else if(k==="⌫"){if(!replace){display=display.slice(0,-1);if(!display||display==="-")display="0"}}
+      else if(k==="±"||k==="%"){
+        const n=Number(display);display=fmt(k==="±"?-n:n/100);fresh=false;replace=false;
+        if(!op){expr=lastOp=""}
+      }else if(ops.includes(k)){
+        if(op&&!fresh)display=fmt(compute(stored,Number(display),op));
+        stored=Number(display);op=k;expr=display+" "+k;fresh=replace=true;lastOp="";
+      }else if(k==="="&&(op||lastOp)){
+        const a=op?stored:Number(display),b=op?Number(display):lastNum,o=op||lastOp;
+        display=fmt(compute(a,b,o));expr=a+" "+o+" "+b+" =";lastOp=o;lastNum=b;op="";stored=null;fresh=replace=true;
+      }
+    }
+    w.body.querySelector(".expression").textContent=expr;w.body.querySelector(".answer").textContent=display;
+  }
+  for(const k of keys){const b=document.createElement("button");b.className="bevel"+(k==="="?" equals":ops.includes(k)?" op":"");b.textContent=k;b.onclick=()=>press(k);w.body.querySelector(".keys").append(b)}
+  w.el.addEventListener("keydown",e=>{
+    if(e.ctrlKey||e.metaKey||e.altKey)return;
+    if(e.key==="Enter"&&e.target.closest("button"))return;
+    const map={"*":"×","/":"÷","-":"−","Enter":"=","Escape":"AC","Backspace":"⌫","Delete":"AC"};
+    const k=map[e.key]||e.key;if(keys.includes(k)){e.preventDefault();press(k)}
+  });
+}
+openApp("files");
+})();
+</script>
+</body>
+</html>
