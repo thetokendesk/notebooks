@@ -1,0 +1,518 @@
+{
+  "matches": {
+    "exhibition": {
+      "version": 1,
+      "names": {
+        "A": "Claude Fable 5.2",
+        "B": "Gemini 4 Carbon"
+      },
+      "score": {
+        "A": 0,
+        "B": 1,
+        "draw": 9
+      },
+      "rounds": [
+        {
+          "round": 1,
+          "map": "pillars",
+          "starts": {
+            "A": "left",
+            "B": "right"
+          },
+          "winner": "draw",
+          "ticks": 1350,
+          "health": {
+            "A": 3,
+            "B": 3
+          },
+          "reason": "time-limit"
+        },
+        {
+          "round": 2,
+          "map": "pillars",
+          "starts": {
+            "A": "right",
+            "B": "left"
+          },
+          "winner": "draw",
+          "ticks": 1350,
+          "health": {
+            "A": 3,
+            "B": 3
+          },
+          "reason": "time-limit"
+        },
+        {
+          "round": 3,
+          "map": "crossfire",
+          "starts": {
+            "A": "left",
+            "B": "right"
+          },
+          "winner": "draw",
+          "ticks": 1350,
+          "health": {
+            "A": 3,
+            "B": 3
+          },
+          "reason": "time-limit"
+        },
+        {
+          "round": 4,
+          "map": "crossfire",
+          "starts": {
+            "A": "right",
+            "B": "left"
+          },
+          "winner": "draw",
+          "ticks": 1350,
+          "health": {
+            "A": 3,
+            "B": 3
+          },
+          "reason": "time-limit"
+        },
+        {
+          "round": 5,
+          "map": "divide",
+          "starts": {
+            "A": "left",
+            "B": "right"
+          },
+          "winner": "draw",
+          "ticks": 1350,
+          "health": {
+            "A": 3,
+            "B": 3
+          },
+          "reason": "time-limit"
+        },
+        {
+          "round": 6,
+          "map": "divide",
+          "starts": {
+            "A": "right",
+            "B": "left"
+          },
+          "winner": "draw",
+          "ticks": 1350,
+          "health": {
+            "A": 3,
+            "B": 3
+          },
+          "reason": "time-limit"
+        },
+        {
+          "round": 7,
+          "map": "citadel",
+          "starts": {
+            "A": "left",
+            "B": "right"
+          },
+          "winner": "draw",
+          "ticks": 1350,
+          "health": {
+            "A": 3,
+            "B": 3
+          },
+          "reason": "time-limit"
+        },
+        {
+          "round": 8,
+          "map": "citadel",
+          "starts": {
+            "A": "right",
+            "B": "left"
+          },
+          "winner": "draw",
+          "ticks": 1350,
+          "health": {
+            "A": 3,
+            "B": 3
+          },
+          "reason": "time-limit"
+        },
+        {
+          "round": 9,
+          "map": "channels",
+          "starts": {
+            "A": "left",
+            "B": "right"
+          },
+          "winner": "draw",
+          "ticks": 1350,
+          "health": {
+            "A": 3,
+            "B": 3
+          },
+          "reason": "time-limit"
+        },
+        {
+          "round": 10,
+          "map": "channels",
+          "starts": {
+            "A": "right",
+            "B": "left"
+          },
+          "winner": "B",
+          "ticks": 1350,
+          "health": {
+            "A": 2,
+            "B": 3
+          },
+          "reason": "time-limit"
+        }
+      ]
+    },
+    "match-1": {
+      "version": 1,
+      "names": {
+        "A": "Claude Fable 5.2",
+        "B": "Gemini 4 Carbon"
+      },
+      "score": {
+        "A": 10,
+        "B": 0,
+        "draw": 0
+      },
+      "rounds": [
+        {
+          "round": 1,
+          "map": "pillars",
+          "starts": {
+            "A": "left",
+            "B": "right"
+          },
+          "winner": "A",
+          "ticks": 473,
+          "health": {
+            "A": 3,
+            "B": 0
+          },
+          "reason": "knockout"
+        },
+        {
+          "round": 2,
+          "map": "pillars",
+          "starts": {
+            "A": "right",
+            "B": "left"
+          },
+          "winner": "A",
+          "ticks": 565,
+          "health": {
+            "A": 3,
+            "B": 0
+          },
+          "reason": "knockout"
+        },
+        {
+          "round": 3,
+          "map": "crossfire",
+          "starts": {
+            "A": "left",
+            "B": "right"
+          },
+          "winner": "A",
+          "ticks": 243,
+          "health": {
+            "A": 3,
+            "B": 0
+          },
+          "reason": "knockout"
+        },
+        {
+          "round": 4,
+          "map": "crossfire",
+          "starts": {
+            "A": "right",
+            "B": "left"
+          },
+          "winner": "A",
+          "ticks": 243,
+          "health": {
+            "A": 3,
+            "B": 0
+          },
+          "reason": "knockout"
+        },
+        {
+          "round": 5,
+          "map": "divide",
+          "starts": {
+            "A": "left",
+            "B": "right"
+          },
+          "winner": "A",
+          "ticks": 243,
+          "health": {
+            "A": 3,
+            "B": 0
+          },
+          "reason": "knockout"
+        },
+        {
+          "round": 6,
+          "map": "divide",
+          "starts": {
+            "A": "right",
+            "B": "left"
+          },
+          "winner": "A",
+          "ticks": 676,
+          "health": {
+            "A": 3,
+            "B": 0
+          },
+          "reason": "knockout"
+        },
+        {
+          "round": 7,
+          "map": "citadel",
+          "starts": {
+            "A": "left",
+            "B": "right"
+          },
+          "winner": "A",
+          "ticks": 698,
+          "health": {
+            "A": 3,
+            "B": 0
+          },
+          "reason": "knockout"
+        },
+        {
+          "round": 8,
+          "map": "citadel",
+          "starts": {
+            "A": "right",
+            "B": "left"
+          },
+          "winner": "A",
+          "ticks": 1350,
+          "health": {
+            "A": 3,
+            "B": 1
+          },
+          "reason": "time-limit"
+        },
+        {
+          "round": 9,
+          "map": "channels",
+          "starts": {
+            "A": "left",
+            "B": "right"
+          },
+          "winner": "A",
+          "ticks": 243,
+          "health": {
+            "A": 3,
+            "B": 0
+          },
+          "reason": "knockout"
+        },
+        {
+          "round": 10,
+          "map": "channels",
+          "starts": {
+            "A": "right",
+            "B": "left"
+          },
+          "winner": "A",
+          "ticks": 243,
+          "health": {
+            "A": 3,
+            "B": 0
+          },
+          "reason": "knockout"
+        }
+      ]
+    },
+    "match-2": {
+      "version": 1,
+      "names": {
+        "A": "Claude Fable 5.2",
+        "B": "Gemini 4 Carbon"
+      },
+      "score": {
+        "A": 10,
+        "B": 0,
+        "draw": 0
+      },
+      "rounds": [
+        {
+          "round": 1,
+          "map": "pillars",
+          "starts": {
+            "A": "left",
+            "B": "right"
+          },
+          "winner": "A",
+          "ticks": 528,
+          "health": {
+            "A": 3,
+            "B": 0
+          },
+          "reason": "knockout"
+        },
+        {
+          "round": 2,
+          "map": "pillars",
+          "starts": {
+            "A": "right",
+            "B": "left"
+          },
+          "winner": "A",
+          "ticks": 519,
+          "health": {
+            "A": 3,
+            "B": 0
+          },
+          "reason": "knockout"
+        },
+        {
+          "round": 3,
+          "map": "crossfire",
+          "starts": {
+            "A": "left",
+            "B": "right"
+          },
+          "winner": "A",
+          "ticks": 243,
+          "health": {
+            "A": 3,
+            "B": 0
+          },
+          "reason": "knockout"
+        },
+        {
+          "round": 4,
+          "map": "crossfire",
+          "starts": {
+            "A": "right",
+            "B": "left"
+          },
+          "winner": "A",
+          "ticks": 243,
+          "health": {
+            "A": 3,
+            "B": 0
+          },
+          "reason": "knockout"
+        },
+        {
+          "round": 5,
+          "map": "divide",
+          "starts": {
+            "A": "left",
+            "B": "right"
+          },
+          "winner": "A",
+          "ticks": 245,
+          "health": {
+            "A": 3,
+            "B": 0
+          },
+          "reason": "knockout"
+        },
+        {
+          "round": 6,
+          "map": "divide",
+          "starts": {
+            "A": "right",
+            "B": "left"
+          },
+          "winner": "A",
+          "ticks": 535,
+          "health": {
+            "A": 3,
+            "B": 0
+          },
+          "reason": "knockout"
+        },
+        {
+          "round": 7,
+          "map": "citadel",
+          "starts": {
+            "A": "left",
+            "B": "right"
+          },
+          "winner": "A",
+          "ticks": 735,
+          "health": {
+            "A": 3,
+            "B": 0
+          },
+          "reason": "knockout"
+        },
+        {
+          "round": 8,
+          "map": "citadel",
+          "starts": {
+            "A": "right",
+            "B": "left"
+          },
+          "winner": "A",
+          "ticks": 1350,
+          "health": {
+            "A": 3,
+            "B": 1
+          },
+          "reason": "time-limit"
+        },
+        {
+          "round": 9,
+          "map": "channels",
+          "starts": {
+            "A": "left",
+            "B": "right"
+          },
+          "winner": "A",
+          "ticks": 243,
+          "health": {
+            "A": 3,
+            "B": 0
+          },
+          "reason": "knockout"
+        },
+        {
+          "round": 10,
+          "map": "channels",
+          "starts": {
+            "A": "right",
+            "B": "left"
+          },
+          "winner": "A",
+          "ticks": 243,
+          "health": {
+            "A": 3,
+            "B": 0
+          },
+          "reason": "knockout"
+        }
+      ]
+    }
+  },
+  "writingTheBrains": {
+    "usage": [
+      {
+        "who": "fable",
+        "step": "brain-2",
+        "inTok": 8852,
+        "outTok": 7852,
+        "seconds": 62
+      },
+      {
+        "who": "carbon",
+        "step": "brain-2",
+        "inTok": 12826,
+        "outTok": 10949,
+        "seconds": 114
+      }
+    ],
+    "listUsd": {
+      "fable": "0.385",
+      "carbon": "0.135"
+    }
+  }
+}

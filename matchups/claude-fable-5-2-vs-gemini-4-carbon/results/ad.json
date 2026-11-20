@@ -1,0 +1,65 @@
+{
+  "carbon": {
+    "model": "gemini-4-carbon",
+    "setting": "thinking not set (Google's default, medium)",
+    "turns": [
+      {
+        "turn": 1,
+        "seconds": 106,
+        "inputTokens": 208,
+        "outputTokens": 9856,
+        "listUsd": 0.099
+      },
+      {
+        "turn": 2,
+        "seconds": 138,
+        "inputTokens": 10083,
+        "outputTokens": 15487,
+        "listUsd": 0.175
+      }
+    ],
+    "totalListUsd": 0.274
+  },
+  "fable": {
+    "model": "claude-fable-5-2 (effort high)",
+    "setting": "effort high",
+    "turns": [
+      {
+        "turn": 1,
+        "seconds": 723,
+        "inputTokens": 228,
+        "outputTokens": 73724,
+        "listUsd": 2.9508
+      },
+      {
+        "turn": 2,
+        "seconds": 524,
+        "inputTokens": 73976,
+        "outputTokens": 58009,
+        "listUsd": 2.9122
+      }
+    ],
+    "totalListUsd": 5.863
+  },
+  "opus": {
+    "model": "claude-opus-5-5 (effort high)",
+    "setting": null,
+    "turns": [
+      {
+        "turn": 1,
+        "seconds": 444,
+        "inputTokens": 228,
+        "outputTokens": 49667,
+        "listUsd": 0.9943
+      },
+      {
+        "turn": 2,
+        "seconds": 393,
+        "inputTokens": 49919,
+        "outputTokens": 45785,
+        "listUsd": 1.1154
+      }
+    ],
+    "totalListUsd": 2.1097
+  }
+}

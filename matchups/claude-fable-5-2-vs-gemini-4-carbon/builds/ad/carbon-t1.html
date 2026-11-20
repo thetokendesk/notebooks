@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920, height=1080, initial-scale=1.0">
+<title>Claude Fable 5.2 — Launch Ad</title>
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #0a0a09;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #stage {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    background: #131311;
+    color: #F2EFE9;
+    overflow: hidden;
+    transform-origin: center center;
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8);
+  }
+
+  /* Ambient Warm Glow & Subtle Grid */
+  #bg-glow {
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(circle at 50% 45%, rgba(217, 119, 87, 0.14) 0%, rgba(19, 19, 17, 0) 65%),
+      radial-gradient(circle at 80% 80%, rgba(227, 218, 201, 0.05) 0%, rgba(19, 19, 17, 0) 50%);
+    z-index: 0;
+    transition: opacity 1s ease;
+  }
+
+  #bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(to right, rgba(242, 239, 233, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(242, 239, 233, 0.03) 1px, transparent 1px);
+    background-size: 80px 80px;
+    z-index: 0;
+    mask-image: radial-gradient(circle at center, black 35%, transparent 85%);
+    -webkit-mask-image: radial-gradient(circle at center, black 35%, transparent 85%);
+  }
+
+  /* Typography Utilities */
+  .serif {
+    font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+  }
+  .mono {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+  }
+  .accent {
+    color: #D97757;
+  }
+  .muted {
+    color: #9E9A90;
+  }
+
+  /* Top Brand Header */
+  #top-bar {
+    position: absolute;
+    top: 56px;
+    left: 80px;
+    right: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 20;
+    font-size: 18px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #A8A399;
+    font-weight: 600;
+  }
+
+  .brand-pill {
+    padding: 8px 18px;
+    border: 1px solid rgba(242, 239, 233, 0.15);
+    border-radius: 999px;
+    font-size: 15px;
+    letter-spacing: 0.14em;
+    color: #E3DAC9;
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  /* Scene Containers */
+  .scene {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(24px) scale(0.985);
+    transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .scene.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .scene.exit {
+    opacity: 0;
+    transform: translateY(-24px) scale(1.015);
+  }
+
+  /* SCENE 1: Intro */
+  .s1-eyebrow {
+    font-size: 22px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: #D97757;
+    margin-bottom: 24px;
+    font-weight: 600;
+  }
+
+  .s1-title {
+    font-size: 138px;
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    line-height: 1.02;
+    color: #FAF8F5;
+    margin-bottom: 34px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .spark-icon {
+    width: 96px;
+    height: 96px;
+    animation: slowSpin 12s linear infinite;
+  }
+
+  @keyframes slowSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .s1-date {
+    font-size: 26px;
+    color: #B8B3A8;
+    letter-spacing: 0.06em;
+    border-top: 1px solid rgba(242, 239, 233, 0.15);
+    padding-top: 24px;
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  /* SCENE 2: 30% Faster */
+  .s2-wrap {
+    width: 1520px;
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .s2-stat {
+    font-size: 168px;
+    line-height: 0.92;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: #D97757;
+    margin-bottom: 18px;
+  }
+
+  .s2-label {
+    font-size: 52px;
+    line-height: 1.15;
+    color: #FAF8F5;
+    margin-bottom: 22px;
+  }
+
+  .s2-sub {
+    font-size: 26px;
+    color: #9E9A90;
+  }
+
+  .bars-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(242, 239, 233, 0.12);
+    border-radius: 28px;
+    padding: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+  }
+
+  .bar-group {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .bar-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 22px;
+    font-weight: 500;
+  }
+
+  .bar-track {
+    height: 36px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 12px;
+    transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .bar-fill.v51 {
+    background: #5C5953;
+  }
+
+  .bar-fill.v52 {
+    background: linear-gradient(90deg, #D97757 0%, #F09B7E 100%);
+    box-shadow: 0 0 30px rgba(217, 119, 87, 0.5);
+  }
+
+  .code-stream {
+    padding: 20px 24px;
+    background: #0D0D0C;
+    border-radius: 14px;
+    border: 1px solid rgba(242, 239, 233, 0.08);
+    font-size: 18px;
+    color: #D7D2C8;
+    height: 92px;
+    overflow: hidden;
+    line-height: 1.5;
+  }
+
+  /* SCENE 3: 1,000+ Coordinated Agents -> OS */
+  #agent-canvas {
+    position: absolute;
+    inset: 0;
+    width: 1920px;
+    height: 1080px;
+    z-index: 1;
+  }
+
+  .s3-content {
+    position: relative;
+    z-index: 5;
+    width: 1580px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 70px;
+  }
+
+  .s3-left {
+    max-width: 740px;
+  }
+
+  .s3-badge {
+    display: inline-block;
+    padding: 8px 18px;
+    border-radius: 8px;
+    background: rgba(217, 119, 87, 0.16);
+    color: #F09B7E;
+    font-size: 18px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    font-weight: 600;
+  }
+
+  .s3-headline {
+    font-size: 74px;
+    line-height: 1.08;
+    margin-bottom: 26px;
+    color: #FAF8F5;
+  }
+
+  .s3-desc {
+    font-size: 30px;
+    line-height: 1.4;
+    color: #B8B3A8;
+  }
+
+  /* Laptop Illustration */
+  .laptop-wrap {
+    width: 720px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: perspective(1200px) rotateY(-8deg) rotateX(3deg);
+  }
+
+  .laptop-screen {
+    width: 640px;
+    height: 400px;
+    background: #0B0B0A;
+    border: 12px solid #2A2926;
+    border-bottom-width: 18px;
+    border-radius: 22px 22px 0 0;
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 60px rgba(217, 119, 87, 0.16);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .os-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.09);
+    font-size: 15px;
+    color: #9E9A90;
+  }
+
+  .os-dots {
+    display: flex;
+    gap: 8px;
+  }
+
+  .os-dots span {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #3D3B37;
+  }
+  .os-dots span:nth-child(1) { background: #D97757; }
+  .os-dots span:nth-child(2) { background: #E3DAC9; }
+
+  .os-terminal {
+    font-size: 17px;
+    line-height: 1.65;
+    color: #D5D0C5;
+    flex: 1;
+    padding-top: 16px;
+  }
+
+  .os-ok {
+    color: #8FD19E;
+  }
+
+  .os-boot-banner {
+    background: rgba(217, 119, 87, 0.15);
+    border: 1px solid rgba(217, 119, 87, 0.45);
+    padding: 14px 20px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    color: #FAF8F5;
+  }
+
+  .laptop-base {
+    width: 720px;
+    height: 22px;
+    background: linear-gradient(90deg, #252421, #45433E, #252421);
+    border-radius: 0 0 18px 18px;
+    position: relative;
+  }
+
+  .laptop-notch {
+    width: 110px;
+    height: 7px;
+    background: #1A1917;
+    margin: 0 auto;
+    border-radius: 0 0 8px 8px;
+  }
+
+  /* SCENE 4: 3 Working Gadgets */
+  .s4-header {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+
+  .s4-eyebrow {
+    font-size: 20px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #D97757;
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+
+  .s4-title {
+    font-size: 68px;
+    color: #FAF8F5;
+  }
+
+  .gadget-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 460px);
+    gap: 44px;
+  }
+
+  .gadget-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(242, 239, 233, 0.13);
+    border-radius: 28px;
+    padding: 46px 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(35px);
+    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .scene.active .gadget-card:nth-child(1) { opacity: 1; transform: translateY(0); transition-delay: 0.08s; }
+  .scene.active .gadget-card:nth-child(2) { opacity: 1; transform: translateY(0); transition-delay: 0.22s; }
+  .scene.active .gadget-card:nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: 0.36s; }
+
+  .gadget-svg {
+    width: 210px;
+    height: 210px;
+    margin-bottom: 32px;
+  }
+
+  .gadget-name {
+    font-size: 32px;
+    font-weight: 600;
+    color: #FAF8F5;
+    margin-bottom: 10px;
+  }
+
+  .gadget-tag {
+    font-size: 19px;
+    color: #9E9A90;
+  }
+
+  @keyframes pulseRing {
+    0%, 100% { r: 36px; opacity: 0.9; }
+    50% { r: 48px; opacity: 0.35; }
+  }
+
+  .voice-ring {
+    animation: pulseRing 2s ease-in-out infinite;
+  }
+
+  @keyframes petBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  .pet-face {
+    animation: petBounce 1.2s ease-in-out infinite;
+  }
+
+  /* SCENE 5: Finale & Pricing */
+  .s5-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .s5-title {
+    font-size: 112px;
+    color: #FAF8F5;
+    letter-spacing: -0.025em;
+    margin-bottom: 14px;
+  }
+
+  .s5-sub {
+    font-size: 28px;
+    color: #B8B3A8;
+    margin-bottom: 58px;
+  }
+
+  .price-row {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 56px;
+  }
+
+  .price-box {
+    width: 440px;
+    padding: 38px 44px;
+    border-radius: 26px;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(242, 239, 233, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .price-num {
+    font-size: 84px;
+    font-weight: 700;
+    color: #D97757;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .price-unit {
+    font-size: 23px;
+    color: #E3DAC9;
+    font-weight: 500;
+  }
+
+  .cta-pill {
+    padding: 20px 48px;
+    border-radius: 999px;
+    background: #FAF8F5;
+    color: #131311;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    box-shadow: 0 12px 40px rgba(250, 248, 245, 0.2);
+  }
+
+  /* Progress Timeline Bar */
+  #progress-track {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    z-index: 30;
+  }
+
+  #progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #D97757;
+  }
+</style>
+</head>
+<body>
+
+<div id="stage">
+  <div id="bg-glow"></div>
+  <div id="bg-grid"></div>
+
+  <header id="top-bar">
+    <div>ANTHROPIC</div>
+    <div class="brand-pill mono" id="timer-readout">NOV 9 RELEASE</div>
+  </header>
+
+  <!-- SCENE 1: 0.0s - 2.6s -->
+  <section class="scene active" id="scene-1">
+    <div class="s1-eyebrow">Introducing</div>
+    <h1 class="s1-title serif">
+      <svg class="spark-icon" viewBox="0 0 100 100" fill="none">
+        <g stroke="#D97757" stroke-width="5.5" stroke-linecap="round">
+          <line x1="50" y1="8" x2="50" y2="92"/>
+          <line x1="8" y1="50" x2="92" y2="50"/>
+          <line x1="20" y1="20" x2="80" y2="80"/>
+          <line x1="80" y1="20" x2="20" y2="80"/>
+          <line x1="34" y1="11" x2="66" y2="89"/>
+          <line x1="11" y1="34" x2="89" y2="66"/>
+          <line x1="11" y1="66" x2="89" y2="34"/>
+          <line x1="34" y1="89" x2="66" y2="11"/>
+        </g>
+      </svg>
+      Claude Fable 5.2
+    </h1>
+    <div class="s1-date mono">RELEASED NOVEMBER 9 &nbsp;·&nbsp; BY ANTHROPIC</div>
+  </section>
+
+  <!-- SCENE 2: 2.6s - 5.6s -->
+  <section class="scene" id="scene-2">
+    <div class="s2-wrap">
+      <div>
+        <div class="s2-stat"><span id="speed-counter">0</span>%</div>
+        <h2 class="s2-label serif">Faster writing speed</h2>
+        <p class="s2-sub">Writes up to 30% faster than Claude Fable 5.1</p>
+      </div>
+      <div class="bars-card">
+        <div class="bar-group">
+          <div class="bar-header">
+            <span style="color:#FAF8F5; font-weight:600;">Claude Fable 5.2</span>
+            <span class="mono accent">UP TO +30% FASTER</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill v52" id="bar-52"></div>
+          </div>
+        </div>
+        <div class="bar-group">
+          <div class="bar-header">
+            <span class="muted">Claude Fable 5.1</span>
+            <span class="mono muted">BASELINE</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill v51" id="bar-51"></div>
+          </div>
+        </div>
+        <div class="code-stream mono" id="fast-stream"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENE 3: 5.6s - 9.4s -->
+  <section class="scene" id="scene-3">
+    <canvas id="agent-canvas" width="1920" height="1080"></canvas>
+    <div class="s3-content">
+      <div class="s3-left">
+        <div class="s3-badge mono">Anthropic Demo</div>
+        <h2 class="s3-headline serif"><span class="accent">1,000+</span> coordinated AI agents.</h2>
+        <p class="s3-desc">Built a prototype operating system in <strong style="color:#FAF8F5">8 days</strong> that boots on a laptop.</p>
+      </div>
+      <div class="laptop-wrap">
+        <div class="laptop-screen mono">
+          <div class="os-topbar">
+            <div class="os-dots"><span></span><span></span><span></span></div>
+            <div>fable-os-kernel v0.8 — tty1</div>
+          </div>
+          <div class="os-terminal" id="os-log"></div>
+          <div class="os-boot-banner">
+            <span>PROTOTYPE OS — LAPTOP BOOT</span>
+            <span class="os-ok">● DAY 8 READY</span>
+          </div>
+        </div>
+        <div class="laptop-base"><div class="laptop-notch"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENE 4: 9.4s - 12.4s -->
+  <section class="scene" id="scene-4">
+    <div class="s4-header">
+      <div class="s4-eyebrow">Hardware Design Demos</div>
+      <h2 class="s4-title serif">Designed three working gadgets</h2>
+    </div>
+    <div class="gadget-grid">
+      <!-- Gadget 1: Voice-assistant hub -->
+      <div class="gadget-card">
+        <svg class="gadget-svg" viewBox="0 0 200 200" fill="none">
+          <rect x="48" y="45" width="104" height="125" rx="34" stroke="#E3DAC9" stroke-width="4" fill="#1B1A18"/>
+          <line x1="48" y1="118" x2="152" y2="118" stroke="#3D3B37" stroke-width="3"/>
+          <circle cx="100" cy="82" r="36" stroke="#D97757" stroke-width="3" class="voice-ring"/>
+          <circle cx="100" cy="82" r="16" fill="#D97757"/>
+          <circle cx="78" cy="142" r="3" fill="#78746C"/>
+          <circle cx="100" cy="142" r="3" fill="#78746C"/>
+          <circle cx="122" cy="142" r="3" fill="#78746C"/>
+        </svg>
+        <div class="gadget-name">Voice-Assistant Hub</div>
+        <div class="gadget-tag mono">WORKING PROTOTYPE 01</div>
+      </div>
+
+      <!-- Gadget 2: USB speakerphone -->
+      <div class="gadget-card">
+        <svg class="gadget-svg" viewBox="0 0 200 200" fill="none">
+          <path d="M100 42 C100 18, 152 18, 152 38" stroke="#9E9A90" stroke-width="4" stroke-linecap="round"/>
+          <rect x="144" y="36" width="16" height="22" rx="3" stroke="#D97757" stroke-width="3" fill="#1B1A18"/>
+          <circle cx="100" cy="112" r="64" stroke="#E3DAC9" stroke-width="4" fill="#1B1A18"/>
+          <circle cx="100" cy="112" r="42" stroke="#3D3B37" stroke-width="2" stroke-dasharray="6 6"/>
+          <circle cx="100" cy="112" r="14" stroke="#D97757" stroke-width="3"/>
+          <circle cx="66" cy="112" r="4" fill="#D97757"/>
+          <circle cx="134" cy="112" r="4" fill="#E3DAC9"/>
+          <circle cx="100" cy="78" r="4" fill="#E3DAC9"/>
+          <circle cx="100" cy="146" r="4" fill="#E3DAC9"/>
+        </svg>
+        <div class="gadget-name">USB Speakerphone</div>
+        <div class="gadget-tag mono">WORKING PROTOTYPE 02</div>
+      </div>
+
+      <!-- Gadget 3: Handheld virtual pet -->
+      <div class="gadget-card">
+        <svg class="gadget-svg" viewBox="0 0 200 200" fill="none">
+          <path d="M100 26 C144 26, 162 68, 162 114 C162 156, 134 178, 100 178 C66 178, 38 156, 38 114 C38 68, 56 26, 100 26 Z" stroke="#E3DAC9" stroke-width="4" fill="#1B1A18"/>
+          <rect x="64" y="64" width="72" height="58" rx="10" stroke="#D97757" stroke-width="3" fill="#121210"/>
+          <g class="pet-face" fill="#FAF8F5">
+            <rect x="80" y="84" width="10" height="12" rx="2"/>
+            <rect x="110" y="84" width="10" height="12" rx="2"/>
+            <path d="M90 104 H110" stroke="#D97757" stroke-width="4" stroke-linecap="round"/>
+          </g>
+          <circle cx="78" cy="146" r="7" stroke="#9E9A90" stroke-width="3"/>
+          <circle cx="100" cy="152" r="7" stroke="#D97757" stroke-width="3"/>
+          <circle cx="122" cy="146" r="7" stroke="#9E9A90" stroke-width="3"/>
+        </svg>
+        <div class="gadget-name">Handheld Virtual Pet</div>
+        <div class="gadget-tag mono">WORKING PROTOTYPE 03</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENE 5: 12.4s - 15.0s -->
+  <section class="scene" id="scene-5">
+    <div class="s5-wrap">
+      <h2 class="s5-title serif">Claude Fable 5.2</h2>
+      <div class="s5-sub">Available via the Anthropic API · Released November 9</div>
+      <div class="price-row">
+        <div class="price-box">
+          <div class="price-num">$8</div>
+          <div class="price-unit mono">PER 1M INPUT TOKENS</div>
+        </div>
+        <div class="price-box">
+          <div class="price-num">$40</div>
+          <div class="price-unit mono">PER 1M OUTPUT TOKENS</div>
+        </div>
+      </div>
+      <div class="cta-pill">Build with Claude Fable 5.2</div>
+    </div>
+  </section>
+
+  <div id="progress-track">
+    <div id="progress-bar"></div>
+  </div>
+</div>
+
+<script>
+  // Responsive fit to any viewport while keeping strict 1920x1080 internal coordinates
+  function fitStage() {
+    const stage = document.getElementById('stage');
+    const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    stage.style.transform = `scale(${scale})`;
+  }
+  window.addEventListener('resize', fitStage);
+  fitStage();
+
+  // Timeline Configuration (Total = 15,000 ms)
+  const DURATION = 15000;
+  const scenes = [
+    { id: 'scene-1', start: 0,     end: 2600,  label: 'NOV 9 RELEASE' },
+    { id: 'scene-2', start: 2600,  end: 5600,  label: 'PERFORMANCE' },
+    { id: 'scene-3', start: 5600,  end: 9400,  label: 'MULTI-AGENT DEMO' },
+    { id: 'scene-4', start: 9400,  end: 12400, label: 'HARDWARE DESIGN' },
+    { id: 'scene-5', start: 12400, end: 15000, label: 'API PRICING' }
+  ];
+
+  const sceneEls = scenes.map(s => document.getElementById(s.id));
+  const progressBar = document.getElementById('progress-bar');
+  const timerReadout = document.getElementById('timer-readout');
+
+  // Scene 2 helpers
+  let s2Triggered = false;
+  const speedCounter = document.getElementById('speed-counter');
+  const bar52 = document.getElementById('bar-52');
+  const bar51 = document.getElementById('bar-51');
+  const fastStream = document.getElementById('fast-stream');
+  const streamText = "synthesizing kernel_sched.rs · coordinating 1,024 worker contexts · generating schematicbom.json · throughput +30% vs Fable 5.1 · verified [OK]";
+
+  // Scene 3 helpers: 1,000+ particle swarm on Canvas + OS Boot log
+  const canvas = document.getElementById('agent-canvas');
+  const ctx = canvas.getContext('2d');
+  const PARTICLE_COUNT = 1020;
+  const particles = [];
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    particles.push({
+      x: Math.random() * 1920,
+      y: Math.random() * 1080,
+      angle: Math.random() * Math.PI * 2,
+      radius: 120 + Math.random() * 680,
+      speed: 0.004 + Math.random() * 0.012,
+      size: 1.2 + Math.random() * 2.1,
+      warm: Math.random() > 0.35
+    });
+  }
+
+  let s3Triggered = false;
+  const osLog = document.getElementById('os-log');
+  const bootLines = [
+    "[ 0.001 ] Fable-OS bootloader initialized",
+    "[ 1.420 ] Mounting virtual fs & driver modules... <span class='os-ok'>[OK]</span>",
+    "[ 3.180 ] 1,000+ agent commits merged (Day 8 build)",
+    "[ 5.904 ] Display server & laptop HAL online... <span class='os-ok'>[OK]</span>",
+    "[ 7.812 ] System booted cleanly on laptop hardware."
+  ];
+
+  function renderAgents(elapsedInScene) {
+    ctx.clearRect(0, 0, 1920, 1080);
+    const converge = Math.min(1, elapsedInScene / 2400);
+    const targetX = 1380;
+    const targetY = 520;
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      const p = particles[i];
+      p.angle += p.speed;
+      const curRadius = p.radius * (1 - converge * 0.62);
+      const orbitX = targetX + Math.cos(p.angle) * curRadius * 1.35;
+      const orbitY = targetY + Math.sin(p.angle) * curRadius * 0.75;
+
+      const x = p.x * (1 - converge) + orbitX * converge;
+      const y = p.y * (1 - converge) + orbitY * converge;
+
+      ctx.fillStyle = p.warm ? 'rgba(217, 119, 87, 0.55)' : 'rgba(227, 218, 201, 0.35)';
+      ctx.fillRect(x, y, p.size, p.size);
+    }
+  }
+
+  const startTime = performance.now();
+
+  function tick(now) {
+    const elapsed = Math.min(now - startTime, DURATION);
+    const pct = (elapsed / DURATION) * 100;
+    progressBar.style.width = pct + '%';
+
+    // Activate matching scene
+    scenes.forEach((s, idx) => {
+      const el = sceneEls[idx];
+      if (elapsed >= s.start && elapsed <= s.end) {
+        if (!el.classList.contains('active')) {
+          el.classList.remove('exit');
+          el.classList.add('active');
+          timerReadout.textContent = s.label;
+        }
+      } else if (elapsed > s.end) {
+        if (el.classList.contains('active')) {
+          el.classList.remove('active');
+          el.classList.add('exit');
+        }
+      }
+    });
+
+    // Scene 2 dynamic animations
+    if (elapsed >= 2600 && elapsed < 5600) {
+      const localT = elapsed - 2600;
+      if (!s2Triggered) {
+        s2Triggered = true;
+        requestAnimationFrame(() => {
+          bar52.style.width = '96%';
+          bar51.style.width = '74%';
+        });
+      }
+      const countVal = Math.min(30, Math.round((localT / 1100) * 30));
+      speedCounter.textContent = countVal;
+
+      const chars = Math.min(streamText.length, Math.floor((localT / 2000) * streamText.length));
+      fastStream.textContent = "> " + streamText.slice(0, chars) + "▋";
+    }
+
+    // Scene 3 dynamic animations
+    if (elapsed >= 5600 && elapsed < 9400) {
+      const localT = elapsed - 5600;
+      renderAgents(localT);
+
+      const visibleLines = Math.min(bootLines.length, Math.floor(localT / 520) + 1);
+      if (!s3Triggered || osLog.dataset.count != visibleLines) {
+        s3Triggered = true;
+        osLog.dataset.count = visibleLines;
+        osLog.innerHTML = bootLines.slice(0, visibleLines).join('<br>');
+      }
+    }
+
+    if (elapsed < DURATION) {
+      requestAnimationFrame(tick);
+    } else {
+      timerReadout.textContent = 'CLAUDE FABLE 5.2';
+    }
+  }
+
+  requestAnimationFrame(tick);
+</script>
+</body>
+</html>

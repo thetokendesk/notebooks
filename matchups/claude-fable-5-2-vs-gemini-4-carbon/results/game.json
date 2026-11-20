@@ -1,0 +1,58 @@
+{
+  "carbon": {
+    "model": "gemini-4-carbon",
+    "setting": "thinking not set (Google's default, medium)",
+    "turns": [
+      {
+        "turn": 1,
+        "seconds": 176,
+        "inputTokens": 59,
+        "outputTokens": 21553,
+        "listUsd": 0.2156
+      },
+      {
+        "turn": 2,
+        "seconds": 438,
+        "inputTokens": 73332,
+        "outputTokens": 33649,
+        "listUsd": 0.4832
+      },
+      {
+        "turn": 3,
+        "seconds": 320,
+        "inputTokens": 138439,
+        "outputTokens": 36572,
+        "listUsd": 0.6426
+      }
+    ],
+    "totalListUsd": 1.3414
+  },
+  "fable": {
+    "model": "claude-fable-5-2 (effort high)",
+    "setting": "effort high",
+    "turns": [
+      {
+        "turn": 1,
+        "seconds": 684,
+        "inputTokens": 29,
+        "outputTokens": 77701,
+        "listUsd": 3.1083
+      },
+      {
+        "turn": 2,
+        "seconds": 492,
+        "inputTokens": 77754,
+        "outputTokens": 61015,
+        "listUsd": 3.0626
+      },
+      {
+        "turn": 3,
+        "seconds": 504,
+        "inputTokens": 138811,
+        "outputTokens": 62384,
+        "listUsd": 3.6058
+      }
+    ],
+    "totalListUsd": 9.7767
+  }
+}
