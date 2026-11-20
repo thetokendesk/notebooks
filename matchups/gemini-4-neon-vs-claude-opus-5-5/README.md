@@ -12,11 +12,11 @@ Why the settings differ: Each at its highest setting: Neon xhigh in Antigravity,
 
 ### Practical jobs
 
-Three-year launch model in Excel, Product launch landing page, Product launch promo video, Quarterly business review deck: jobs for [Kestrine](../../practical/kestrine/), a company we made up for these tests (its brand guide, logos, photos and numbers are in that folder). The most fun 3D browser game is a test of its own. Each model worked alone in its maker's own coding app with the same folder, the same ask and the same time limit, and nobody answered questions.
+Three-year launch model in Excel, Product launch landing page, Product launch promo video, Quarterly business review deck: jobs for [Kestrine](https://github.com/thetokendesk/kestrine/tree/e1ae3ee0bc00725f42afc0f74c1fd195323fd2b8), a company we made up for these tests (its brand guide, logos, photos and numbers are in its own repo). The most fun 3D browser game is a test of its own. Each model worked alone in its maker's own coding app with the same folder, the same ask and the same time limit, and nobody answered questions.
 
 #### Three-year launch model in Excel
 
-Prompts as sent: [prompts/forecast-model.md](prompts/forecast-model.md). The case and the folder the models got: [practical/cases/forecast-model/](../../practical/cases/forecast-model/).
+Prompts as sent: [prompts/forecast-model.md](prompts/forecast-model.md). The case, its checklist and the folder the models got: [kestrine/cases/forecast-model](https://github.com/thetokendesk/kestrine/tree/e1ae3ee0bc00725f42afc0f74c1fd195323fd2b8/cases/forecast-model).
 
 | Model | Setting | App | Minutes | List price | Checklist | Files |
 |---|---|---|---|---|---|---|
@@ -27,7 +27,7 @@ Points item by item: [results/forecast-model.json](results/forecast-model.json).
 
 #### Product launch landing page
 
-Prompts as sent: [prompts/landing-page.md](prompts/landing-page.md). The case and the folder the models got: [practical/cases/landing-page/](../../practical/cases/landing-page/).
+Prompts as sent: [prompts/landing-page.md](prompts/landing-page.md). The case, its checklist and the folder the models got: [kestrine/cases/landing-page](https://github.com/thetokendesk/kestrine/tree/e1ae3ee0bc00725f42afc0f74c1fd195323fd2b8/cases/landing-page).
 
 | Model | Setting | App | Minutes | List price | Checklist | Files |
 |---|---|---|---|---|---|---|
@@ -38,7 +38,7 @@ Points item by item: [results/landing-page.json](results/landing-page.json).
 
 #### Product launch promo video
 
-Prompts as sent: [prompts/launch-promo.md](prompts/launch-promo.md). The case and the folder the models got: [practical/cases/launch-promo/](../../practical/cases/launch-promo/).
+Prompts as sent: [prompts/launch-promo.md](prompts/launch-promo.md). The case, its checklist and the folder the models got: [kestrine/cases/launch-promo](https://github.com/thetokendesk/kestrine/tree/e1ae3ee0bc00725f42afc0f74c1fd195323fd2b8/cases/launch-promo).
 
 | Model | Setting | App | Minutes | List price | Checklist | Files |
 |---|---|---|---|---|---|---|
@@ -49,7 +49,7 @@ Points item by item: [results/launch-promo.json](results/launch-promo.json).
 
 #### Quarterly business review deck
 
-Prompts as sent: [prompts/qbr-deck.md](prompts/qbr-deck.md). The case and the folder the models got: [practical/cases/qbr-deck/](../../practical/cases/qbr-deck/).
+Prompts as sent: [prompts/qbr-deck.md](prompts/qbr-deck.md). The case, its checklist and the folder the models got: [kestrine/cases/qbr-deck](https://github.com/thetokendesk/kestrine/tree/e1ae3ee0bc00725f42afc0f74c1fd195323fd2b8/cases/qbr-deck).
 
 | Model | Setting | App | Minutes | List price | Checklist | Files |
 |---|---|---|---|---|---|---|
@@ -60,7 +60,7 @@ Points item by item: [results/qbr-deck.json](results/qbr-deck.json).
 
 #### The most fun 3D browser game
 
-Prompts as sent: [prompts/game3d.md](prompts/game3d.md). The case and the folder the models got: [practical/cases/game3d/](../../practical/cases/game3d/).
+Prompts as sent: [prompts/game3d.md](prompts/game3d.md). The case, its checklist and the folder the models got: [cases/game3d.md](cases/game3d.md).
 
 | Model | Setting | App | Minutes | List price | Checklist | Files |
 |---|---|---|---|---|---|---|
