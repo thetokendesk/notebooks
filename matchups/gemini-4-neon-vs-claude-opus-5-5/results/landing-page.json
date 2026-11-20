@@ -1,0 +1,121 @@
+{
+  "title": "Product launch landing page",
+  "results": {
+    "neon": {
+      "model": "Gemini 4 Neon",
+      "setting": "xhigh",
+      "app": "Antigravity",
+      "minutes": 10.7,
+      "listUsd": 1.69,
+      "tokens": {
+        "input": 128344,
+        "cacheRead": 1824892,
+        "cacheWrite": 0,
+        "cacheWrite1h": 0,
+        "output": 48427,
+        "thinking": 20530
+      },
+      "checklist": [
+        {
+          "item": "The first screen sells it",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Copy in the brand's voice, with the brief's facts",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Waitlist form works (validates, confirms)",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Looks great on a phone and a laptop",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Brand applied; photos sharp, not stretched",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Loads fast, works offline",
+          "points": 2,
+          "of": 2
+        }
+      ],
+      "score": "12 of 12",
+      "ourNote": "offer maths in the form; form at the bottom",
+      "turns": [
+        {
+          "turn": 1,
+          "seconds": 642,
+          "inputTokens": 1953236,
+          "outputTokens": 48427,
+          "listUsd": 1.69312
+        }
+      ]
+    },
+    "opus": {
+      "model": "Claude Opus 5.5",
+      "setting": "max",
+      "app": "Claude Code",
+      "minutes": 10,
+      "listUsd": 2.69,
+      "tokens": {
+        "input": 50,
+        "cacheRead": 1866503,
+        "cacheWrite": 0,
+        "cacheWrite1h": 129110,
+        "output": 64098,
+        "thinking": 0
+      },
+      "checklist": [
+        {
+          "item": "The first screen sells it",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Copy in the brand's voice, with the brief's facts",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Waitlist form works (validates, confirms)",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Looks great on a phone and a laptop",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Brand applied; photos sharp, not stretched",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Loads fast, works offline",
+          "points": 2,
+          "of": 2
+        }
+      ],
+      "score": "12 of 12",
+      "ourNote": "form on the first screen; 147-day countdown",
+      "turns": [
+        {
+          "turn": 1,
+          "seconds": 600,
+          "inputTokens": 1995663,
+          "outputTokens": 64098,
+          "listUsd": 2.68834
+        }
+      ]
+    }
+  }
+}

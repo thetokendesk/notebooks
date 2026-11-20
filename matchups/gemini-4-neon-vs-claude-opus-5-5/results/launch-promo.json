@@ -1,0 +1,121 @@
+{
+  "title": "Product launch promo video",
+  "results": {
+    "neon": {
+      "model": "Gemini 4 Neon",
+      "setting": "xhigh",
+      "app": "Antigravity",
+      "minutes": 17.4,
+      "listUsd": 2.78,
+      "tokens": {
+        "input": 178479,
+        "cacheRead": 3416491,
+        "cacheWrite": 0,
+        "cacheWrite1h": 0,
+        "output": 77216,
+        "thinking": 38157
+      },
+      "checklist": [
+        {
+          "item": "Hook in the first two seconds",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "What, when, price and where all clear by the end",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Text readable on a phone and clear of the app's buttons",
+          "points": 1,
+          "of": 2
+        },
+        {
+          "item": "Movement and pacing feel made, not a slideshow",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Brand applied; photos not stretched",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Plays everywhere: 1080x1920, H.264, 20 to 30 s",
+          "points": 2,
+          "of": 2
+        }
+      ],
+      "score": "11 of 12",
+      "ourNote": "small kicker labels",
+      "turns": [
+        {
+          "turn": 1,
+          "seconds": 1046.6,
+          "inputTokens": 3594970,
+          "outputTokens": 77216,
+          "listUsd": 2.77851
+        }
+      ]
+    },
+    "opus": {
+      "model": "Claude Opus 5.5",
+      "setting": "max",
+      "app": "Claude Code",
+      "minutes": 13.5,
+      "listUsd": 3.09,
+      "tokens": {
+        "input": 60,
+        "cacheRead": 2746518,
+        "cacheWrite": 0,
+        "cacheWrite1h": 132902,
+        "output": 73805,
+        "thinking": 0
+      },
+      "checklist": [
+        {
+          "item": "Hook in the first two seconds",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "What, when, price and where all clear by the end",
+          "points": 1,
+          "of": 2
+        },
+        {
+          "item": "Text readable on a phone and clear of the app's buttons",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Movement and pacing feel made, not a slideshow",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Brand applied; photos not stretched",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Plays everywhere: 1080x1920, H.264, 20 to 30 s",
+          "points": 2,
+          "of": 2
+        }
+      ],
+      "score": "11 of 12",
+      "ourNote": "no 4.50 cafe price",
+      "turns": [
+        {
+          "turn": 1,
+          "seconds": 809.6,
+          "inputTokens": 2879480,
+          "outputTokens": 73805,
+          "listUsd": 3.08886
+        }
+      ]
+    }
+  }
+}

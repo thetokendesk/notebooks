@@ -1,0 +1,121 @@
+{
+  "title": "Three-year launch model in Excel",
+  "results": {
+    "neon": {
+      "model": "Gemini 4 Neon",
+      "setting": "xhigh",
+      "app": "Antigravity",
+      "minutes": 22.4,
+      "listUsd": 5.28,
+      "tokens": {
+        "input": 526500,
+        "cacheRead": 4458409,
+        "cacheWrite": 0,
+        "cacheWrite1h": 0,
+        "output": 160352,
+        "thinking": 42021
+      },
+      "checklist": [
+        {
+          "item": "Inputs on their own sheet; every calculation a live formula (change an input and the outputs move)",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "The low/base/high switch works and changes the answer",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Break-even month and lowest cash point shown on a summary sheet",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Both co-packers modelled or the choice explained; the 25,000-can minimum and 120-day shelf life handled",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Café cannibalisation (30%) and cold-pack shipping loss included",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "No formula errors after recalculation; assumptions written down",
+          "points": 2,
+          "of": 2
+        }
+      ],
+      "score": "12 of 12",
+      "ourNote": "hybrid co-packer plan; dense",
+      "turns": [
+        {
+          "turn": 1,
+          "seconds": 1344.5,
+          "inputTokens": 4984909,
+          "outputTokens": 160352,
+          "listUsd": 5.28386
+        }
+      ]
+    },
+    "opus": {
+      "model": "Claude Opus 5.5",
+      "setting": "max",
+      "app": "Claude Code",
+      "minutes": 17.3,
+      "listUsd": 4.15,
+      "tokens": {
+        "input": 62,
+        "cacheRead": 3682666,
+        "cacheWrite": 0,
+        "cacheWrite1h": 146929,
+        "output": 111963,
+        "thinking": 0
+      },
+      "checklist": [
+        {
+          "item": "Inputs on their own sheet; every calculation a live formula (change an input and the outputs move)",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "The low/base/high switch works and changes the answer",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Break-even month and lowest cash point shown on a summary sheet",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Both co-packers modelled or the choice explained; the 25,000-can minimum and 120-day shelf life handled",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Café cannibalisation (30%) and cold-pack shipping loss included",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "No formula errors after recalculation; assumptions written down",
+          "points": 2,
+          "of": 2
+        }
+      ],
+      "score": "12 of 12",
+      "ourNote": "'The answer' first; one co-packer at a time",
+      "turns": [
+        {
+          "turn": 1,
+          "seconds": 1036.8,
+          "inputTokens": 3829657,
+          "outputTokens": 111963,
+          "listUsd": 4.15147
+        }
+      ]
+    }
+  }
+}

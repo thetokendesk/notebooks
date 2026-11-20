@@ -1,0 +1,1580 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kestrine Cold Brew — On sale 15 April 2027</title>
+  <meta name="description" content="Our Hover House Blend, steeped 18 hours, in an 8 oz can. Nothing added. On sale Thursday 15 April 2027 in Chattanooga and online. Join the waitlist for 20% off your first 12-pack with free shipping.">
+  <style>
+    :root {
+      /* Brand palette from brand/BRAND.md */
+      --rust: #B4532A;
+      --rust-hover: #96411E;
+      --roast: #2B1D16;
+      --roast-soft: #3A2920;
+      --roast-muted: #58463C;
+      --crema: #F3E9DC;
+      --crema-light: #FAF5EE;
+      --crema-deep: #E8DAC7;
+      --crema-muted: #D5C6B4;
+      --sage: #7A8B6F;
+      --sage-dark: #48543F;
+      --sage-tint: #E5EAE0;
+      --sage-on-dark: #A8BC9B;
+      --line: #D7C8B5;
+      --line-dark: #4A372D;
+      --white: #FFFFFF;
+
+      /* Type scale: Georgia Bold for headings, Avenir Next for everything else */
+      --font-display: Georgia, "Times New Roman", serif;
+      --font-body: "Avenir Next", Avenir, "Helvetica Neue", Arial, sans-serif;
+
+      /* Layout & 8 px spacing scale */
+      --max-w: 1120px;
+      --gutter: 24px;
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--crema);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+      *, *::before, *::after {
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    body {
+      margin: 0;
+      background-color: var(--crema);
+      color: var(--roast);
+      font-family: var(--font-body);
+      font-size: 17px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-wrap: anywhere;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--rust);
+      outline-offset: 3px;
+    }
+
+    /* Skip link for keyboard navigation */
+    .skip-link {
+      position: absolute;
+      left: 16px;
+      top: -64px;
+      z-index: 100;
+      background: var(--roast);
+      color: var(--crema);
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .skip-link:focus {
+      top: 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding-left: var(--gutter);
+      padding-right: var(--gutter);
+    }
+
+    /* Typography */
+    h1, h2, h3 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      margin: 0;
+      letter-spacing: -0.01em;
+      text-wrap: balance;
+    }
+
+    h1 {
+      font-size: clamp(32px, 4.4vw, 50px);
+      line-height: 1.09;
+    }
+
+    h2 {
+      font-size: clamp(26px, 3.1vw, 36px);
+      line-height: 1.16;
+    }
+
+    h3 {
+      font-size: clamp(19px, 1.9vw, 22px);
+      line-height: 1.25;
+    }
+
+    p {
+      margin: 0;
+      max-width: 60ch;
+    }
+
+    .eyebrow {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--sage-dark);
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .band-dark .eyebrow {
+      color: var(--sage-on-dark);
+    }
+
+    .lede {
+      font-size: clamp(17px, 1.5vw, 19px);
+      line-height: 1.55;
+      color: var(--roast-muted);
+      max-width: 52ch;
+    }
+
+    .band-dark .lede {
+      color: var(--crema-muted);
+    }
+
+    /* Buttons & links (44px+ tap targets everywhere) */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 15px 32px;
+      background-color: var(--rust);
+      color: var(--white);
+      border: 2px solid var(--rust);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 17px;
+      font-weight: 600;
+      line-height: 1.2;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color 0.16s ease, border-color 0.16s ease, transform 0.12s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--rust-hover);
+      border-color: var(--rust-hover);
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 12px 24px;
+      background-color: var(--roast);
+      color: var(--crema);
+      border: 2px solid var(--roast);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.2;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color 0.16s ease, border-color 0.16s ease;
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--roast-soft);
+      border-color: var(--roast-soft);
+    }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 18px;
+      background-color: transparent;
+      color: var(--roast);
+      border: 1.5px solid var(--roast);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.2;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color 0.16s ease, color 0.16s ease;
+    }
+
+    .btn-outline:hover {
+      background-color: var(--roast);
+      color: var(--crema);
+    }
+
+    /* Header: exact Crema (#F3E9DC) so logo.png blends seamlessly; generous clear space >= mark height */
+    .site-header {
+      background-color: var(--crema);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding-top: 24px;
+      padding-bottom: 24px;
+    }
+
+    .brand-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 48px;
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+
+    .brand-logo {
+      height: 60px;
+      width: auto;
+    }
+
+    .site-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 8px 14px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--roast);
+      text-decoration: none;
+      border-radius: var(--radius-sm);
+      transition: background-color 0.15s ease;
+    }
+
+    .nav-link:hover {
+      background-color: var(--crema-deep);
+    }
+
+    .header-cta {
+      margin-left: 8px;
+      white-space: nowrap;
+    }
+
+    /* Hero */
+    .hero {
+      padding-top: 48px;
+      padding-bottom: 56px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+      gap: 48px;
+      align-items: center;
+    }
+
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .launch-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background-color: var(--sage-tint);
+      color: var(--roast);
+      border: 1px solid rgba(122, 139, 111, 0.35);
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      margin-bottom: 20px;
+    }
+
+    .launch-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--sage);
+      flex-shrink: 0;
+    }
+
+    .hero h1 {
+      margin-bottom: 16px;
+    }
+
+    .hero .lede {
+      margin-bottom: 28px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+    }
+
+    .hero-offer-note {
+      margin-top: 14px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--roast-muted);
+    }
+
+    .hero-offer-note strong {
+      color: var(--roast);
+      font-weight: 600;
+    }
+
+    .hero-media {
+      margin: 0;
+    }
+
+    .photo-frame {
+      overflow: hidden;
+      border-radius: var(--radius-md);
+      background-color: var(--roast);
+      aspect-ratio: 3 / 2;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-media .photo-frame {
+      box-shadow: 0 18px 40px rgba(43, 29, 22, 0.14);
+    }
+
+    /* Fact Strip (Dark Roast anchor right beneath hero) */
+    .fact-bar {
+      background-color: var(--roast);
+      color: var(--crema);
+      padding-top: 28px;
+      padding-bottom: 28px;
+    }
+
+    .fact-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .fact-item {
+      border-left: 2px solid var(--sage);
+      padding-left: 16px;
+    }
+
+    .fact-value {
+      display: block;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(20px, 2vw, 24px);
+      line-height: 1.2;
+      color: var(--crema);
+      margin-bottom: 4px;
+    }
+
+    .fact-label {
+      display: block;
+      font-size: 14px;
+      line-height: 1.4;
+      color: var(--crema-muted);
+    }
+
+    /* Shared section spacing */
+    .section {
+      padding-top: 80px;
+      padding-bottom: 80px;
+    }
+
+    .band-light {
+      background-color: var(--crema);
+      color: var(--roast);
+    }
+
+    .band-warm {
+      background-color: var(--crema-light);
+      color: var(--roast);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .band-dark {
+      background-color: var(--roast);
+      color: var(--crema);
+    }
+
+    .section-header {
+      margin-bottom: 40px;
+    }
+
+    .section-header h2 {
+      margin-bottom: 12px;
+    }
+
+    /* Section 1: Taste & Steep */
+    .split-feature {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+      gap: 48px;
+      align-items: center;
+      margin-bottom: 48px;
+    }
+
+    .tasting-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      list-style: none;
+      padding: 0;
+      margin: 24px 0 0;
+    }
+
+    .tasting-pills li {
+      padding: 8px 14px;
+      background-color: var(--crema);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--roast);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .step-card {
+      background-color: var(--crema);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 24px;
+    }
+
+    .step-num {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sage-dark);
+      margin-bottom: 8px;
+    }
+
+    .step-card h3 {
+      margin-bottom: 8px;
+    }
+
+    .step-card p {
+      font-size: 16px;
+      color: var(--roast-muted);
+    }
+
+    /* Section 2: Proof / Chattanooga Roots (Dark Roast band) */
+    .proof-intro {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      gap: 40px;
+      align-items: end;
+      margin-bottom: 40px;
+    }
+
+    .proof-quote {
+      border-left: 3px solid var(--sage);
+      padding-left: 20px;
+      font-family: var(--font-display);
+      font-size: 19px;
+      line-height: 1.45;
+      color: var(--crema);
+    }
+
+    .proof-quote span {
+      display: block;
+      margin-top: 8px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--crema-muted);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .gallery-card {
+      margin: 0;
+    }
+
+    .gallery-card .photo-frame {
+      margin-bottom: 12px;
+      border: 1px solid var(--line-dark);
+    }
+
+    .gallery-card h3 {
+      font-size: 18px;
+      color: var(--crema);
+      margin-bottom: 4px;
+    }
+
+    .gallery-card figcaption {
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--crema-muted);
+    }
+
+    /* Section 3: Offer & Where to Find It */
+    .offer-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .offer-card {
+      display: flex;
+      flex-direction: column;
+      background-color: var(--crema-light);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 32px;
+    }
+
+    .offer-card-featured {
+      border: 2px solid var(--roast);
+      background-color: var(--white);
+    }
+
+    .offer-badge {
+      display: inline-block;
+      align-self: flex-start;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      background-color: var(--crema-deep);
+      color: var(--roast);
+    }
+
+    .offer-card-featured .offer-badge {
+      background-color: var(--sage-tint);
+      color: var(--roast);
+    }
+
+    .offer-card h3 {
+      margin-bottom: 12px;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .price-main {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(30px, 3.4vw, 38px);
+      line-height: 1.1;
+      color: var(--roast);
+    }
+
+    .price-was {
+      font-size: 18px;
+      color: var(--roast-muted);
+      text-decoration: line-through;
+    }
+
+    .price-unit {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--roast-muted);
+    }
+
+    .offer-sub {
+      font-size: 15px;
+      color: var(--roast-muted);
+      margin-bottom: 24px;
+    }
+
+    .offer-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-top: 1px solid var(--line);
+      padding-top: 20px;
+      flex-grow: 1;
+    }
+
+    .offer-list li {
+      position: relative;
+      padding-left: 20px;
+      font-size: 16px;
+      color: var(--roast);
+    }
+
+    .offer-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 9px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--sage);
+    }
+
+    .offer-foot {
+      margin-top: auto;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      background-color: var(--crema);
+      border-left: 3px solid var(--sage);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--roast);
+    }
+
+    /* Section 4: FAQ */
+    .faq-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+      gap: 48px;
+      align-items: start;
+    }
+
+    .faq-list {
+      border-top: 1px solid var(--line);
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .faq-item summary {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 56px;
+      padding: 16px 0;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 1.3;
+      color: var(--roast);
+      cursor: pointer;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-icon {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1.5px solid var(--roast);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-body);
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1;
+      color: var(--roast);
+    }
+
+    .faq-item[open] .faq-icon {
+      background-color: var(--roast);
+      color: var(--crema);
+    }
+
+    .faq-answer {
+      padding: 0 0 20px;
+      font-size: 16px;
+      color: var(--roast-muted);
+      max-width: 60ch;
+    }
+
+    /* Section 5: Final Waitlist CTA */
+    .waitlist-section {
+      padding-top: 80px;
+      padding-bottom: 96px;
+    }
+
+    .waitlist-card {
+      background-color: var(--crema-light);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 48px;
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+      gap: 48px;
+      align-items: start;
+    }
+
+    .waitlist-mark {
+      height: 36px;
+      width: auto;
+      margin-bottom: 24px;
+    }
+
+    .waitlist-info h2 {
+      margin-bottom: 16px;
+    }
+
+    .waitlist-info .lede {
+      margin-bottom: 24px;
+    }
+
+    .waitlist-summary {
+      background-color: var(--crema);
+      border-left: 3px solid var(--sage);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 16px 20px;
+      font-size: 15px;
+      color: var(--roast);
+    }
+
+    .waitlist-summary strong {
+      display: block;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .waitlist-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field label,
+    .field legend {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--roast);
+    }
+
+    .optional-tag {
+      font-weight: 400;
+      color: var(--roast-muted);
+      font-size: 14px;
+    }
+
+    .text-input {
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 14px;
+      font-family: var(--font-body);
+      font-size: 16px;
+      color: var(--roast);
+      background-color: var(--white);
+      border: 1.5px solid #B7A692;
+      border-radius: var(--radius-sm);
+      transition: border-color 0.15s ease;
+    }
+
+    .text-input:focus {
+      border-color: var(--roast);
+    }
+
+    .text-input[aria-invalid="true"] {
+      border-color: var(--rust);
+      background-color: #FFF9F6;
+    }
+
+    .field-error {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--rust-hover);
+      min-height: 20px;
+    }
+
+    .field-error:empty {
+      display: none;
+    }
+
+    fieldset.choice-group {
+      border: 0;
+      padding: 0;
+      margin: 0;
+    }
+
+    fieldset.choice-group legend {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--roast);
+      margin-bottom: 10px;
+    }
+
+    .choice-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .choice-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 48px;
+      padding: 10px 14px;
+      background-color: var(--white);
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--roast);
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .choice-option:has(input:checked) {
+      border-color: var(--roast);
+      background-color: var(--crema);
+    }
+
+    .choice-option input {
+      width: 20px;
+      height: 20px;
+      margin: 0;
+      accent-color: var(--roast);
+      flex-shrink: 0;
+    }
+
+    .form-submit {
+      width: 100%;
+    }
+
+    .form-note {
+      font-size: 14px;
+      color: var(--roast-muted);
+    }
+
+    /* Confirmation state */
+    .waitlist-success {
+      background-color: var(--white);
+      border: 2px solid var(--sage);
+      border-radius: var(--radius-md);
+      padding: 28px;
+    }
+
+    .waitlist-success[hidden] {
+      display: none;
+    }
+
+    .success-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background-color: var(--sage-tint);
+      color: var(--roast);
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .waitlist-success h3 {
+      margin-bottom: 12px;
+    }
+
+    .waitlist-success p {
+      font-size: 16px;
+      color: var(--roast-muted);
+      margin-bottom: 16px;
+    }
+
+    .waitlist-success .success-perk {
+      background-color: var(--crema);
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      color: var(--roast);
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+
+    /* Footer: exact Roast (#2B1D16) so logo-dark.png blends seamlessly */
+    .site-footer {
+      background-color: var(--roast);
+      color: var(--crema);
+      padding-top: 56px;
+      padding-bottom: 56px;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .footer-logo {
+      height: 60px;
+      width: auto;
+    }
+
+    .footer-tagline {
+      font-size: 15px;
+      color: var(--crema-muted);
+      max-width: 42ch;
+    }
+
+    .footer-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 15px;
+      color: var(--crema-muted);
+      text-align: right;
+    }
+
+    .footer-meta strong {
+      color: var(--crema);
+      font-weight: 600;
+    }
+
+    /* Mobile & tablet responsive rules (< 760px collapses to one column) */
+    @media (max-width: 960px) {
+      .nav-link {
+        display: none;
+      }
+      .hero-grid,
+      .split-feature,
+      .proof-intro,
+      .faq-layout,
+      .waitlist-card {
+        gap: 32px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      :root {
+        --gutter: 16px;
+      }
+
+      body {
+        font-size: 16px;
+      }
+
+      .header-inner {
+        padding-top: 18px;
+        padding-bottom: 18px;
+        gap: 12px;
+      }
+
+      .brand-logo {
+        height: 46px;
+      }
+
+      .header-cta {
+        margin-left: 0;
+        padding: 10px 14px;
+        font-size: 14px;
+      }
+
+      .hero {
+        padding-top: 24px;
+        padding-bottom: 40px;
+      }
+
+      .hero-grid,
+      .split-feature,
+      .steps-grid,
+      .proof-intro,
+      .gallery-grid,
+      .offer-grid,
+      .faq-layout,
+      .waitlist-card {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-grid {
+        gap: 24px;
+      }
+
+      .launch-tag {
+        margin-bottom: 14px;
+      }
+
+      .hero h1 {
+        margin-bottom: 12px;
+      }
+
+      .hero .lede {
+        margin-bottom: 20px;
+      }
+
+      .hero-actions .btn-primary {
+        width: 100%;
+      }
+
+      .fact-bar {
+        padding-top: 24px;
+        padding-bottom: 24px;
+      }
+
+      .fact-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px 16px;
+      }
+
+      .section {
+        padding-top: 56px;
+        padding-bottom: 56px;
+      }
+
+      .section-header {
+        margin-bottom: 28px;
+      }
+
+      .split-feature {
+        margin-bottom: 32px;
+      }
+
+      .offer-card {
+        padding: 24px;
+      }
+
+      .waitlist-section {
+        padding-top: 56px;
+        padding-bottom: 64px;
+      }
+
+      .waitlist-card {
+        padding: 24px;
+        gap: 28px;
+      }
+
+      .site-footer {
+        padding-top: 40px;
+        padding-bottom: 40px;
+      }
+
+      .footer-logo {
+        height: 48px;
+      }
+
+      .footer-meta {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand-link" href="#top" aria-label="Kestrine Coffee Co. home">
+        <img class="brand-logo" src="images/logo.png" alt="Kestrine Coffee Co." width="1589" height="460">
+      </a>
+      <nav class="site-nav" aria-label="Page sections">
+        <a class="nav-link" href="#the-coffee">The Coffee</a>
+        <a class="nav-link" href="#our-story">Our Story</a>
+        <a class="nav-link" href="#where-to-buy">Pricing &amp; Cafés</a>
+        <a class="nav-link" href="#faq">FAQ</a>
+        <a class="btn-outline header-cta" href="#waitlist" data-focus-email>Join waitlist</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero -->
+    <section id="top" class="hero band-light">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="launch-tag">
+            <span class="launch-dot" aria-hidden="true"></span>
+            On sale Thursday, 15 April 2027
+          </p>
+          <h1>Our house blend, steeped 18&nbsp;hours, in&nbsp;a&nbsp;can.</h1>
+          <p class="lede">Hover House Blend—chocolate, toasted almond, a little cherry. Cold, smooth, not bitter, with no café line.</p>
+          <div class="hero-actions">
+            <a class="btn-primary" href="#waitlist" data-focus-email>Join the waitlist</a>
+          </div>
+          <p class="hero-offer-note"><strong>20% off your first 12-pack + free shipping</strong> when you join before launch.</p>
+        </div>
+
+        <figure class="hero-media">
+          <div class="photo-frame">
+            <img src="images/cold-brew-cans.jpg" alt="Three chilled 8 oz cans of Kestrine Cold Brew covered in condensation on dark slate with ice cubes" width="1536" height="1024">
+          </div>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Key Facts Strip -->
+    <section class="fact-bar" aria-label="Launch details at a glance">
+      <div class="container fact-grid">
+        <div class="fact-item">
+          <span class="fact-value">18 hours</span>
+          <span class="fact-label">Cold-steeped Hover House Blend</span>
+        </div>
+        <div class="fact-item">
+          <span class="fact-value">8 oz can</span>
+          <span class="fact-label">Nothing added—smooth, not bitter</span>
+        </div>
+        <div class="fact-item">
+          <span class="fact-value">$4.50 / $36</span>
+          <span class="fact-label">Single can in cafés · 12-pack online</span>
+        </div>
+        <div class="fact-item">
+          <span class="fact-value">15 April 2027</span>
+          <span class="fact-label">In our 3 cafés &amp; kestrinecoffee.com</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 1: What's in the Can / How It's Made -->
+    <section id="the-coffee" class="section band-warm">
+      <div class="container">
+        <div class="split-feature">
+          <div class="photo-frame">
+            <img src="images/roastery.jpg" alt="Roaster inspecting freshly roasted coffee beans beside Kestrine's 15 kg roaster in Chattanooga" width="1536" height="1024">
+          </div>
+          <div>
+            <span class="eyebrow">What is in the can</span>
+            <h2>Chocolate, toasted almond, a&nbsp;little&nbsp;cherry.</h2>
+            <p class="lede" style="margin-top: 12px;">We did not invent a separate recipe for a can. We took the medium-roast house blend people already order in our cafés—beans from Brazil and Colombia—and steeped it cold for 18 hours.</p>
+            <ul class="tasting-pills" aria-label="Tasting notes and profile">
+              <li>Chocolate</li>
+              <li>Toasted almond</li>
+              <li>A little cherry</li>
+              <li>Nothing added</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="steps-grid">
+          <article class="step-card">
+            <span class="step-num">01 · The blend</span>
+            <h3>Brazil and Colombia</h3>
+            <p>Hover House Blend is roasted medium on our 15 kg roaster on Chattanooga's Southside—the same coffee behind our daily bar drinks.</p>
+          </article>
+          <article class="step-card">
+            <span class="step-num">02 · The steep</span>
+            <h3>18 hours in cold water</h3>
+            <p>Steeping cold and slow brings out cocoa sweetness and toasted almond while keeping the finish clean, smooth, and never bitter.</p>
+          </article>
+          <article class="step-card">
+            <span class="step-num">03 · The can</span>
+            <h3>8 oz, grab and go</h3>
+            <p>Just our coffee and water, sealed cold in an 8 oz can. Keep a 12-pack in your fridge or grab one when there is no time for the line.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Proof / Who We Are -->
+    <section id="our-story" class="section band-dark">
+      <div class="container">
+        <div class="proof-intro">
+          <div>
+            <span class="eyebrow">Chattanooga roaster</span>
+            <h2>Roasted on the Southside since&nbsp;2016.</h2>
+            <p class="lede" style="margin-top: 12px;">Founded by Maya Okafor and Tom Reyes, Kestrine roasts about 3,600 kg of coffee a month across our cafés and online shop. Cold Brew is our first canned coffee—built for people who already love Hover House Blend and want it cold, wherever the day goes.</p>
+          </div>
+          <p class="proof-quote">
+            Named after the kestrel, the small falcon that hovers in place before it dives: we take our time, then commit.
+            <span>Kestrine Coffee Co. · Chattanooga, Tennessee</span>
+          </p>
+        </div>
+
+        <div class="gallery-grid">
+          <figure class="gallery-card">
+            <div class="photo-frame">
+              <img src="images/farm-visit.jpg" alt="Coffee grower holding freshly picked red coffee cherries at a partner farm in Colombia" width="1536" height="1024">
+            </div>
+            <h3>Partner farm in Colombia</h3>
+            <figcaption>Where part of Hover House Blend is grown, paired with coffees from Brazil for chocolate, toasted almond, and a little cherry.</figcaption>
+          </figure>
+          <figure class="gallery-card">
+            <div class="photo-frame">
+              <img src="images/cafe-downtown.jpg" alt="Sunlight streaming through tall brick-framed windows inside Kestrine's Downtown Chattanooga café" width="1536" height="1024">
+            </div>
+            <h3>Downtown since 2017</h3>
+            <figcaption>Our first Chattanooga café, joined by North Shore in 2019—both stocking cold 8 oz cans starting 15 April 2027.</figcaption>
+          </figure>
+          <figure class="gallery-card">
+            <div class="photo-frame">
+              <img src="images/airport-cafe.jpg" alt="Barista handing a coffee across the counter to a traveler at Kestrine's Airport café" width="1536" height="1024">
+            </div>
+            <h3>Ready before boarding</h3>
+            <figcaption>Opened at the Chattanooga Airport in June 2025—cold cans will stock all three cafés on launch day.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Pricing & Where to Buy -->
+    <section id="where-to-buy" class="section band-light">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow">Where to find it</span>
+          <h2>Two ways to buy starting 15&nbsp;April&nbsp;2027.</h2>
+          <p class="lede">Pick up cold single cans in Chattanooga, or order a 12-pack shipped cold straight to your door.</p>
+        </div>
+
+        <div class="offer-grid">
+          <article class="offer-card">
+            <span class="offer-badge">In person · Chattanooga</span>
+            <h3>Single 8 oz cans in our cafés</h3>
+            <div class="price-row">
+              <span class="price-main">$4.50</span>
+              <span class="price-unit">per 8 oz can</span>
+            </div>
+            <p class="offer-sub">Grab a cold can at the counter and skip the espresso line.</p>
+            <ul class="offer-list">
+              <li>Downtown café (open since 2017)</li>
+              <li>North Shore café (open since 2019)</li>
+              <li>Chattanooga Airport café (opened June 2025)</li>
+            </ul>
+            <p class="offer-foot">On sale Thursday, 15 April 2027 at all three locations.</p>
+          </article>
+
+          <article class="offer-card offer-card-featured">
+            <span class="offer-badge">Waitlist offer · Save 20% + free shipping</span>
+            <h3>12-pack shipped cold online</h3>
+            <div class="price-row">
+              <span class="price-main">$28.80</span>
+              <span class="price-was" aria-label="Regular price 36 dollars">$36</span>
+              <span class="price-unit">first 12-pack on waitlist</span>
+            </div>
+            <p class="offer-sub">$2.40 a can on the waitlist (regularly $36, or $3.00 a can).</p>
+            <ul class="offer-list">
+              <li>Twelve 8 oz cans of Kestrine Cold Brew</li>
+              <li>Shipped cold from kestrinecoffee.com anywhere in the US</li>
+              <li>20% off your first 12-pack plus free shipping when you join before launch</li>
+            </ul>
+            <a class="btn-secondary" href="#waitlist" data-focus-email>Claim 20% off on the waitlist</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Common Questions -->
+    <section id="faq" class="section band-warm">
+      <div class="container faq-layout">
+        <div>
+          <span class="eyebrow">Common questions</span>
+          <h2>Quick answers before launch day.</h2>
+          <p class="lede" style="margin-top: 12px;">Everything you need to know about what is in the can, pricing, and how the waitlist offer works.</p>
+        </div>
+
+        <div class="faq-list">
+          <details class="faq-item" open>
+            <summary>
+              <span>When does Kestrine Cold Brew go on sale?</span>
+              <span class="faq-icon" aria-hidden="true">−</span>
+            </summary>
+            <p class="faq-answer">Thursday, 15 April 2027—available the same day at our three Chattanooga cafés and online at kestrinecoffee.com.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>
+              <span>What coffee is inside, and is anything added?</span>
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <p class="faq-answer">It is our Hover House Blend—a medium roast of coffees from Brazil and Colombia—steeped cold for 18 hours in an 8 oz can with nothing added. It tastes like chocolate, toasted almond, and a little cherry: smooth, not bitter.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>
+              <span>How does the waitlist discount work?</span>
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <p class="faq-answer">Join the waitlist below before Thursday, 15 April 2027. On launch day, you get 20% off your first 12-pack ($28.80 instead of $36) with free cold shipping on kestrinecoffee.com.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>
+              <span>How are online 12-packs delivered?</span>
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <p class="faq-answer">Online 12-packs are shipped cold in the US through kestrinecoffee.com, ready to put straight in your fridge.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>
+              <span>Which Chattanooga cafés will carry single cans?</span>
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <p class="faq-answer">All three Kestrine cafés: Downtown, North Shore, and the Airport. Single 8 oz cans are $4.50 in the cafés.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Final Waitlist CTA -->
+    <section id="waitlist" class="waitlist-section band-light">
+      <div class="container">
+        <div class="waitlist-card">
+          <div class="waitlist-info">
+            <img class="waitlist-mark" src="images/logo-mark.png" alt="" aria-hidden="true" width="724" height="419">
+            <span class="eyebrow">Early access · Before 15 April 2027</span>
+            <h2>Get 20% off your first 12-pack and free&nbsp;shipping.</h2>
+            <p class="lede">Leave your email and we will send your launch-day link as soon as Kestrine Cold Brew goes on sale Thursday, 15 April 2027.</p>
+            <div class="waitlist-summary">
+              <strong>Waitlist offer: $28.80 shipped cold</strong>
+              20% off the $36 12-pack ($2.40 a can) plus free shipping on your first online order.
+            </div>
+          </div>
+
+          <div>
+            <form id="waitlist-form" class="waitlist-form" novalidate>
+              <div class="field">
+                <label for="wl-email">Email address</label>
+                <input id="wl-email" name="email" type="email" class="text-input" autocomplete="email" inputmode="email" placeholder="you@example.com" required aria-describedby="wl-email-error">
+                <p id="wl-email-error" class="field-error" role="alert"></p>
+              </div>
+
+              <div class="field">
+                <label for="wl-name">First name <span class="optional-tag">(optional)</span></label>
+                <input id="wl-name" name="firstName" type="text" class="text-input" autocomplete="given-name" placeholder="Your first name">
+              </div>
+
+              <fieldset class="choice-group">
+                <legend>How do you plan to grab your first cans?</legend>
+                <div class="choice-options">
+                  <label class="choice-option">
+                    <input type="radio" name="channel" value="online" checked>
+                    <span>Online 12-pack shipped cold (20% off + free shipping)</span>
+                  </label>
+                  <label class="choice-option">
+                    <input type="radio" name="channel" value="cafe">
+                    <span>Single cans at a Chattanooga café ($4.50 a can)</span>
+                  </label>
+                  <label class="choice-option">
+                    <input type="radio" name="channel" value="both">
+                    <span>Both—a 12-pack at home and cans in the cafés</span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <button type="submit" class="btn-primary form-submit">Join the waitlist</button>
+              <p class="form-note">One launch email on Thursday, 15 April 2027 with your 20% off + free shipping link. No noise in between.</p>
+            </form>
+
+            <div id="waitlist-success" class="waitlist-success" role="status" aria-live="polite" hidden>
+              <span class="success-badge">Waitlist spot saved</span>
+              <h3 id="success-heading">You are on the list.</h3>
+              <p id="success-body"></p>
+              <p class="success-perk">Your launch offer: <strong>20% off your first 12-pack ($28.80 instead of $36) with free cold shipping</strong> at kestrinecoffee.com.</p>
+              <button type="button" id="waitlist-reset" class="btn-outline">Use a different email</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img class="footer-logo" src="images/logo-dark.png" alt="Kestrine Coffee Co." width="1589" height="460">
+        <p class="footer-tagline">Specialty coffee roaster in Chattanooga, Tennessee. Take your time, then commit.</p>
+      </div>
+      <div class="footer-meta">
+        <div><strong>Cafés:</strong> Downtown · North Shore · Airport</div>
+        <div><strong>Online:</strong> kestrinecoffee.com (ships in the US)</div>
+        <div><strong>Launch day:</strong> Thursday, 15 April 2027</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const STORAGE_KEY = "kestrine_cold_brew_waitlist_v1";
+      const form = document.getElementById("waitlist-form");
+      const emailInput = document.getElementById("wl-email");
+      const nameInput = document.getElementById("wl-name");
+      const emailError = document.getElementById("wl-email-error");
+      const successBox = document.getElementById("waitlist-success");
+      const successHeading = document.getElementById("success-heading");
+      const successBody = document.getElementById("success-body");
+      const resetBtn = document.getElementById("waitlist-reset");
+
+      // Keep FAQ +/- icons synchronized with native <details> open state
+      document.querySelectorAll(".faq-item").forEach((item) => {
+        const icon = item.querySelector(".faq-icon");
+        if (!icon) return;
+        const syncIcon = () => {
+          icon.textContent = item.open ? "−" : "+";
+        };
+        item.addEventListener("toggle", syncIcon);
+        syncIcon();
+      });
+
+      // Focus the email input when users tap any waitlist jump button
+      document.querySelectorAll("[data-focus-email]").forEach((link) => {
+        link.addEventListener("click", () => {
+          if (!successBox.hidden) return;
+          window.setTimeout(() => {
+            emailInput.focus({ preventScroll: true });
+          }, 250);
+        });
+      });
+
+      function isValidEmail(value) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+      }
+
+      function channelCopy(channel) {
+        if (channel === "cafe") {
+          return "We will remind you when $4.50 cans hit the coolers at Downtown, North Shore, and the Airport—and include your online 12-pack discount in case you want some at home too.";
+        }
+        if (channel === "both") {
+          return "We will send your 12-pack discount link on launch morning and let you know when cold cans are stocked at Downtown, North Shore, and the Airport.";
+        }
+        return "On Thursday, 15 April 2027, we will send your direct link to order your first 12-pack shipped cold from kestrinecoffee.com.";
+      }
+
+      function showConfirmation(entry) {
+        const greeting = entry.firstName ? `You are on the list, ${entry.firstName}.` : "You are on the list.";
+        successHeading.textContent = greeting;
+        successBody.textContent = `We saved ${entry.email} for launch day. ${channelCopy(entry.channel)}`;
+        form.hidden = true;
+        successBox.hidden = false;
+      }
+
+      function clearError() {
+        emailError.textContent = "";
+        emailInput.removeAttribute("aria-invalid");
+      }
+
+      emailInput.addEventListener("input", () => {
+        if (emailInput.getAttribute("aria-invalid") === "true") {
+          clearError();
+        }
+      });
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const email = emailInput.value.trim();
+        const firstName = nameInput.value.trim();
+        const selectedChannel = form.querySelector('input[name="channel"]:checked');
+        const channel = selectedChannel ? selectedChannel.value : "online";
+
+        if (!email) {
+          emailError.textContent = "Enter your email address to join the waitlist.";
+          emailInput.setAttribute("aria-invalid", "true");
+          emailInput.focus();
+          return;
+        }
+        if (!isValidEmail(email)) {
+          emailError.textContent = "Enter a valid email address, such as you@example.com.";
+          emailInput.setAttribute("aria-invalid", "true");
+          emailInput.focus();
+          return;
+        }
+
+        clearError();
+        const entry = { email, firstName, channel, savedAt: new Date().toISOString() };
+        try {
+          window.localStorage.setItem(STORAGE_KEY, JSON.stringify(entry));
+        } catch (_) {
+          // Storage may be unavailable in restricted file:// contexts; confirmation still displays.
+        }
+        showConfirmation(entry);
+        successBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      });
+
+      resetBtn.addEventListener("click", () => {
+        try {
+          window.localStorage.removeItem(STORAGE_KEY);
+        } catch (_) {}
+        successBox.hidden = true;
+        form.hidden = false;
+        emailInput.value = "";
+        nameInput.value = "";
+        clearError();
+        emailInput.focus();
+      });
+
+      // Restore previous waitlist confirmation if already saved in this browser
+      try {
+        const saved = window.localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && parsed.email) {
+            showConfirmation(parsed);
+          }
+        }
+      } catch (_) {}
+    })();
+  </script>
+</body>
+</html>

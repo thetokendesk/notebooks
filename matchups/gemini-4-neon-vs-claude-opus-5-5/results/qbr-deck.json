@@ -1,0 +1,121 @@
+{
+  "title": "Quarterly business review deck",
+  "results": {
+    "neon": {
+      "model": "Gemini 4 Neon",
+      "setting": "xhigh",
+      "app": "Antigravity",
+      "minutes": 18.6,
+      "listUsd": 3.88,
+      "tokens": {
+        "input": 313079,
+        "cacheRead": 3468475,
+        "cacheWrite": 0,
+        "cacheWrite1h": 0,
+        "output": 117978,
+        "thinking": 43341
+      },
+      "checklist": [
+        {
+          "item": "Every number matches the data (Q3 2026 revenue $1,274,171, up 17.5%; gross margin 63.1%; wholesale down 32%; subscription up 70%)",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Each slide makes one point, with a headline that says it",
+          "points": 1,
+          "of": 2
+        },
+        {
+          "item": "Charts, not tables, and readable from the back of the room",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "The three asks are clear and each has what the board needs to decide",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Brand applied: colours, Georgia and Avenir Next, the logo, no stretched photos",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Nothing overflows or overlaps; speaker notes on every slide",
+          "points": 2,
+          "of": 2
+        }
+      ],
+      "score": "11 of 12",
+      "ourNote": "dense slides (2, 9, 11); 'record profit' by its own measure",
+      "turns": [
+        {
+          "turn": 1,
+          "seconds": 1115.3,
+          "inputTokens": 3781554,
+          "outputTokens": 117978,
+          "listUsd": 3.87929
+        }
+      ]
+    },
+    "opus": {
+      "model": "Claude Opus 5.5",
+      "setting": "max",
+      "app": "Claude Code",
+      "minutes": 15,
+      "listUsd": 3.94,
+      "tokens": {
+        "input": 88,
+        "cacheRead": 4612794,
+        "cacheWrite": 0,
+        "cacheWrite1h": 154962,
+        "output": 88985,
+        "thinking": 0
+      },
+      "checklist": [
+        {
+          "item": "Every number matches the data (Q3 2026 revenue $1,274,171, up 17.5%; gross margin 63.1%; wholesale down 32%; subscription up 70%)",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Each slide makes one point, with a headline that says it",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Charts, not tables, and readable from the back of the room",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "The three asks are clear and each has what the board needs to decide",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Brand applied: colours, Georgia and Avenir Next, the logo, no stretched photos",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Nothing overflows or overlaps; speaker notes on every slide",
+          "points": 2,
+          "of": 2
+        }
+      ],
+      "score": "12 of 12",
+      "ourNote": "clean; honest 'second only to last year's holiday quarter'",
+      "turns": [
+        {
+          "turn": 1,
+          "seconds": 898.8,
+          "inputTokens": 4767844,
+          "outputTokens": 88985,
+          "listUsd": 3.94231
+        }
+      ]
+    }
+  }
+}

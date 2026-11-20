@@ -1,0 +1,149 @@
+{
+  "title": "The most fun 3D browser game",
+  "results": {
+    "neon": {
+      "model": "Gemini 4 Neon",
+      "setting": "xhigh",
+      "app": "Antigravity",
+      "minutes": 74.4,
+      "listUsd": 15.54,
+      "tokens": {
+        "input": 304293,
+        "cacheRead": 8831793,
+        "cacheWrite": 0,
+        "cacheWrite1h": 0,
+        "output": 129415,
+        "thinking": 32903
+      },
+      "checklist": [
+        {
+          "item": "It starts and plays without errors",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Controls are clear and responsive",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "There is a goal, score or challenge that pulls you on",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "It looks good: lighting, effects, motion",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Each follow-up made it visibly better",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Runs smoothly (frame rate) on a normal laptop",
+          "points": 2,
+          "of": 2
+        }
+      ],
+      "score": "12 of 12",
+      "ourNote": "three tracks, 7 AI rivals, drift tiers, rings; each turn visibly richer",
+      "turns": [
+        {
+          "turn": 1,
+          "seconds": 1445.9,
+          "inputTokens": 9136086,
+          "outputTokens": 129415,
+          "listUsd": 4.67242
+        },
+        {
+          "turn": 2,
+          "seconds": 1322.6,
+          "inputTokens": 11562123,
+          "outputTokens": 107092,
+          "listUsd": 4.6437
+        },
+        {
+          "turn": 3,
+          "seconds": 1695,
+          "inputTokens": 14041573,
+          "outputTokens": 161476,
+          "listUsd": 6.22713
+        }
+      ]
+    },
+    "opus": {
+      "model": "Claude Opus 5.5",
+      "setting": "max",
+      "app": "Claude Code",
+      "minutes": 44,
+      "listUsd": 11.13,
+      "tokens": {
+        "input": 58,
+        "cacheRead": 3467012,
+        "cacheWrite": 0,
+        "cacheWrite1h": 158686,
+        "output": 124220,
+        "thinking": 0
+      },
+      "checklist": [
+        {
+          "item": "It starts and plays without errors",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Controls are clear and responsive",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "There is a goal, score or challenge that pulls you on",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "It looks good: lighting, effects, motion",
+          "points": 1,
+          "of": 2
+        },
+        {
+          "item": "Each follow-up made it visibly better",
+          "points": 2,
+          "of": 2
+        },
+        {
+          "item": "Runs smoothly (frame rate) on a normal laptop",
+          "points": 2,
+          "of": 2
+        }
+      ],
+      "score": "11 of 12",
+      "ourNote": "rival holes and power-ups in turn 2; clean but plain top-down look",
+      "turns": [
+        {
+          "turn": 1,
+          "seconds": 1232.5,
+          "inputTokens": 3625756,
+          "outputTokens": 124220,
+          "listUsd": 4.44752
+        },
+        {
+          "turn": 2,
+          "seconds": 972.7,
+          "inputTokens": 4974717,
+          "outputTokens": 93786,
+          "listUsd": 4.19393
+        },
+        {
+          "turn": 3,
+          "seconds": 437.7,
+          "inputTokens": 3531654,
+          "outputTokens": 40761,
+          "listUsd": 2.4866
+        }
+      ]
+    }
+  }
+}
