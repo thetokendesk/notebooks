@@ -1,0 +1,3155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovaOS</title>
+<style>
+  :root {
+    --bg-wallpaper: radial-gradient(circle at 18% 20%, #2563eb 0%, #1e1b4b 48%, #090d16 100%);
+    --accent: #4f8cff;
+    --accent-rgb: 79, 140, 255;
+    --glass: rgba(18, 21, 31, 0.76);
+    --glass-heavy: rgba(16, 19, 28, 0.9);
+    --win-bg: rgba(26, 29, 41, 0.94);
+    --win-header: rgba(18, 20, 30, 0.95);
+    --win-border: rgba(255, 255, 255, 0.13);
+    --text: #eef1f8;
+    --text-muted: #949cb3;
+    --danger: #ff5c6c;
+    --warning: #fbbf24;
+    --success: #34d399;
+    --taskbar-h: 50px;
+    --radius: 11px;
+  }
+
+  * {
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+    color: var(--text);
+    background: #05070c;
+  }
+
+  input, textarea {
+    user-select: text;
+    -webkit-user-select: text;
+    font-family: inherit;
+  }
+
+  /* Night Light Filter */
+  #night-light {
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 140, 40, 0);
+    pointer-events: none;
+    z-index: 99990;
+    mix-blend-mode: multiply;
+    transition: background 0.3s;
+  }
+
+  /* Boot Screen */
+  #boot-screen {
+    position: fixed;
+    inset: 0;
+    background: #070910;
+    z-index: 100000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    transition: opacity 0.45s ease, visibility 0.45s;
+  }
+  #boot-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .boot-logo {
+    width: 68px;
+    height: 68px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--accent), #a855f7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 45px rgba(79, 140, 255, 0.45);
+    animation: pulseLogo 1.6s infinite ease-in-out;
+  }
+  @keyframes pulseLogo {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+  }
+  .boot-bar-track {
+    width: 180px;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .boot-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), #c084fc);
+    transition: width 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .boot-sub {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* Lock Screen */
+  #lock-screen {
+    position: fixed;
+    inset: 0;
+    background: var(--bg-wallpaper);
+    background-size: cover;
+    z-index: 99980;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(18px);
+  }
+  #lock-screen::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(8, 10, 18, 0.55);
+    backdrop-filter: blur(16px);
+  }
+  #lock-screen.active { display: flex; }
+  .lock-box {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    text-align: center;
+  }
+  .lock-clock { font-size: 64px; font-weight: 200; letter-spacing: -2px; }
+  .lock-date { font-size: 16px; color: rgba(255,255,255,0.8); margin-bottom: 18px; }
+  .lock-avatar {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #8b5cf6);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; font-weight: 600;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+  }
+  .lock-btn {
+    margin-top: 8px;
+    padding: 9px 28px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.14);
+    color: #fff;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .lock-btn:hover { background: var(--accent); border-color: var(--accent); transform: scale(1.03); }
+
+  /* Desktop */
+  #desktop {
+    position: relative;
+    width: 100vw;
+    height: calc(100vh - var(--taskbar-h));
+    background: var(--bg-wallpaper);
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    transition: background 0.35s ease;
+  }
+
+  #desktop-icons {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 6px;
+    padding: 14px;
+    height: 100%;
+    width: fit-content;
+    z-index: 2;
+    position: relative;
+  }
+
+  .desktop-icon {
+    width: 86px;
+    padding: 9px 6px;
+    border-radius: 9px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background 0.12s, border-color 0.12s, transform 0.12s;
+    text-align: center;
+  }
+  .desktop-icon:hover { background: rgba(255, 255, 255, 0.1); }
+  .desktop-icon:active { transform: scale(0.96); }
+  .desktop-icon.selected {
+    background: rgba(var(--accent-rgb), 0.28);
+    border-color: rgba(var(--accent-rgb), 0.65);
+  }
+  .desktop-icon svg {
+    width: 40px;
+    height: 40px;
+    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.45));
+    pointer-events: none;
+  }
+  .desktop-icon span {
+    font-size: 12px;
+    line-height: 1.22;
+    color: #fff;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.9);
+    word-break: break-word;
+    pointer-events: none;
+    max-width: 100%;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Rubber-band selection marquee */
+  #selection-box {
+    position: absolute;
+    border: 1px solid rgba(var(--accent-rgb), 0.85);
+    background: rgba(var(--accent-rgb), 0.22);
+    border-radius: 3px;
+    pointer-events: none;
+    display: none;
+    z-index: 5;
+  }
+
+  /* Snap Preview Ghost */
+  #snap-preview {
+    position: absolute;
+    background: rgba(var(--accent-rgb), 0.18);
+    border: 2px solid rgba(var(--accent-rgb), 0.65);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    pointer-events: none;
+    z-index: 9000;
+    opacity: 0;
+    transform: scale(0.96);
+    transition: opacity 0.15s, transform 0.15s, left 0.12s, top 0.12s, width 0.12s, height 0.12s;
+  }
+  #snap-preview.visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Windows */
+  .window {
+    position: absolute;
+    background: var(--win-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--win-border);
+    border-radius: var(--radius);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55), 0 2px 10px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    min-width: 260px;
+    min-height: 170px;
+    overflow: hidden;
+    animation: winOpen 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, left, top;
+  }
+  @keyframes winOpen {
+    from { transform: scale(0.93) translateY(8px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
+  }
+  .window.focused {
+    border-color: rgba(var(--accent-rgb), 0.55);
+    box-shadow: 0 24px 65px rgba(0, 0, 0, 0.72), 0 0 0 1px rgba(var(--accent-rgb), 0.25);
+  }
+  .window.minimized {
+    display: none !important;
+  }
+  .window.maximized {
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0;
+    border: none;
+  }
+  .window.snapped-left {
+    top: 0 !important; left: 0 !important;
+    width: 50% !important; height: 100% !important;
+    border-radius: 0;
+  }
+  .window.snapped-right {
+    top: 0 !important; left: 50% !important;
+    width: 50% !important; height: 100% !important;
+    border-radius: 0;
+  }
+
+  .titlebar {
+    height: 38px;
+    background: var(--win-header);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px 0 12px;
+    cursor: default;
+    flex-shrink: 0;
+  }
+  .titlebar-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    font-weight: 500;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    pointer-events: none;
+  }
+  .titlebar-info svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .win-controls { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+  .win-btn {
+    width: 28px;
+    height: 24px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.12s, color 0.12s;
+  }
+  .win-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .win-btn.close:hover { background: var(--danger); color: #fff; }
+
+  .win-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    background: rgba(30, 33, 46, 0.92);
+  }
+
+  /* 8-Way Resize Handles */
+  .rz { position: absolute; z-index: 12; }
+  .rz-n { top: 0; left: 8px; right: 8px; height: 5px; cursor: ns-resize; }
+  .rz-s { bottom: 0; left: 8px; right: 8px; height: 6px; cursor: ns-resize; }
+  .rz-e { right: 0; top: 8px; bottom: 8px; width: 6px; cursor: ew-resize; }
+  .rz-w { left: 0; top: 8px; bottom: 8px; width: 5px; cursor: ew-resize; }
+  .rz-ne { top: 0; right: 0; width: 10px; height: 10px; cursor: nesw-resize; z-index: 13; }
+  .rz-nw { top: 0; left: 0; width: 10px; height: 10px; cursor: nwse-resize; z-index: 13; }
+  .rz-se { bottom: 0; right: 0; width: 14px; height: 14px; cursor: nwse-resize; z-index: 13; }
+  .rz-sw { bottom: 0; left: 0; width: 12px; height: 12px; cursor: nesw-resize; z-index: 13; }
+  .window.maximized .rz { display: none; }
+
+  /* Taskbar */
+  #taskbar {
+    position: relative;
+    height: var(--taskbar-h);
+    width: 100vw;
+    background: var(--glass);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-top: 1px solid rgba(255,255,255,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    z-index: 9500;
+  }
+
+  .taskbar-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .tb-btn {
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .tb-btn:hover, .tb-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .tb-btn svg { width: 17px; height: 17px; }
+
+  #search-btn {
+    font-weight: 400;
+    color: var(--text-muted);
+    padding: 0 11px;
+  }
+  #search-btn:hover { color: #fff; background: rgba(255,255,255,0.13); border-color: rgba(255,255,255,0.2); }
+
+  #taskbar-apps {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-left: 4px;
+  }
+  #taskbar-apps::-webkit-scrollbar { display: none; }
+
+  .task-tab {
+    position: relative;
+    height: 36px;
+    max-width: 170px;
+    min-width: 88px;
+    padding: 0 11px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.05);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: all 0.14s;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .task-tab:hover { background: rgba(255,255,255,0.11); color: #fff; }
+  .task-tab.active {
+    background: rgba(var(--accent-rgb), 0.22);
+    border-color: rgba(var(--accent-rgb), 0.5);
+    color: #fff;
+  }
+  .task-tab.active::after {
+    content: "";
+    position: absolute;
+    bottom: 2px;
+    left: 28%;
+    right: 28%;
+    height: 3px;
+    border-radius: 3px;
+    background: var(--accent);
+  }
+  .task-tab svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .task-tab span { overflow: hidden; text-overflow: ellipsis; }
+
+  /* System Tray */
+  #tray {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .tray-pill {
+    height: 36px;
+    padding: 0 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    background: rgba(255,255,255,0.04);
+    color: var(--text);
+    font-size: 12px;
+    transition: all 0.15s;
+  }
+  .tray-pill:hover, .tray-pill.active {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.15);
+  }
+  #gravity-tray-btn.physics-on {
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    color: #fff;
+    border-color: rgba(255,255,255,0.35);
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.55);
+    font-weight: 600;
+  }
+
+  #clock { text-align: right; line-height: 1.22; }
+  #clock-time { font-size: 12.5px; font-weight: 500; }
+  #clock-date { font-size: 10.5px; color: var(--text-muted); }
+
+  /* Start Menu */
+  #start-menu {
+    position: fixed;
+    left: 10px;
+    bottom: calc(var(--taskbar-h) + 10px);
+    width: 350px;
+    background: var(--glass-heavy);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 14px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.7);
+    padding: 14px;
+    z-index: 9800;
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    animation: popFlyout 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  #start-menu.open { display: flex; }
+  @keyframes popFlyout {
+    from { transform: translateY(14px) scale(0.98); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+  }
+
+  .start-search {
+    width: 100%;
+    background: rgba(0,0,0,0.32);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #fff;
+    font-size: 13px;
+    outline: none;
+  }
+  .start-search:focus { border-color: var(--accent); }
+
+  .start-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    max-height: 290px;
+    overflow-y: auto;
+  }
+  .start-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 10px;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: background 0.12s;
+    color: var(--text);
+    font-size: 13px;
+  }
+  .start-item:hover { background: rgba(255,255,255,0.1); }
+  .start-item svg { width: 26px; height: 26px; flex-shrink: 0; }
+  .start-item-sub { font-size: 10.5px; color: var(--text-muted); }
+
+  .start-footer {
+    border-top: 1px solid rgba(255,255,255,0.09);
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .user-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    font-weight: 500;
+  }
+  .user-dot {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #a855f7);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+  }
+
+  /* Quick Settings & Calendar Flyout */
+  #control-center {
+    position: fixed;
+    right: 10px;
+    bottom: calc(var(--taskbar-h) + 10px);
+    width: 310px;
+    background: var(--glass-heavy);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 14px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.7);
+    padding: 14px;
+    z-index: 9800;
+    display: none;
+    flex-direction: column;
+    gap: 14px;
+    animation: popFlyout 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  #control-center.open { display: flex; }
+
+  .qs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .qs-tile {
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: all 0.14s;
+  }
+  .qs-tile:hover { background: rgba(255,255,255,0.12); }
+  .qs-tile.active {
+    background: rgba(var(--accent-rgb), 0.3);
+    border-color: rgba(var(--accent-rgb), 0.7);
+  }
+  .qs-sub { font-size: 10.5px; color: var(--text-muted); font-weight: 400; }
+
+  .cal-box {
+    border-top: 1px solid rgba(255,255,255,0.09);
+    padding-top: 10px;
+  }
+  .cal-header {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+    text-align: center;
+    font-size: 11.5px;
+  }
+  .cal-day-lbl { color: var(--text-muted); font-size: 10px; padding-bottom: 4px; }
+  .cal-cell { padding: 5px 0; border-radius: 6px; color: var(--text); }
+  .cal-cell.today { background: var(--accent); color: #fff; font-weight: 700; }
+  .cal-cell.muted { color: rgba(255,255,255,0.2); }
+
+  /* Spotlight Search Modal (Ctrl+K) */
+  #spotlight {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.42);
+    z-index: 9900;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 13vh;
+  }
+  #spotlight.open { display: flex; }
+  .spotlight-box {
+    width: 480px;
+    max-width: 92vw;
+    background: var(--glass-heavy);
+    backdrop-filter: blur(28px);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 14px;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.75);
+    overflow: hidden;
+    animation: winOpen 0.14s ease-out;
+  }
+  .spotlight-in {
+    width: 100%;
+    padding: 15px 18px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    color: #fff;
+    font-size: 16px;
+    outline: none;
+  }
+  .spotlight-results {
+    max-height: 270px;
+    overflow-y: auto;
+    padding: 6px;
+  }
+  .spot-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  .spot-item:hover, .spot-item.active { background: rgba(var(--accent-rgb), 0.28); }
+  .spot-left { display: flex; align-items: center; gap: 10px; }
+  .spot-left svg { width: 20px; height: 20px; }
+  .spot-tag { font-size: 11px; color: var(--text-muted); }
+
+  /* Custom Context Menu */
+  #context-menu {
+    position: fixed;
+    min-width: 195px;
+    background: var(--glass-heavy);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: 10px;
+    box-shadow: 0 14px 36px rgba(0,0,0,0.65);
+    padding: 5px;
+    z-index: 9990;
+    display: none;
+    flex-direction: column;
+    gap: 2px;
+  }
+  #context-menu.open { display: flex; }
+  .ctx-item {
+    padding: 7px 11px;
+    border-radius: 6px;
+    font-size: 12.5px;
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .ctx-item:hover { background: var(--accent); color: #fff; }
+  .ctx-sep { height: 1px; background: rgba(255,255,255,0.1); margin: 3px 6px; }
+  .ctx-hint { font-size: 10.5px; opacity: 0.65; }
+
+  /* Toast Notifications */
+  #toast-area {
+    position: fixed;
+    right: 14px;
+    bottom: calc(var(--taskbar-h) + 14px);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 9700;
+    pointer-events: none;
+  }
+  .toast {
+    width: 295px;
+    background: var(--glass-heavy);
+    backdrop-filter: blur(22px);
+    border: 1px solid rgba(255,255,255,0.16);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    padding: 11px 13px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.55);
+    pointer-events: auto;
+    cursor: pointer;
+    animation: toastIn 0.22s ease-out;
+  }
+  @keyframes toastIn {
+    from { transform: translateX(30px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  .toast-title { font-size: 12.5px; font-weight: 600; margin-bottom: 3px; }
+  .toast-msg { font-size: 11.5px; color: var(--text-muted); line-height: 1.35; }
+
+  /* Shared UI Controls */
+  .btn-small {
+    background: rgba(255,255,255,0.08);
+    color: var(--text);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .btn-small:hover { background: rgba(255,255,255,0.16); }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn-primary:hover { filter: brightness(1.1); }
+
+  .app-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: rgba(20, 22, 32, 0.9);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    flex-wrap: wrap;
+    flex-shrink: 0;
+  }
+  .inline-prompt {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: #262b3d;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-size: 12px;
+  }
+  .inline-prompt input {
+    flex: 1;
+    background: #141722;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    outline: none;
+  }
+
+  /* Notepad */
+  .notepad-area {
+    flex: 1;
+    width: 100%;
+    background: transparent;
+    color: #f1f4fb;
+    border: none;
+    outline: none;
+    resize: none;
+    padding: 14px;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 13.5px;
+    line-height: 1.58;
+  }
+  .notepad-status {
+    height: 24px;
+    background: rgba(16, 18, 26, 0.9);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  /* Paint */
+  .paint-canvas-wrap {
+    flex: 1;
+    overflow: auto;
+    background: #13151e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+  }
+  .paint-canvas {
+    background: #ffffff;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.5);
+    cursor: crosshair;
+    touch-action: none;
+    border-radius: 2px;
+  }
+  .tool-btn {
+    padding: 4px 8px;
+    border-radius: 5px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.05);
+    color: var(--text);
+    font-size: 11.5px;
+    cursor: pointer;
+  }
+  .tool-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .color-swatch { width: 24px; height: 24px; border: none; padding: 0; background: transparent; cursor: pointer; }
+
+  /* Calculator */
+  .calc-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    gap: 10px;
+    background: #191c26;
+  }
+  .calc-screen {
+    background: #101219;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 9px;
+    padding: 10px 14px;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 76px;
+  }
+  .calc-expr { font-size: 12px; color: var(--text-muted); min-height: 16px; overflow: hidden; text-overflow: ellipsis; }
+  .calc-val { font-size: 29px; font-weight: 600; color: #fff; overflow: hidden; text-overflow: ellipsis; }
+  .calc-grid { flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
+  .calc-btn {
+    border: none; border-radius: 8px; background: #272b3b; color: #fff;
+    font-size: 16px; font-weight: 500; cursor: pointer; transition: background 0.1s, transform 0.05s;
+  }
+  .calc-btn:hover { background: #33384d; }
+  .calc-btn:active { transform: scale(0.95); }
+  .calc-btn.op { background: #313954; color: #93bbfd; }
+  .calc-btn.eq { background: var(--accent); color: #fff; }
+  .calc-btn.fn { background: #222533; color: #ff8b96; }
+  .calc-btn.span2 { grid-column: span 2; }
+
+  /* File Browser */
+  .fb-layout { flex: 1; display: flex; overflow: hidden; }
+  .fb-sidebar {
+    width: 145px; background: rgba(20, 22, 32, 0.85);
+    border-right: 1px solid rgba(255,255,255,0.07);
+    padding: 8px; display: flex; flex-direction: column; gap: 3px; flex-shrink: 0;
+  }
+  .fb-nav {
+    padding: 7px 9px; border-radius: 6px; font-size: 12.5px;
+    color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 7px;
+  }
+  .fb-nav:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .fb-nav.active { background: rgba(var(--accent-rgb), 0.22); color: #fff; font-weight: 500; }
+  .fb-main {
+    flex: 1; padding: 12px; overflow-y: auto;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+    grid-auto-rows: min-content; gap: 10px; align-content: flex-start;
+  }
+  .fb-item {
+    padding: 10px 6px; border-radius: 8px; display: flex; flex-direction: column;
+    align-items: center; gap: 6px; text-align: center; cursor: pointer; border: 1px solid transparent;
+  }
+  .fb-item:hover { background: rgba(255,255,255,0.06); }
+  .fb-item.selected { background: rgba(var(--accent-rgb), 0.24); border-color: rgba(var(--accent-rgb), 0.55); }
+  .fb-item svg { width: 34px; height: 34px; }
+  .fb-item span { font-size: 12px; word-break: break-word; line-height: 1.2; }
+  .fb-path {
+    flex: 1; background: #12141d; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 5px; padding: 4px 9px; font-size: 12px; color: var(--text);
+  }
+
+  /* Terminal */
+  .term-wrap {
+    flex: 1; background: #0c0e14; color: #d9e2f2;
+    font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+    font-size: 12.5px; padding: 12px; overflow-y: auto;
+    display: flex; flex-direction: column; gap: 4px;
+    cursor: text;
+  }
+  .term-line { white-space: pre-wrap; word-break: break-word; line-height: 1.45; }
+  .term-input-row { display: flex; align-items: center; gap: 6px; }
+  .term-prompt { color: #34d399; font-weight: 600; flex-shrink: 0; }
+  .term-in {
+    flex: 1; background: transparent; border: none; outline: none;
+    color: #fff; font-family: inherit; font-size: inherit; padding: 0;
+  }
+
+  /* Task Manager */
+  .tm-wrap { flex: 1; display: flex; flex-direction: column; padding: 12px; gap: 12px; overflow: hidden; }
+  .tm-meters { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .tm-card {
+    background: rgba(0,0,0,0.28); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px; padding: 9px 11px;
+  }
+  .tm-card-lbl { font-size: 11px; color: var(--text-muted); }
+  .tm-card-val { font-size: 18px; font-weight: 600; margin-top: 2px; }
+  .tm-list {
+    flex: 1; overflow-y: auto; border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px; background: rgba(0,0,0,0.2);
+  }
+  .tm-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 12.5px;
+  }
+  .tm-row-left { display: flex; align-items: center; gap: 8px; }
+  .tm-row-left svg { width: 16px; height: 16px; }
+
+  /* Settings */
+  .settings-body { padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; }
+  .wp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+  .wp-card {
+    height: 58px; border-radius: 8px; cursor: pointer;
+    border: 2px solid rgba(255,255,255,0.14); transition: transform 0.12s, border-color 0.12s;
+  }
+  .wp-card:hover { transform: scale(1.03); }
+  .wp-card.active { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(var(--accent-rgb), 0.4); }
+  .accent-row { display: flex; gap: 10px; }
+  .accent-dot {
+    width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+    border: 2px solid rgba(255,255,255,0.25); transition: transform 0.12s;
+  }
+  .accent-dot:hover { transform: scale(1.12); }
+
+  /* Floating Physics Banner */
+  #physics-hud {
+    position: fixed;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(18, 20, 30, 0.88);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(245, 158, 11, 0.6);
+    border-radius: 24px;
+    padding: 6px 14px;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    font-size: 12.5px;
+    z-index: 9600;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  #physics-hud.visible { display: flex; }
+</style>
+</head>
+<body>
+
+<div id="night-light"></div>
+
+<!-- Boot Screen -->
+<div id="boot-screen">
+  <div class="boot-logo">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="#fff">
+      <path d="M12 2L2 7l10 5 10-5-10-5zm0 7.5l-6-3 6-3 6 3-6 3zm0 2.5l-10-5v10l10 5 10-5V7l-10 5z"/>
+    </svg>
+  </div>
+  <div class="boot-bar-track"><div class="boot-bar-fill" id="boot-fill"></div></div>
+  <div class="boot-sub">NovaOS Kernel 2.4</div>
+</div>
+
+<!-- Lock Screen -->
+<div id="lock-screen">
+  <div class="lock-box">
+    <div class="lock-clock" id="lock-clock">12:00</div>
+    <div class="lock-date" id="lock-date">Monday, January 1</div>
+    <div class="lock-avatar">N</div>
+    <div style="font-weight:600;font-size:15px;">Nova User</div>
+    <button class="lock-btn" id="unlock-btn">Sign In</button>
+  </div>
+</div>
+
+<!-- Physics Mode Floating HUD (Surprising Feature!) -->
+<div id="physics-hud">
+  <span>🪐 <strong>Desktop Physics Active!</strong> Throw &amp; stack windows!</span>
+  <button class="btn-small" id="phys-mode-btn">Mode: Earth Gravity</button>
+  <button class="btn-small btn-primary" id="phys-off-btn">Restore Normal</button>
+</div>
+
+<!-- Desktop -->
+<div id="desktop">
+  <div id="desktop-icons"></div>
+  <div id="selection-box"></div>
+  <div id="snap-preview"></div>
+  <div id="windows-container"></div>
+</div>
+
+<!-- Spotlight Launcher -->
+<div id="spotlight">
+  <div class="spotlight-box">
+    <input type="text" class="spotlight-in" id="spotlight-in" placeholder="Search apps, files, or type math (e.g. 42 * 19)..." />
+    <div class="spotlight-results" id="spotlight-results"></div>
+  </div>
+</div>
+
+<!-- Context Menu -->
+<div id="context-menu"></div>
+
+<!-- Toast Area -->
+<div id="toast-area"></div>
+
+<!-- Start Menu -->
+<div id="start-menu">
+  <input type="text" class="start-search" id="start-search" placeholder="Search applications..." />
+  <div class="start-grid" id="start-app-list"></div>
+  <div class="start-footer">
+    <div class="user-badge">
+      <div class="user-dot">N</div>
+      <span>Nova User</span>
+    </div>
+    <div style="display:flex;gap:6px;">
+      <button class="btn-small" id="lock-os-btn" title="Lock Screen">Lock</button>
+      <button class="btn-small" id="reset-os-btn" title="Factory Reset OS">Reset</button>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Settings & Calendar -->
+<div id="control-center">
+  <div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;">Quick Controls</div>
+  <div class="qs-grid">
+    <div class="qs-tile active" id="qs-sound">
+      <span>🔊 System Sounds</span>
+      <span class="qs-sub" id="qs-sound-sub">Enabled</span>
+    </div>
+    <div class="qs-tile" id="qs-night">
+      <span>🌙 Night Light</span>
+      <span class="qs-sub" id="qs-night-sub">Off</span>
+    </div>
+    <div class="qs-tile" id="qs-gravity">
+      <span>🪐 Window Gravity</span>
+      <span class="qs-sub" id="qs-grav-sub">Normal</span>
+    </div>
+    <div class="qs-tile" id="qs-fullscreen">
+      <span>⛶ Fullscreen</span>
+      <span class="qs-sub">Toggle Display</span>
+    </div>
+  </div>
+  <div class="cal-box">
+    <div class="cal-header"><span id="cal-month">Month</span><span>Today</span></div>
+    <div class="cal-grid" id="cal-grid"></div>
+  </div>
+</div>
+
+<!-- Taskbar -->
+<div id="taskbar">
+  <div class="taskbar-left">
+    <button class="tb-btn" id="start-btn">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2L2 7l10 5 10-5-10-5zm0 13l-10-5v7l10 5 10-5v-7l-10 5z"/>
+      </svg>
+      Start
+    </button>
+    <button class="tb-btn" id="search-btn" title="Search & Run (Ctrl+K)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5" stroke-linecap="round"/>
+      </svg>
+      Search
+    </button>
+    <div id="taskbar-apps"></div>
+  </div>
+  <div id="tray">
+    <button class="tray-pill" id="gravity-tray-btn" title="Surprising Feature: Toggle Newtonian Window Physics!">
+      🪐 <span>Gravity</span>
+    </button>
+    <div class="tray-pill" id="cc-btn" title="Quick Settings & Calendar">
+      <span id="tray-sound-ico">🔊</span>
+      <div id="clock">
+        <div id="clock-time">12:00</div>
+        <div id="clock-date">Jan 1</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  /* =========================================================
+     1. STORAGE & CONFIGURATION
+  ========================================================= */
+  const memStore = {};
+  const Store = {
+    get(k, fallback = null) {
+      try { const v = localStorage.getItem(k); return v !== null ? v : fallback; }
+      catch { return k in memStore ? memStore[k] : fallback; }
+    },
+    set(k, v) {
+      try { localStorage.setItem(k, v); } catch { memStore[k] = v; }
+    },
+    clearAll() {
+      try {
+        Object.keys(localStorage).forEach(k => { if (k.startsWith('novaos_') || k.startsWith('minios_')) localStorage.removeItem(k); });
+      } catch {}
+    }
+  };
+
+  /* =========================================================
+     2. SYNTHESIZED WEB AUDIO OS SOUNDS
+  ========================================================= */
+  const SFX = {
+    enabled: Store.get('novaos_sound', '1') === '1',
+    ctx: null,
+    init() {
+      if (!this.ctx) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) this.ctx = new AudioCtx();
+      }
+      if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+    },
+    tone(freq, dur = 0.08, type = 'sine', vol = 0.06, slideTo = null) {
+      if (!this.enabled) return;
+      try {
+        this.init();
+        if (!this.ctx) return;
+        const t = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, t);
+        if (slideTo) osc.frequency.exponentialRampToValueAtTime(slideTo, t + dur);
+        gain.gain.setValueAtTime(vol, t);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(t);
+        osc.stop(t + dur);
+      } catch {}
+    },
+    open() { this.tone(420, 0.09, 'sine', 0.05, 620); },
+    close() { this.tone(480, 0.08, 'sine', 0.045, 280); },
+    snap() { this.tone(700, 0.06, 'triangle', 0.05, 920); },
+    notify() {
+      this.tone(587.33, 0.11, 'sine', 0.05);
+      setTimeout(() => this.tone(880, 0.18, 'sine', 0.05), 90);
+    },
+    bounce(intensity = 1) {
+      const v = Math.min(0.08, Math.max(0.01, intensity * 0.012));
+      this.tone(95 + Math.random() * 45, 0.06, 'triangle', v, 55);
+    },
+    bootChord() {
+      [261.63, 329.63, 392.00, 523.25].forEach((f, i) => {
+        setTimeout(() => this.tone(f, 0.55, 'sine', 0.035), i * 55);
+      });
+    }
+  };
+
+  /* =========================================================
+     3. TOAST NOTIFICATIONS
+  ========================================================= */
+  const toastArea = document.getElementById('toast-area');
+  function notify(title, msg, onClick = null) {
+    SFX.notify();
+    const el = document.createElement('div');
+    el.className = 'toast';
+    el.innerHTML = `<div class="toast-title"></div><div class="toast-msg"></div>`;
+    el.querySelector('.toast-title').textContent = title;
+    el.querySelector('.toast-msg').textContent = msg;
+    const remove = () => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateX(20px)';
+      el.style.transition = 'all 0.2s';
+      setTimeout(() => el.remove(), 200);
+    };
+    el.addEventListener('click', () => {
+      if (onClick) onClick();
+      remove();
+    });
+    toastArea.appendChild(el);
+    setTimeout(remove, 5200);
+  }
+
+  /* =========================================================
+     4. ICONS & WALLPAPERS
+  ========================================================= */
+  const ICONS = {
+    notepad: `<svg viewBox="0 0 48 48" fill="none"><rect x="8" y="6" width="32" height="36" rx="5" fill="#4F8CFF"/><rect x="12" y="10" width="24" height="28" rx="2.5" fill="#F8FAFC"/><path d="M16 17h16M16 23h16M16 29h10" stroke="#64748B" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+    paint: `<svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" fill="#F59E0B"/><path d="M24 6C14.06 6 6 14.06 6 24c0 6.2 3.1 11.6 7.9 14.8 2.1 1.4 4.9-.1 4.9-2.6v-2.1c0-2.2 1.8-4 4-4h3.2c8.8 0 16-6.3 16-14.1C42 10.6 33.9 6 24 6z" fill="#FBBF24"/><circle cx="16" cy="19" r="3" fill="#EF4444"/><circle cx="24" cy="14" r="3" fill="#3B82F6"/><circle cx="32" cy="18" r="3" fill="#10B981"/><circle cx="15" cy="28" r="2.8" fill="#8B5CF6"/></svg>`,
+    calc: `<svg viewBox="0 0 48 48" fill="none"><rect x="9" y="5" width="30" height="38" rx="6" fill="#334155"/><rect x="14" y="10" width="20" height="8" rx="2" fill="#94A3B8"/><circle cx="16.5" cy="25" r="2.5" fill="#E2E8F0"/><circle cx="24" cy="25" r="2.5" fill="#E2E8F0"/><circle cx="31.5" cy="25" r="2.5" fill="#F59E0B"/><circle cx="16.5" cy="33" r="2.5" fill="#E2E8F0"/><circle cx="24" cy="33" r="2.5" fill="#E2E8F0"/><rect x="29" y="30.5" width="5" height="8" rx="2.5" fill="#3B82F6"/></svg>`,
+    files: `<svg viewBox="0 0 48 48" fill="none"><path d="M6 13a4 4 0 014-4h10l4 5h14a4 4 0 014 4v18a4 4 0 01-4 4H10a4 4 0 01-4-4V13z" fill="#FBBF24"/><path d="M6 19h36v17a4 4 0 01-4 4H10a4 4 0 01-4-4V19z" fill="#F59E0B"/></svg>`,
+    terminal: `<svg viewBox="0 0 48 48" fill="none"><rect x="5" y="8" width="38" height="32" rx="5" fill="#0F172A" stroke="#475569" stroke-width="2"/><path d="M13 18l7 6-7 6M23 30h10" stroke="#34D399" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    taskmgr: `<svg viewBox="0 0 48 48" fill="none"><rect x="6" y="8" width="36" height="32" rx="5" fill="#1E293B" stroke="#64748B" stroke-width="2"/><path d="M11 26h6l4-9 6 15 4-9h6" stroke="#38BDF8" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    settings: `<svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="17" fill="#475569"/><path d="M24 14a10 10 0 100 20 10 10 0 000-20z" fill="#1E293B"/><circle cx="24" cy="24" r="4.5" fill="#60A5FA"/></svg>`,
+    folder: `<svg viewBox="0 0 48 48" fill="none"><path d="M5 12a4 4 0 014-4h11l4 5h15a4 4 0 014 4v19a4 4 0 01-4 4H9a4 4 0 01-4-4V12z" fill="#60A5FA"/></svg>`,
+    fileTxt: `<svg viewBox="0 0 48 48" fill="none"><path d="M10 6h18l10 10v26a2 2 0 01-2 2H10a2 2 0 01-2-2V8a2 2 0 012-2z" fill="#E2E8F0"/><path d="M28 6v10h10" fill="#94A3B8"/><path d="M15 24h18M15 30h18M15 36h11" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+    fileImg: `<svg viewBox="0 0 48 48" fill="none"><rect x="7" y="9" width="34" height="30" rx="4" fill="#A78BFA"/><circle cx="17" cy="19" r="3.5" fill="#FEF08A"/><path d="M9 36l10-11 7 7 5-5 8 9H9z" fill="#4C1D95"/></svg>`
+  };
+
+  const WALLPAPERS = [
+    'radial-gradient(circle at 18% 20%, #2563eb 0%, #1e1b4b 48%, #090d16 100%)',
+    'linear-gradient(135deg, #1a2a6c 0%, #b21f1f 50%, #fdbb2d 100%)',
+    'linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)',
+    'linear-gradient(135deg, #134e5e 0%, #71b280 100%)',
+    'linear-gradient(135deg, #3a1c71 0%, #d76d77 50%, #ffaf7b 100%)',
+    'radial-gradient(circle at 80% 20%, #059669 0%, #0f172a 60%, #020617 100%)'
+  ];
+
+  const ACCENTS = [
+    { hex: '#4f8cff', rgb: '79, 140, 255' },
+    { hex: '#a855f7', rgb: '168, 85, 247' },
+    { hex: '#10b981', rgb: '16, 185, 129' },
+    { hex: '#f59e0b', rgb: '245, 158, 11' },
+    { hex: '#ec4899', rgb: '236, 72, 153' }
+  ];
+
+  const savedWp = Store.get('novaos_wallpaper');
+  if (savedWp) document.documentElement.style.setProperty('--bg-wallpaper', savedWp);
+  const savedAcc = Store.get('novaos_accent');
+  if (savedAcc) {
+    try {
+      const a = JSON.parse(savedAcc);
+      document.documentElement.style.setProperty('--accent', a.hex);
+      document.documentElement.style.setProperty('--accent-rgb', a.rgb);
+    } catch {}
+  }
+
+  /* =========================================================
+     5. VIRTUAL FILE SYSTEM (VFS)
+  ========================================================= */
+  const DEFAULT_FS = {
+    '/Desktop': { type: 'dir' },
+    '/Desktop/ReadMe.txt': {
+      type: 'file',
+      content: 'Welcome to NovaOS!\n\nTry these real OS features:\n1. Drag windows to the left, right, or top screen edges for Aero Snap!\n2. Right-click anywhere on the Desktop for context actions.\n3. Press Ctrl+K (or click Search) for the instant Spotlight launcher & math evaluator.\n4. Open Terminal and run commands like ls, cat, neofetch, or matrix.\n\nSURPRISING FEATURE:\nClick "🪐 Gravity" on the taskbar (or type `gravity` in Terminal) to turn all open windows into live Newtonian physics objects you can throw, bounce, and stack!'
+    },
+    '/Documents': { type: 'dir' },
+    '/Documents/Notes.txt': {
+      type: 'file',
+      content: 'Meeting Notes:\n- Ship single-file HTML OS\n- Add Aero Snap & 8-way window resizing\n- Add Newtonian physics surprise mode'
+    },
+    '/Pictures': { type: 'dir' },
+    '/System': { type: 'dir' },
+    '/System/Kernel.log': {
+      type: 'file',
+      content: '[0.001] NovaOS Kernel 2.4.0 initialized\n[0.014] Mounted Virtual File System (/Desktop, /Documents, /Pictures)\n[0.029] Compositor AeroSnap & RigidBody2D engine ready\n[0.042] AudioSynth subsystem online'
+    }
+  };
+
+  let VFS = {};
+  try {
+    const raw = Store.get('novaos_vfs') || Store.get('minios_vfs');
+    VFS = raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(DEFAULT_FS));
+    if (!VFS['/Desktop']) VFS['/Desktop'] = { type: 'dir' };
+  } catch {
+    VFS = JSON.parse(JSON.stringify(DEFAULT_FS));
+  }
+
+  function saveVFS() {
+    Store.set('novaos_vfs', JSON.stringify(VFS));
+    window.dispatchEvent(new CustomEvent('vfs-change'));
+  }
+
+  function getChildren(dirPath) {
+    const prefix = dirPath === '/' ? '/' : dirPath + '/';
+    const items = [];
+    for (const path of Object.keys(VFS)) {
+      if (path.startsWith(prefix)) {
+        const rest = path.slice(prefix.length);
+        if (rest && !rest.includes('/')) {
+          items.push({ name: rest, path, ...VFS[path] });
+        }
+      }
+    }
+    return items.sort((a, b) => (a.type === b.type ? a.name.localeCompare(b.name) : a.type === 'dir' ? -1 : 1));
+  }
+
+  function openVFSFile(path) {
+    const node = VFS[path];
+    if (!node) return;
+    if (node.type === 'dir') {
+      createWindow(getApp('files'), { startDir: path });
+    } else if (path.endsWith('.png')) {
+      createWindow(getApp('paint'), { filePath: path });
+    } else {
+      createWindow(getApp('notepad'), { filePath: path });
+    }
+  }
+
+  /* =========================================================
+     6. WINDOW MANAGER + AERO SNAP + 8-WAY RESIZE
+  ========================================================= */
+  let zCounter = 100;
+  let winIdCounter = 1;
+  const windows = new Map();
+
+  const winContainer = document.getElementById('windows-container');
+  const taskbarApps = document.getElementById('taskbar-apps');
+  const snapPreview = document.getElementById('snap-preview');
+
+  function focusWindow(id) {
+    windows.forEach((w, wid) => {
+      const isTarget = wid === id && !w.minimized;
+      w.el.classList.toggle('focused', isTarget);
+      w.tabEl.classList.toggle('active', isTarget);
+      if (isTarget) w.el.style.zIndex = ++zCounter;
+    });
+  }
+
+  function toggleMinimize(id) {
+    const w = windows.get(id);
+    if (!w) return;
+    if (w.minimized) {
+      w.minimized = false;
+      w.el.classList.remove('minimized');
+      SFX.open();
+      focusWindow(id);
+    } else {
+      w.minimized = true;
+      w.el.classList.add('minimized');
+      w.el.classList.remove('focused');
+      w.tabEl.classList.remove('active');
+      SFX.close();
+      focusTopmost();
+    }
+    window.dispatchEvent(new CustomEvent('wm-change'));
+  }
+
+  function clearSnapClasses(w) {
+    w.el.classList.remove('maximized', 'snapped-left', 'snapped-right');
+    w.maximized = false;
+    w.snapped = null;
+  }
+
+  function toggleMaximize(id) {
+    const w = windows.get(id);
+    if (!w) return;
+    if (w.maximized || w.snapped) {
+      clearSnapClasses(w);
+      if (w.restoreRect) {
+        w.x = w.restoreRect.x; w.y = w.restoreRect.y;
+        w.el.style.left = w.x + 'px';
+        w.el.style.top = w.y + 'px';
+        w.el.style.width = w.restoreRect.w + 'px';
+        w.el.style.height = w.restoreRect.h + 'px';
+      }
+    } else {
+      w.restoreRect = { x: w.el.offsetLeft, y: w.el.offsetTop, w: w.el.offsetWidth, h: w.el.offsetHeight };
+      clearSnapClasses(w);
+      w.maximized = true;
+      w.el.classList.add('maximized');
+      w.el.style.transform = '';
+      SFX.snap();
+    }
+    focusWindow(id);
+  }
+
+  function applySnap(w, zone) {
+    w.restoreRect = w.restoreRect || { x: w.el.offsetLeft, y: w.el.offsetTop, w: w.el.offsetWidth, h: w.el.offsetHeight };
+    clearSnapClasses(w);
+    w.el.style.transform = '';
+    if (zone === 'top') {
+      w.maximized = true;
+      w.el.classList.add('maximized');
+    } else if (zone === 'left') {
+      w.snapped = 'left';
+      w.el.classList.add('snapped-left');
+    } else if (zone === 'right') {
+      w.snapped = 'right';
+      w.el.classList.add('snapped-right');
+    }
+    SFX.snap();
+  }
+
+  function focusTopmost() {
+    let topWin = null, topZ = -1;
+    windows.forEach(other => {
+      if (!other.minimized) {
+        const z = parseInt(other.el.style.zIndex || 0, 10);
+        if (z > topZ) { topZ = z; topWin = other; }
+      }
+    });
+    if (topWin) focusWindow(topWin.id);
+  }
+
+  function closeWindow(id) {
+    const w = windows.get(id);
+    if (!w) return;
+    SFX.close();
+    if (w.cleanup) w.cleanup();
+    w.el.remove();
+    w.tabEl.remove();
+    windows.delete(id);
+    focusTopmost();
+    window.dispatchEvent(new CustomEvent('wm-change'));
+  }
+
+  function createWindow(app, options = {}) {
+    if (!app) return null;
+    SFX.open();
+    const id = winIdCounter++;
+    const offset = ((id - 1) % 7) * 26;
+    const maxW = window.innerWidth;
+    const maxH = window.innerHeight - 50;
+    const width = Math.min(options.width || app.width || 580, maxW - 20);
+    const height = Math.min(options.height || app.height || 420, maxH - 20);
+    const left = Math.max(12, Math.min(80 + offset, maxW - width - 12));
+    const top = Math.max(12, Math.min(40 + offset, maxH - height - 12));
+
+    const winEl = document.createElement('div');
+    winEl.className = 'window';
+    winEl.style.width = width + 'px';
+    winEl.style.height = height + 'px';
+    winEl.style.left = left + 'px';
+    winEl.style.top = top + 'px';
+
+    const titleText = options.title || app.name;
+
+    winEl.innerHTML = `
+      <div class="titlebar">
+        <div class="titlebar-info">
+          ${app.icon}
+          <span class="win-title-text"></span>
+        </div>
+        <div class="win-controls">
+          <button class="win-btn min" title="Minimize">&#8211;</button>
+          <button class="win-btn max" title="Maximize / Restore">&#9633;</button>
+          <button class="win-btn close" title="Close">&#10005;</button>
+        </div>
+      </div>
+      <div class="win-content"></div>
+      <div class="rz rz-n" data-dir="n"></div>
+      <div class="rz rz-s" data-dir="s"></div>
+      <div class="rz rz-e" data-dir="e"></div>
+      <div class="rz rz-w" data-dir="w"></div>
+      <div class="rz rz-ne" data-dir="ne"></div>
+      <div class="rz rz-nw" data-dir="nw"></div>
+      <div class="rz rz-se" data-dir="se"></div>
+      <div class="rz rz-sw" data-dir="sw"></div>
+    `;
+    winEl.querySelector('.win-title-text').textContent = titleText;
+    winEl.addEventListener('pointerdown', () => focusWindow(id));
+
+    const titlebar = winEl.querySelector('.titlebar');
+    titlebar.addEventListener('dblclick', (e) => {
+      if (!e.target.closest('.win-controls')) toggleMaximize(id);
+    });
+
+    winEl.querySelector('.win-btn.min').addEventListener('click', e => { e.stopPropagation(); toggleMinimize(id); });
+    winEl.querySelector('.win-btn.max').addEventListener('click', e => { e.stopPropagation(); toggleMaximize(id); });
+    winEl.querySelector('.win-btn.close').addEventListener('click', e => { e.stopPropagation(); closeWindow(id); });
+
+    const tabEl = document.createElement('button');
+    tabEl.className = 'task-tab';
+    tabEl.innerHTML = `${app.icon}<span></span>`;
+    tabEl.querySelector('span').textContent = titleText;
+    tabEl.addEventListener('click', () => {
+      const w = windows.get(id);
+      if (!w) return;
+      if (w.minimized) toggleMinimize(id);
+      else if (w.el.classList.contains('focused')) toggleMinimize(id);
+      else focusWindow(id);
+    });
+
+    winContainer.appendChild(winEl);
+    taskbarApps.appendChild(tabEl);
+
+    const winObj = {
+      id,
+      appId: app.id,
+      appName: app.name,
+      icon: app.icon,
+      el: winEl,
+      tabEl,
+      minimized: false,
+      maximized: false,
+      snapped: null,
+      restoreRect: null,
+      // Physics state
+      x: left,
+      y: top,
+      vx: (Math.random() - 0.5) * 6,
+      vy: -2,
+      angle: 0,
+      dragging: false,
+      setTitle(t) {
+        winEl.querySelector('.win-title-text').textContent = t;
+        tabEl.querySelector('span').textContent = t;
+      },
+      cleanup: null
+    };
+    windows.set(id, winObj);
+
+    setupWindowInteractions(winObj);
+    app.mount(winEl.querySelector('.win-content'), winObj, options);
+
+    focusWindow(id);
+    window.dispatchEvent(new CustomEvent('wm-change'));
+    return winObj;
+  }
+
+  function setupWindowInteractions(w) {
+    const el = w.el;
+    const titlebar = el.querySelector('.titlebar');
+
+    titlebar.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('.win-controls') || e.button !== 0) return;
+      e.preventDefault();
+      focusWindow(w.id);
+
+      let startX = e.clientX;
+      let startY = e.clientY;
+
+      // If maximized or snapped, unsnap on drag move
+      let startLeft = el.offsetLeft;
+      let startTop = el.offsetTop;
+      let snapZone = null;
+
+      w.dragging = true;
+      w.vx = 0; w.vy = 0;
+      let lastX = e.clientX, lastY = e.clientY, lastT = performance.now();
+
+      const setSnapGhost = (zone) => {
+        if (Physics.active) zone = null;
+        snapZone = zone;
+        if (!zone) {
+          snapPreview.classList.remove('visible');
+          return;
+        }
+        const deskW = window.innerWidth;
+        const deskH = window.innerHeight - 50;
+        if (zone === 'left') {
+          snapPreview.style.left = '6px'; snapPreview.style.top = '6px';
+          snapPreview.style.width = (deskW / 2 - 10) + 'px'; snapPreview.style.height = (deskH - 12) + 'px';
+        } else if (zone === 'right') {
+          snapPreview.style.left = (deskW / 2 + 4) + 'px'; snapPreview.style.top = '6px';
+          snapPreview.style.width = (deskW / 2 - 10) + 'px'; snapPreview.style.height = (deskH - 12) + 'px';
+        } else if (zone === 'top') {
+          snapPreview.style.left = '6px'; snapPreview.style.top = '6px';
+          snapPreview.style.width = (deskW - 12) + 'px'; snapPreview.style.height = (deskH - 12) + 'px';
+        }
+        snapPreview.classList.add('visible');
+      };
+
+      const onMove = (ev) => {
+        const dx = ev.clientX - startX;
+        const dy = ev.clientY - startY;
+
+        if ((w.maximized || w.snapped) && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) {
+          const prevW = w.restoreRect ? w.restoreRect.w : 560;
+          const prevH = w.restoreRect ? w.restoreRect.h : 400;
+          clearSnapClasses(w);
+          el.style.width = prevW + 'px';
+          el.style.height = prevH + 'px';
+          startLeft = ev.clientX - prevW / 2;
+          startTop = Math.max(0, ev.clientY - 18);
+          startX = ev.clientX;
+          startY = ev.clientY;
+        }
+
+        const now = performance.now();
+        const dt = Math.max(1, now - lastT);
+        w.vx = ((ev.clientX - lastX) / dt) * 16;
+        w.vy = ((ev.clientY - lastY) / dt) * 16;
+        lastX = ev.clientX; lastY = ev.clientY; lastT = now;
+
+        const maxTop = window.innerHeight - 50 - 38;
+        w.x = Math.max(-el.offsetWidth + 90, Math.min(window.innerWidth - 90, startLeft + (ev.clientX - startX)));
+        w.y = Math.max(0, Math.min(maxTop, startTop + (ev.clientY - startY)));
+        el.style.left = w.x + 'px';
+        el.style.top = w.y + 'px';
+
+        if (!Physics.active) {
+          if (ev.clientX <= 14) setSnapGhost('left');
+          else if (ev.clientX >= window.innerWidth - 14) setSnapGhost('right');
+          else if (ev.clientY <= 10) setSnapGhost('top');
+          else setSnapGhost(null);
+        }
+      };
+
+      const onUp = () => {
+        w.dragging = false;
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+        if (snapZone) {
+          applySnap(w, snapZone);
+          setSnapGhost(null);
+        }
+      };
+
+      window.addEventListener('pointermove', onMove);
+      window.addEventListener('pointerup', onUp);
+    });
+
+    // 8-Way Resizing
+    el.querySelectorAll('.rz').forEach(handle => {
+      handle.addEventListener('pointerdown', (e) => {
+        if (w.maximized) return;
+        e.preventDefault();
+        e.stopPropagation();
+        clearSnapClasses(w);
+        focusWindow(w.id);
+
+        const dir = handle.dataset.dir;
+        const startX = e.clientX, startY = e.clientY;
+        const startW = el.offsetWidth, startH = el.offsetHeight;
+        const startL = el.offsetLeft, startT = el.offsetTop;
+        const minW = 260, minH = 170;
+
+        const onMove = (ev) => {
+          const dx = ev.clientX - startX;
+          const dy = ev.clientY - startY;
+
+          if (dir.includes('e')) {
+            el.style.width = Math.max(minW, Math.min(window.innerWidth - startL, startW + dx)) + 'px';
+          }
+          if (dir.includes('s')) {
+            el.style.height = Math.max(minH, Math.min(window.innerHeight - 50 - startT, startH + dy)) + 'px';
+          }
+          if (dir.includes('w')) {
+            const newW = Math.max(minW, startW - dx);
+            if (newW > minW) {
+              w.x = Math.max(0, startL + dx);
+              el.style.left = w.x + 'px';
+              el.style.width = newW + 'px';
+            }
+          }
+          if (dir.includes('n')) {
+            const newH = Math.max(minH, startH - dy);
+            if (newH > minH && startT + dy >= 0) {
+              w.y = startT + dy;
+              el.style.top = w.y + 'px';
+              el.style.height = newH + 'px';
+            }
+          }
+        };
+
+        const onUp = () => {
+          window.removeEventListener('pointermove', onMove);
+          window.removeEventListener('pointerup', onUp);
+        };
+        window.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', onUp);
+      });
+    });
+  }
+
+  /* =========================================================
+     7. SURPRISING FEATURE: NEWTONIAN DESKTOP PHYSICS ENGINE
+  ========================================================= */
+  const Physics = {
+    active: false,
+    zeroG: false,
+    rafId: null,
+    toggle(forceState = null) {
+      this.active = forceState !== null ? forceState : !this.active;
+      document.getElementById('gravity-tray-btn').classList.toggle('physics-on', this.active);
+      document.getElementById('qs-gravity').classList.toggle('active', this.active);
+      document.getElementById('qs-grav-sub').textContent = this.active ? (this.zeroG ? 'Zero-G' : 'Earth Gravity') : 'Normal';
+      document.getElementById('physics-hud').classList.toggle('visible', this.active);
+
+      if (this.active) {
+        SFX.open();
+        windows.forEach(w => {
+          if (w.maximized || w.snapped) {
+            clearSnapClasses(w);
+            w.el.style.width = Math.min(520, window.innerWidth - 40) + 'px';
+            w.el.style.height = Math.min(360, window.innerHeight - 120) + 'px';
+          }
+          w.x = w.el.offsetLeft;
+          w.y = w.el.offsetTop;
+          w.vx = (Math.random() - 0.5) * 14;
+          w.vy = -4 - Math.random() * 5;
+        });
+        if (!this.rafId) this.loop();
+      } else {
+        if (this.rafId) { cancelAnimationFrame(this.rafId); this.rafId = null; }
+        windows.forEach(w => {
+          w.angle = 0;
+          w.el.style.transform = '';
+          w.y = Math.max(0, Math.min(window.innerHeight - 50 - 60, w.y));
+          w.x = Math.max(0, Math.min(window.innerWidth - 120, w.x));
+          w.el.style.left = Math.round(w.x) + 'px';
+          w.el.style.top = Math.round(w.y) + 'px';
+        });
+      }
+    },
+    cycleMode() {
+      this.zeroG = !this.zeroG;
+      document.getElementById('phys-mode-btn').textContent = this.zeroG ? 'Mode: Zero-G Space' : 'Mode: Earth Gravity';
+      document.getElementById('qs-grav-sub').textContent = this.zeroG ? 'Zero-G' : 'Earth Gravity';
+      if (this.zeroG) {
+        windows.forEach(w => {
+          w.vx += (Math.random() - 0.5) * 10;
+          w.vy = (Math.random() - 0.5) * 10;
+        });
+      }
+    },
+    loop() {
+      if (!this.active) return;
+      const W = window.innerWidth;
+      const H = window.innerHeight - 50;
+      const gravity = this.zeroG ? 0 : 0.52;
+      const bounce = this.zeroG ? 0.96 : 0.68;
+      const friction = this.zeroG ? 0.998 : 0.985;
+
+      const activeWins = [];
+      windows.forEach(w => {
+        if (!w.minimized) activeWins.push(w);
+      });
+
+      for (const w of activeWins) {
+        if (w.dragging) {
+          w.angle = Math.max(-10, Math.min(10, w.vx * 0.45));
+          w.el.style.transform = `rotate(${w.angle.toFixed(2)}deg)`;
+          continue;
+        }
+
+        const ww = w.el.offsetWidth;
+        const wh = w.el.offsetHeight;
+
+        w.vy += gravity;
+        w.vx *= friction;
+        w.vy *= this.zeroG ? 0.998 : 0.995;
+
+        w.x += w.vx;
+        w.y += w.vy;
+
+        // Floor (Taskbar)
+        if (w.y + wh > H) {
+          w.y = H - wh;
+          if (Math.abs(w.vy) > 2.2) SFX.bounce(Math.abs(w.vy));
+          w.vy = -w.vy * bounce;
+          if (!this.zeroG && Math.abs(w.vy) < 1.1) w.vy = 0;
+          w.vx *= 0.92;
+        }
+        // Ceiling
+        if (w.y < 0) {
+          w.y = 0;
+          if (Math.abs(w.vy) > 2.2) SFX.bounce(Math.abs(w.vy));
+          w.vy = -w.vy * bounce;
+        }
+        // Walls
+        if (w.x < 0) {
+          w.x = 0;
+          if (Math.abs(w.vx) > 2.2) SFX.bounce(Math.abs(w.vx));
+          w.vx = -w.vx * bounce;
+        } else if (w.x + ww > W) {
+          w.x = W - ww;
+          if (Math.abs(w.vx) > 2.2) SFX.bounce(Math.abs(w.vx));
+          w.vx = -w.vx * bounce;
+        }
+      }
+
+      // Window-to-window AABB collisions!
+      for (let i = 0; i < activeWins.length; i++) {
+        for (let j = i + 1; j < activeWins.length; j++) {
+          const a = activeWins[i], b = activeWins[j];
+          const aw = a.el.offsetWidth, ah = a.el.offsetHeight;
+          const bw = b.el.offsetWidth, bh = b.el.offsetHeight;
+
+          const overlapX = Math.min(a.x + aw, b.x + bw) - Math.max(a.x, b.x);
+          const overlapY = Math.min(a.y + ah, b.y + bh) - Math.max(a.y, b.y);
+
+          if (overlapX > 0 && overlapY > 0) {
+            if (overlapX < overlapY) {
+              const sign = (a.x + aw / 2) < (b.x + bw / 2) ? -1 : 1;
+              if (!a.dragging) a.x += sign * (overlapX / 2);
+              if (!b.dragging) b.x -= sign * (overlapX / 2);
+              const relV = Math.abs(a.vx - b.vx);
+              if (relV > 2.5) SFX.bounce(relV * 0.6);
+              const tmp = a.vx;
+              if (!a.dragging) a.vx = b.vx * 0.85;
+              if (!b.dragging) b.vx = tmp * 0.85;
+            } else {
+              const sign = (a.y + ah / 2) < (b.y + bh / 2) ? -1 : 1;
+              if (!a.dragging) a.y += sign * (overlapY / 2);
+              if (!b.dragging) b.y -= sign * (overlapY / 2);
+              const relV = Math.abs(a.vy - b.vy);
+              if (relV > 2.5) SFX.bounce(relV * 0.6);
+              const tmp = a.vy;
+              if (!a.dragging) a.vy = b.vy * 0.72;
+              if (!b.dragging) b.vy = tmp * 0.72;
+            }
+          }
+        }
+      }
+
+      for (const w of activeWins) {
+        if (!w.dragging) {
+          const targetAngle = Math.max(-8, Math.min(8, w.vx * 0.4));
+          w.angle += (targetAngle - w.angle) * 0.2;
+          if (Math.abs(w.vx) < 0.15) w.angle *= 0.8;
+          w.el.style.left = w.x + 'px';
+          w.el.style.top = w.y + 'px';
+          w.el.style.transform = Math.abs(w.angle) > 0.08 ? `rotate(${w.angle.toFixed(2)}deg)` : '';
+        }
+      }
+
+      this.rafId = requestAnimationFrame(() => this.loop());
+    }
+  };
+
+  document.getElementById('gravity-tray-btn').addEventListener('click', () => Physics.toggle());
+  document.getElementById('phys-mode-btn').addEventListener('click', () => Physics.cycleMode());
+  document.getElementById('phys-off-btn').addEventListener('click', () => Physics.toggle(false));
+
+  /* =========================================================
+     8. APPLICATIONS (7 APPS)
+  ========================================================= */
+  const APPS = [
+    /* --- 1. NOTEPAD (Persistent + VFS) --- */
+    {
+      id: 'notepad',
+      name: 'Notepad',
+      desc: 'Persistent text & code editor',
+      icon: ICONS.notepad,
+      width: 550,
+      height: 410,
+      mount(container, winObj, options) {
+        let currentFilePath = options.filePath || null;
+        const savedScratch = Store.get('novaos_notepad_text') ?? Store.get('minios_notepad_text') ??
+          'Welcome to NovaOS Notepad!\n\n- Your notes here are automatically persisted across reloads.\n- Drag this window to the left/right screen edge to Aero Snap!\n- Or hit "🪐 Gravity" in the bottom-right tray for a surprise.';
+
+        const initialText = currentFilePath && VFS[currentFilePath]
+          ? VFS[currentFilePath].content
+          : savedScratch;
+
+        if (currentFilePath) winObj.setTitle('Notepad — ' + currentFilePath.split('/').pop());
+
+        container.innerHTML = `
+          <div class="app-toolbar">
+            <button class="btn-small np-scratch">Scratchpad</button>
+            <button class="btn-small btn-primary np-save-vfs">Save to Files</button>
+            <button class="btn-small np-desk">Save to Desktop</button>
+            <button class="btn-small np-clear">Clear</button>
+          </div>
+          <div class="inline-prompt np-prompt" style="display:none;">
+            <span>Path:</span>
+            <input type="text" class="np-path-in" value="/Documents/Note.txt" />
+            <button class="btn-small btn-primary np-confirm-save">Save</button>
+            <button class="btn-small np-cancel-save">Cancel</button>
+          </div>
+          <textarea class="notepad-area" spellcheck="false" placeholder="Type anything..."></textarea>
+          <div class="notepad-status">
+            <span class="np-mode"></span>
+            <span class="np-stats">0 chars</span>
+          </div>
+        `;
+
+        const textarea = container.querySelector('.notepad-area');
+        const statsEl = container.querySelector('.np-stats');
+        const modeEl = container.querySelector('.np-mode');
+        const promptRow = container.querySelector('.np-prompt');
+        const pathInput = container.querySelector('.np-path-in');
+
+        textarea.value = initialText;
+
+        const updateMeta = () => {
+          const val = textarea.value;
+          const lines = val.split('\n').length;
+          const words = val.trim() ? val.trim().split(/\s+/).length : 0;
+          statsEl.textContent = `Ln ${lines} · ${words} words · ${val.length} chars`;
+          modeEl.textContent = currentFilePath ? `${currentFilePath} (Saved)` : 'Persistent Scratchpad (Auto-saved)';
+        };
+
+        textarea.addEventListener('input', () => {
+          if (currentFilePath && VFS[currentFilePath]) {
+            VFS[currentFilePath].content = textarea.value;
+            saveVFS();
+          } else {
+            Store.set('novaos_notepad_text', textarea.value);
+          }
+          updateMeta();
+        });
+
+        container.querySelector('.np-scratch').addEventListener('click', () => {
+          currentFilePath = null;
+          winObj.setTitle('Notepad');
+          textarea.value = Store.get('novaos_notepad_text', '');
+          updateMeta();
+        });
+
+        container.querySelector('.np-save-vfs').addEventListener('click', () => {
+          pathInput.value = currentFilePath || '/Documents/Note.txt';
+          promptRow.style.display = 'flex';
+          pathInput.focus();
+        });
+
+        container.querySelector('.np-desk').addEventListener('click', () => {
+          pathInput.value = '/Desktop/Memo.txt';
+          promptRow.style.display = 'flex';
+          pathInput.focus();
+        });
+
+        const doSaveFile = () => {
+          let p = pathInput.value.trim();
+          if (!p) return;
+          if (!p.startsWith('/')) p = '/Documents/' + p;
+          if (!p.includes('.')) p += '.txt';
+          const dir = p.substring(0, p.lastIndexOf('/')) || '/';
+          if (dir !== '/' && !VFS[dir]) VFS[dir] = { type: 'dir' };
+          VFS[p] = { type: 'file', content: textarea.value };
+          saveVFS();
+          currentFilePath = p;
+          winObj.setTitle('Notepad — ' + p.split('/').pop());
+          promptRow.style.display = 'none';
+          updateMeta();
+          notify('File Saved', `Saved to ${p}`);
+        };
+
+        container.querySelector('.np-confirm-save').addEventListener('click', doSaveFile);
+        pathInput.addEventListener('keydown', e => { if (e.key === 'Enter') doSaveFile(); });
+        container.querySelector('.np-cancel-save').addEventListener('click', () => { promptRow.style.display = 'none'; });
+        container.querySelector('.np-clear').addEventListener('click', () => {
+          textarea.value = '';
+          textarea.dispatchEvent(new Event('input'));
+          textarea.focus();
+        });
+
+        updateMeta();
+      }
+    },
+
+    /* --- 2. PAINT STUDIO --- */
+    {
+      id: 'paint',
+      name: 'Paint Studio',
+      desc: 'Digital canvas & pixel art',
+      icon: ICONS.paint,
+      width: 670,
+      height: 500,
+      mount(container, winObj, options) {
+        container.innerHTML = `
+          <div class="app-toolbar">
+            <button class="tool-btn active" data-tool="brush">Brush</button>
+            <button class="tool-btn" data-tool="line">Line</button>
+            <button class="tool-btn" data-tool="rect">Rect</button>
+            <button class="tool-btn" data-tool="circle">Circle</button>
+            <button class="tool-btn" data-tool="fill">Fill</button>
+            <button class="tool-btn" data-tool="eraser">Eraser</button>
+            <input type="color" class="color-swatch p-color" value="#4f8cff" title="Color">
+            <label style="font-size:11.5px;color:var(--text-muted);display:flex;align-items:center;gap:4px;">
+              Size <input type="range" class="p-size" min="1" max="32" value="5" style="width:58px;">
+            </label>
+            <button class="btn-small p-undo">Undo</button>
+            <button class="btn-small p-clear">Clear</button>
+            <button class="btn-small btn-primary p-save">Save</button>
+          </div>
+          <div class="inline-prompt p-prompt" style="display:none;">
+            <span>Save to:</span>
+            <input type="text" class="p-name-in" value="/Pictures/Artwork.png" />
+            <button class="btn-small btn-primary p-confirm">Save</button>
+            <button class="btn-small p-cancel">Cancel</button>
+          </div>
+          <div class="paint-canvas-wrap">
+            <canvas class="paint-canvas" width="580" height="370"></canvas>
+          </div>
+        `;
+
+        const canvas = container.querySelector('.paint-canvas');
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        const history = [];
+        const pushUndo = () => {
+          if (history.length > 15) history.shift();
+          history.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+        };
+
+        if (options.filePath && VFS[options.filePath]?.content) {
+          winObj.setTitle('Paint — ' + options.filePath.split('/').pop());
+          const img = new Image();
+          img.onload = () => ctx.drawImage(img, 0, 0);
+          img.src = VFS[options.filePath].content;
+        }
+
+        let tool = 'brush', drawing = false, startX = 0, startY = 0, snapshot = null;
+        const colorIn = container.querySelector('.p-color');
+        const sizeIn = container.querySelector('.p-size');
+
+        container.querySelectorAll('.tool-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            container.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            tool = btn.dataset.tool;
+          });
+        });
+
+        const hexToRgb = (hex) => {
+          const n = parseInt(hex.slice(1), 16);
+          return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+        };
+
+        const floodFill = (sx, sy, fillHex) => {
+          sx = Math.floor(sx); sy = Math.floor(sy);
+          const w = canvas.width, h = canvas.height;
+          if (sx < 0 || sy < 0 || sx >= w || sy >= h) return;
+          const imgData = ctx.getImageData(0, 0, w, h);
+          const d = imgData.data;
+          const idx = (sy * w + sx) * 4;
+          const [tr, tg, tb] = [d[idx], d[idx + 1], d[idx + 2]];
+          const [fr, fg, fb] = hexToRgb(fillHex);
+          if (Math.abs(tr - fr) < 5 && Math.abs(tg - fg) < 5 && Math.abs(tb - fb) < 5) return;
+
+          const stack = [[sx, sy]];
+          const visited = new Uint8Array(w * h);
+          while (stack.length) {
+            const [x, y] = stack.pop();
+            if (x < 0 || y < 0 || x >= w || y >= h) continue;
+            const p = y * w + x;
+            if (visited[p]) continue;
+            const i = p * 4;
+            if (Math.abs(d[i] - tr) > 22 || Math.abs(d[i + 1] - tg) > 22 || Math.abs(d[i + 2] - tb) > 22) continue;
+            visited[p] = 1;
+            d[i] = fr; d[i + 1] = fg; d[i + 2] = fb; d[i + 3] = 255;
+            stack.push([x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]);
+          }
+          ctx.putImageData(imgData, 0, 0);
+        };
+
+        const getCoords = (e) => {
+          const rect = canvas.getBoundingClientRect();
+          return {
+            x: (e.clientX - rect.left) * (canvas.width / rect.width),
+            y: (e.clientY - rect.top) * (canvas.height / rect.height)
+          };
+        };
+
+        canvas.addEventListener('pointerdown', (e) => {
+          pushUndo();
+          const pos = getCoords(e);
+          if (tool === 'fill') {
+            floodFill(pos.x, pos.y, colorIn.value);
+            return;
+          }
+          drawing = true;
+          canvas.setPointerCapture(e.pointerId);
+          startX = pos.x; startY = pos.y;
+          snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+          ctx.beginPath();
+          ctx.moveTo(startX, startY);
+          ctx.strokeStyle = tool === 'eraser' ? '#ffffff' : colorIn.value;
+          ctx.lineWidth = Number(sizeIn.value);
+          if (tool === 'brush' || tool === 'eraser') {
+            ctx.lineTo(startX + 0.01, startY + 0.01);
+            ctx.stroke();
+          }
+        });
+
+        canvas.addEventListener('pointermove', (e) => {
+          if (!drawing) return;
+          const pos = getCoords(e);
+          if (tool === 'brush' || tool === 'eraser') {
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+          } else if (tool === 'line') {
+            ctx.putImageData(snapshot, 0, 0);
+            ctx.beginPath(); ctx.moveTo(startX, startY); ctx.lineTo(pos.x, pos.y); ctx.stroke();
+          } else if (tool === 'rect') {
+            ctx.putImageData(snapshot, 0, 0);
+            ctx.strokeRect(startX, startY, pos.x - startX, pos.y - startY);
+          } else if (tool === 'circle') {
+            ctx.putImageData(snapshot, 0, 0);
+            const r = Math.hypot(pos.x - startX, pos.y - startY);
+            ctx.beginPath(); ctx.arc(startX, startY, r, 0, Math.PI * 2); ctx.stroke();
+          }
+        });
+
+        canvas.addEventListener('pointerup', () => { drawing = false; });
+        canvas.addEventListener('pointercancel', () => { drawing = false; });
+
+        container.querySelector('.p-undo').addEventListener('click', () => {
+          if (history.length) ctx.putImageData(history.pop(), 0, 0);
+        });
+        container.querySelector('.p-clear').addEventListener('click', () => {
+          pushUndo();
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        });
+
+        const promptEl = container.querySelector('.p-prompt');
+        const nameIn = container.querySelector('.p-name-in');
+        container.querySelector('.p-save').addEventListener('click', () => {
+          promptEl.style.display = 'flex';
+          nameIn.focus();
+        });
+
+        const saveImg = () => {
+          let p = nameIn.value.trim() || '/Pictures/Artwork.png';
+          if (!p.startsWith('/')) p = '/Pictures/' + p;
+          if (!p.endsWith('.png')) p += '.png';
+          const dir = p.substring(0, p.lastIndexOf('/')) || '/';
+          if (dir !== '/' && !VFS[dir]) VFS[dir] = { type: 'dir' };
+          VFS[p] = { type: 'file', content: canvas.toDataURL('image/png') };
+          saveVFS();
+          winObj.setTitle('Paint — ' + p.split('/').pop());
+          promptEl.style.display = 'none';
+          notify('Artwork Saved', `Saved image to ${p}`);
+        };
+
+        container.querySelector('.p-confirm').addEventListener('click', saveImg);
+        nameIn.addEventListener('keydown', e => { if (e.key === 'Enter') saveImg(); });
+        container.querySelector('.p-cancel').addEventListener('click', () => { promptEl.style.display = 'none'; });
+      }
+    },
+
+    /* --- 3. CALCULATOR --- */
+    {
+      id: 'calc',
+      name: 'Calculator',
+      desc: 'Precision arithmetic & keyboard input',
+      icon: ICONS.calc,
+      width: 310,
+      height: 420,
+      mount(container, winObj) {
+        container.innerHTML = `
+          <div class="calc-wrap">
+            <div class="calc-screen">
+              <div class="calc-expr"></div>
+              <div class="calc-val">0</div>
+            </div>
+            <div class="calc-grid">
+              <button class="calc-btn fn" data-act="clear">C</button>
+              <button class="calc-btn fn" data-act="back">&#9003;</button>
+              <button class="calc-btn op" data-act="percent">%</button>
+              <button class="calc-btn op" data-op="/">&#247;</button>
+              <button class="calc-btn" data-num="7">7</button>
+              <button class="calc-btn" data-num="8">8</button>
+              <button class="calc-btn" data-num="9">9</button>
+              <button class="calc-btn op" data-op="*">&#215;</button>
+              <button class="calc-btn" data-num="4">4</button>
+              <button class="calc-btn" data-num="5">5</button>
+              <button class="calc-btn" data-num="6">6</button>
+              <button class="calc-btn op" data-op="-">&#8722;</button>
+              <button class="calc-btn" data-num="1">1</button>
+              <button class="calc-btn" data-num="2">2</button>
+              <button class="calc-btn" data-num="3">3</button>
+              <button class="calc-btn op" data-op="+">+</button>
+              <button class="calc-btn span2" data-num="0">0</button>
+              <button class="calc-btn" data-num=".">.</button>
+              <button class="calc-btn eq" data-act="eq">=</button>
+            </div>
+          </div>
+        `;
+
+        const exprEl = container.querySelector('.calc-expr');
+        const valEl = container.querySelector('.calc-val');
+        let current = '0', prev = null, op = null, resetNext = false;
+        const opSymbols = { '+': '+', '-': '−', '*': '×', '/': '÷' };
+
+        const render = () => {
+          valEl.textContent = current;
+          exprEl.textContent = prev !== null && op ? `${prev} ${opSymbols[op]}` : '';
+        };
+
+        const compute = (a, b, operator) => {
+          const x = parseFloat(a), y = parseFloat(b);
+          if (isNaN(x) || isNaN(y)) return 0;
+          if (operator === '+') return x + y;
+          if (operator === '-') return x - y;
+          if (operator === '*') return x * y;
+          if (operator === '/') return y === 0 ? 'Error' : x / y;
+          return y;
+        };
+
+        const inputNum = (d) => {
+          if (current === 'Error') current = '0';
+          if (resetNext) {
+            current = d === '.' ? '0.' : d;
+            resetNext = false;
+          } else {
+            if (d === '.' && current.includes('.')) return;
+            current = current === '0' && d !== '.' ? d : current + d;
+          }
+          render();
+        };
+
+        const inputOp = (nextOp) => {
+          if (current === 'Error') current = '0';
+          if (op && !resetNext && prev !== null) {
+            const res = compute(prev, current, op);
+            current = res === 'Error' ? 'Error' : String(Number(res.toPrecision(12)));
+          }
+          prev = current === 'Error' ? null : current;
+          op = current === 'Error' ? null : nextOp;
+          resetNext = true;
+          render();
+        };
+
+        const doAction = (act) => {
+          if (act === 'clear') { current = '0'; prev = null; op = null; resetNext = false; }
+          else if (act === 'back') { if (!resetNext && current !== 'Error') current = current.length > 1 ? current.slice(0, -1) : '0'; }
+          else if (act === 'percent') { if (current !== 'Error') current = String(parseFloat(current) / 100); }
+          else if (act === 'eq') {
+            if (op && prev !== null) {
+              const res = compute(prev, current, op);
+              exprEl.textContent = `${prev} ${opSymbols[op]} ${current} =`;
+              current = res === 'Error' ? 'Error' : String(Number(res.toPrecision(12)));
+              prev = null; op = null; resetNext = true;
+              valEl.textContent = current;
+              return;
+            }
+          }
+          render();
+        };
+
+        container.querySelectorAll('.calc-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (btn.dataset.num) inputNum(btn.dataset.num);
+            else if (btn.dataset.op) inputOp(btn.dataset.op);
+            else if (btn.dataset.act) doAction(btn.dataset.act);
+          });
+        });
+
+        const onKey = (e) => {
+          if (!winObj.el.classList.contains('focused') || e.target.tagName === 'INPUT') return;
+          if (/^[0-9.]$/.test(e.key)) inputNum(e.key);
+          else if (['+', '-', '*', '/'].includes(e.key)) inputOp(e.key);
+          else if (e.key === 'Enter' || e.key === '=') { e.preventDefault(); doAction('eq'); }
+          else if (e.key === 'Backspace') doAction('back');
+          else if (e.key === 'Escape') doAction('clear');
+        };
+        window.addEventListener('keydown', onKey);
+        winObj.cleanup = () => window.removeEventListener('keydown', onKey);
+      }
+    },
+
+    /* --- 4. FILE BROWSER --- */
+    {
+      id: 'files',
+      name: 'File Browser',
+      desc: 'Browse Desktop, Documents & Pictures',
+      icon: ICONS.files,
+      width: 620,
+      height: 420,
+      mount(container, winObj, options) {
+        let currentDir = options.startDir || '/Desktop';
+        let selectedPath = null;
+        let promptMode = null;
+
+        container.innerHTML = `
+          <div class="app-toolbar">
+            <button class="btn-small fb-up">&#8593; Up</button>
+            <div class="fb-path"></div>
+            <button class="btn-small fb-new-file">+ File</button>
+            <button class="btn-small fb-new-dir">+ Folder</button>
+            <button class="btn-small fb-del" style="color:#ff8b96;">Delete</button>
+          </div>
+          <div class="inline-prompt fb-prompt" style="display:none;">
+            <span class="fb-prompt-label">Name:</span>
+            <input type="text" class="fb-prompt-in" />
+            <button class="btn-small btn-primary fb-prompt-ok">Create</button>
+            <button class="btn-small fb-prompt-cancel">Cancel</button>
+          </div>
+          <div class="fb-layout">
+            <div class="fb-sidebar">
+              <div class="fb-nav" data-dir="/">Root (/)</div>
+              <div class="fb-nav" data-dir="/Desktop">Desktop</div>
+              <div class="fb-nav" data-dir="/Documents">Documents</div>
+              <div class="fb-nav" data-dir="/Pictures">Pictures</div>
+              <div class="fb-nav" data-dir="/System">System</div>
+            </div>
+            <div class="fb-main"></div>
+          </div>
+        `;
+
+        const pathBar = container.querySelector('.fb-path');
+        const mainArea = container.querySelector('.fb-main');
+        const promptEl = container.querySelector('.fb-prompt');
+        const promptIn = container.querySelector('.fb-prompt-in');
+        const promptLabel = container.querySelector('.fb-prompt-label');
+
+        const navigate = (dir) => { currentDir = dir; selectedPath = null; renderFiles(); };
+
+        const renderFiles = () => {
+          pathBar.textContent = currentDir;
+          winObj.setTitle('Files — ' + (currentDir === '/' ? 'Root' : currentDir.split('/').pop()));
+          container.querySelectorAll('.fb-nav').forEach(n => n.classList.toggle('active', n.dataset.dir === currentDir));
+          mainArea.innerHTML = '';
+          const children = getChildren(currentDir);
+          if (!children.length) {
+            mainArea.innerHTML = `<div style="grid-column:1/-1;color:var(--text-muted);font-size:13px;padding:18px;">Folder is empty.</div>`;
+            return;
+          }
+          children.forEach(item => {
+            const el = document.createElement('div');
+            el.className = 'fb-item' + (selectedPath === item.path ? ' selected' : '');
+            const icon = item.type === 'dir' ? ICONS.folder : (item.name.endsWith('.png') ? ICONS.fileImg : ICONS.fileTxt);
+            el.innerHTML = `${icon}<span></span>`;
+            el.querySelector('span').textContent = item.name;
+            el.addEventListener('click', (e) => {
+              e.stopPropagation();
+              selectedPath = item.path;
+              mainArea.querySelectorAll('.fb-item').forEach(i => i.classList.remove('selected'));
+              el.classList.add('selected');
+            });
+            el.addEventListener('dblclick', () => {
+              if (item.type === 'dir') navigate(item.path);
+              else openVFSFile(item.path);
+            });
+            mainArea.appendChild(el);
+          });
+        };
+
+        mainArea.addEventListener('click', () => {
+          selectedPath = null;
+          mainArea.querySelectorAll('.fb-item').forEach(i => i.classList.remove('selected'));
+        });
+
+        container.querySelectorAll('.fb-nav').forEach(nav => nav.addEventListener('click', () => navigate(nav.dataset.dir)));
+        container.querySelector('.fb-up').addEventListener('click', () => {
+          if (currentDir === '/') return;
+          navigate(currentDir.substring(0, currentDir.lastIndexOf('/')) || '/');
+        });
+
+        const showPrompt = (mode) => {
+          promptMode = mode;
+          promptLabel.textContent = mode === 'file' ? 'New file:' : 'New folder:';
+          promptIn.value = mode === 'file' ? 'NewNote.txt' : 'New Folder';
+          promptEl.style.display = 'flex';
+          promptIn.focus();
+          promptIn.select();
+        };
+
+        container.querySelector('.fb-new-file').addEventListener('click', () => showPrompt('file'));
+        container.querySelector('.fb-new-dir').addEventListener('click', () => showPrompt('dir'));
+
+        const confirmCreate = () => {
+          let name = promptIn.value.trim().replace(/\//g, '');
+          if (!name) return;
+          if (promptMode === 'file' && !name.includes('.')) name += '.txt';
+          const full = (currentDir === '/' ? '' : currentDir) + '/' + name;
+          VFS[full] = promptMode === 'dir' ? { type: 'dir' } : { type: 'file', content: '' };
+          promptEl.style.display = 'none';
+          saveVFS();
+        };
+
+        container.querySelector('.fb-prompt-ok').addEventListener('click', confirmCreate);
+        promptIn.addEventListener('keydown', e => { if (e.key === 'Enter') confirmCreate(); });
+        container.querySelector('.fb-prompt-cancel').addEventListener('click', () => { promptEl.style.display = 'none'; });
+
+        container.querySelector('.fb-del').addEventListener('click', () => {
+          if (!selectedPath) return;
+          Object.keys(VFS).forEach(k => {
+            if (k === selectedPath || k.startsWith(selectedPath + '/')) delete VFS[k];
+          });
+          selectedPath = null;
+          saveVFS();
+        });
+
+        const onVfsChange = () => renderFiles();
+        window.addEventListener('vfs-change', onVfsChange);
+        winObj.cleanup = () => window.removeEventListener('vfs-change', onVfsChange);
+        renderFiles();
+      }
+    },
+
+    /* --- 5. TERMINAL SHELL --- */
+    {
+      id: 'terminal',
+      name: 'Terminal',
+      desc: 'NovaSH command-line interface',
+      icon: ICONS.terminal,
+      width: 580,
+      height: 370,
+      mount(container) {
+        let cwd = '/Desktop';
+        const history = [];
+        let histIdx = -1;
+
+        container.innerHTML = `
+          <div class="term-wrap">
+            <div class="term-output"></div>
+            <div class="term-input-row">
+              <span class="term-prompt">nova@os:/Desktop$</span>
+              <input type="text" class="term-in" spellcheck="false" autocomplete="off" />
+            </div>
+          </div>
+        `;
+
+        const wrap = container.querySelector('.term-wrap');
+        const out = container.querySelector('.term-output');
+        const inp = container.querySelector('.term-in');
+        const promptSpan = container.querySelector('.term-prompt');
+
+        const print = (txt, color = null) => {
+          const line = document.createElement('div');
+          line.className = 'term-line';
+          if (color) line.style.color = color;
+          line.textContent = txt;
+          out.appendChild(line);
+          wrap.scrollTop = wrap.scrollHeight;
+        };
+
+        print('NovaOS Shell v2.4.0 — Type "help" for commands.', '#60a5fa');
+
+        const resolvePath = (p) => {
+          if (!p) return cwd;
+          if (p.startsWith('/')) return p.length > 1 && p.endsWith('/') ? p.slice(0, -1) : p;
+          const parts = (cwd === '/' ? [] : cwd.slice(1).split('/'));
+          for (const seg of p.split('/')) {
+            if (!seg || seg === '.') continue;
+            if (seg === '..') parts.pop();
+            else parts.push(seg);
+          }
+          return '/' + parts.join('/');
+        };
+
+        const exec = (raw) => {
+          const cmdLine = raw.trim();
+          print(`${promptSpan.textContent} ${cmdLine}`, '#94a3b8');
+          if (!cmdLine) return;
+          history.push(cmdLine);
+          histIdx = history.length;
+
+          const [cmd, ...args] = cmdLine.split(/\s+/);
+          const argStr = cmdLine.slice(cmd.length).trim();
+
+          switch (cmd.toLowerCase()) {
+            case 'help':
+              print('Available commands:\n  ls [dir]        List directory contents\n  cd <dir>        Change directory\n  cat <file>      Print file contents\n  touch <file>    Create empty file\n  mkdir <dir>     Create directory\n  rm <path>       Delete file or folder\n  echo <text>     Print text\n  open <app>      Open app (notepad, paint, calc, files, taskmgr)\n  neofetch        Display system info\n  gravity         Toggle Newtonian Window Physics!\n  zerog           Toggle Zero-G space mode\n  clear           Clear terminal');
+              break;
+            case 'clear':
+              out.innerHTML = '';
+              break;
+            case 'pwd':
+              print(cwd);
+              break;
+            case 'ls': {
+              const target = resolvePath(args[0]);
+              if (target !== '/' && (!VFS[target] || VFS[target].type !== 'dir')) {
+                print(`ls: cannot access '${args[0]}': No such directory`, '#f87171');
+              } else {
+                const items = getChildren(target).map(i => i.type === 'dir' ? i.name + '/' : i.name);
+                print(items.length ? items.join('   ') : '(empty)');
+              }
+              break;
+            }
+            case 'cd': {
+              const target = resolvePath(args[0] || '/Desktop');
+              if (target === '/' || (VFS[target] && VFS[target].type === 'dir')) {
+                cwd = target;
+                promptSpan.textContent = `nova@os:${cwd}$`;
+              } else {
+                print(`cd: no such directory: ${args[0]}`, '#f87171');
+              }
+              break;
+            }
+            case 'cat': {
+              if (!args[0]) { print('Usage: cat <file>'); break; }
+              const target = resolvePath(args[0]);
+              if (VFS[target] && VFS[target].type === 'file') {
+                print(VFS[target].content || '(empty file)');
+              } else {
+                print(`cat: ${args[0]}: No such file`, '#f87171');
+              }
+              break;
+            }
+            case 'touch': {
+              if (!args[0]) { print('Usage: touch <filename>'); break; }
+              const target = resolvePath(args[0]);
+              VFS[target] = { type: 'file', content: '' };
+              saveVFS();
+              print(`Created ${target}`, '#34d399');
+              break;
+            }
+            case 'mkdir': {
+              if (!args[0]) { print('Usage: mkdir <dirname>'); break; }
+              const target = resolvePath(args[0]);
+              VFS[target] = { type: 'dir' };
+              saveVFS();
+              print(`Created directory ${target}`, '#34d399');
+              break;
+            }
+            case 'rm': {
+              if (!args[0]) { print('Usage: rm <path>'); break; }
+              const target = resolvePath(args[0]);
+              if (!VFS[target]) { print(`rm: cannot remove '${args[0]}': No such file`, '#f87171'); break; }
+              Object.keys(VFS).forEach(k => { if (k === target || k.startsWith(target + '/')) delete VFS[k]; });
+              saveVFS();
+              print(`Removed ${target}`);
+              break;
+            }
+            case 'echo':
+              print(argStr);
+              break;
+            case 'open': {
+              const app = getApp((args[0] || '').toLowerCase());
+              if (app) { createWindow(app); print(`Launching ${app.name}...`, '#34d399'); }
+              else print(`Unknown app '${args[0]}'. Try: notepad, paint, calc, files, taskmgr, settings`, '#f87171');
+              break;
+            }
+            case 'gravity':
+              Physics.toggle();
+              print(`Desktop Physics: ${Physics.active ? 'ENABLED 🪐' : 'DISABLED'}`, '#fbbf24');
+              break;
+            case 'zerog':
+              if (!Physics.active) Physics.toggle(true);
+              Physics.cycleMode();
+              print(`Physics mode switched to: ${Physics.zeroG ? 'Zero-G Space' : 'Earth Gravity'}`, '#fbbf24');
+              break;
+            case 'neofetch':
+              print(
+`   _   _                 ___  ____  
+  | \\ | | _____   ____ _/ _ \\/ ___|   OS: NovaOS 2.4.0 (HTML5 Single-File)
+  |  \\| |/ _ \\ \\ / / _\` | | | \\___ \\   Kernel: RigidBody2D + AeroCompositor
+  | |\\  | (_) \\ V / (_| | |_| |___) |  Windows Open: ${windows.size}
+  |_| \\_|\\___/ \\_/ \\__,_|\\___/|____/   VFS Nodes: ${Object.keys(VFS).length}
+                                       Resolution: ${window.innerWidth}x${window.innerHeight}`, '#60a5fa');
+              break;
+            case 'date':
+              print(new Date().toString());
+              break;
+            default:
+              print(`${cmd}: command not found. Type "help".`, '#f87171');
+          }
+        };
+
+        wrap.addEventListener('click', () => inp.focus());
+        inp.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            const v = inp.value;
+            inp.value = '';
+            exec(v);
+          } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (histIdx > 0) inp.value = history[--histIdx];
+          } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (histIdx < history.length - 1) inp.value = history[++histIdx];
+            else { histIdx = history.length; inp.value = ''; }
+          }
+        });
+        setTimeout(() => inp.focus(), 40);
+      }
+    },
+
+    /* --- 6. TASK MANAGER --- */
+    {
+      id: 'taskmgr',
+      name: 'Task Manager',
+      desc: 'Live processes & system monitor',
+      icon: ICONS.taskmgr,
+      width: 440,
+      height: 360,
+      mount(container, winObj) {
+        container.innerHTML = `
+          <div class="tm-wrap">
+            <div class="tm-meters">
+              <div class="tm-card"><div class="tm-card-lbl">CPU Load</div><div class="tm-card-val tm-cpu">8%</div></div>
+              <div class="tm-card"><div class="tm-card-lbl">Memory</div><div class="tm-card-val tm-mem">142 MB</div></div>
+              <div class="tm-card"><div class="tm-card-lbl">Processes</div><div class="tm-card-val tm-cnt">0</div></div>
+            </div>
+            <div class="tm-list"></div>
+          </div>
+        `;
+
+        const cpuEl = container.querySelector('.tm-cpu');
+        const memEl = container.querySelector('.tm-mem');
+        const cntEl = container.querySelector('.tm-cnt');
+        const listEl = container.querySelector('.tm-list');
+
+        const renderProcs = () => {
+          cntEl.textContent = windows.size;
+          const baseCpu = Physics.active ? 26 : 4;
+          cpuEl.textContent = Math.min(99, baseCpu + windows.size * 3 + Math.floor(Math.random() * 5)) + '%';
+          memEl.textContent = (96 + windows.size * 28) + ' MB';
+
+          listEl.innerHTML = '';
+          windows.forEach(w => {
+            const row = document.createElement('div');
+            row.className = 'tm-row';
+            row.innerHTML = `
+              <div class="tm-row-left">${w.icon}<span></span></div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="font-size:11px;color:var(--text-muted);">PID ${1000 + w.id}</span>
+                <button class="btn-small tm-kill" style="color:#ff8b96;padding:3px 8px;">End Task</button>
+              </div>
+            `;
+            row.querySelector('.tm-row-left span').textContent = w.el.querySelector('.win-title-text').textContent;
+            row.querySelector('.tm-kill').addEventListener('click', () => closeWindow(w.id));
+            listEl.appendChild(row);
+          });
+        };
+
+        const timer = setInterval(renderProcs, 1400);
+        window.addEventListener('wm-change', renderProcs);
+        winObj.cleanup = () => {
+          clearInterval(timer);
+          window.removeEventListener('wm-change', renderProcs);
+        };
+        renderProcs();
+      }
+    },
+
+    /* --- 7. SETTINGS --- */
+    {
+      id: 'settings',
+      name: 'Settings',
+      desc: 'Wallpapers, theme & physics controls',
+      icon: ICONS.settings,
+      width: 460,
+      height: 410,
+      mount(container) {
+        container.innerHTML = `
+          <div class="settings-body">
+            <div>
+              <div style="font-size:13px;font-weight:600;margin-bottom:8px;">Desktop Wallpaper</div>
+              <div class="wp-grid"></div>
+            </div>
+            <div>
+              <div style="font-size:13px;font-weight:600;margin-bottom:8px;">Accent Color</div>
+              <div class="accent-row"></div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,0.22);padding:11px 13px;border-radius:9px;border:1px solid rgba(255,255,255,0.08);">
+              <div>
+                <div style="font-size:13px;font-weight:600;">🪐 Newtonian Window Physics</div>
+                <div style="font-size:11.5px;color:var(--text-muted);">Turn windows into throwable physical blocks</div>
+              </div>
+              <button class="btn-small btn-primary st-phys-btn">Toggle Physics</button>
+            </div>
+            <div style="font-size:11.5px;color:var(--text-muted);line-height:1.5;">
+              Shortcuts: <strong>Ctrl+K</strong> opens Spotlight Search · Drag windows to screen edges for <strong>Aero Snap</strong> · Right-click desktop for quick actions.
+            </div>
+          </div>
+        `;
+
+        const grid = container.querySelector('.wp-grid');
+        const curWp = getComputedStyle(document.documentElement).getPropertyValue('--bg-wallpaper').trim();
+        WALLPAPERS.forEach(wp => {
+          const card = document.createElement('div');
+          card.className = 'wp-card' + (curWp === wp ? ' active' : '');
+          card.style.background = wp;
+          card.addEventListener('click', () => {
+            document.documentElement.style.setProperty('--bg-wallpaper', wp);
+            Store.set('novaos_wallpaper', wp);
+            grid.querySelectorAll('.wp-card').forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+          });
+          grid.appendChild(card);
+        });
+
+        const accRow = container.querySelector('.accent-row');
+        ACCENTS.forEach(a => {
+          const dot = document.createElement('div');
+          dot.className = 'accent-dot';
+          dot.style.background = a.hex;
+          dot.addEventListener('click', () => {
+            document.documentElement.style.setProperty('--accent', a.hex);
+            document.documentElement.style.setProperty('--accent-rgb', a.rgb);
+            Store.set('novaos_accent', JSON.stringify(a));
+          });
+          accRow.appendChild(dot);
+        });
+
+        container.querySelector('.st-phys-btn').addEventListener('click', () => Physics.toggle());
+      }
+    }
+  ];
+
+  function getApp(id) {
+    return APPS.find(a => a.id === id);
+  }
+
+  /* =========================================================
+     9. DESKTOP ICONS (APPS + LIVE /Desktop FILES) & MARQUEE
+  ========================================================= */
+  const desktopEl = document.getElementById('desktop');
+  const desktopIconsEl = document.getElementById('desktop-icons');
+  const selectionBox = document.getElementById('selection-box');
+
+  function renderDesktopIcons() {
+    desktopIconsEl.innerHTML = '';
+
+    // System App Shortcuts
+    APPS.forEach(app => {
+      const dIcon = document.createElement('div');
+      dIcon.className = 'desktop-icon';
+      dIcon.innerHTML = `${app.icon}<span></span>`;
+      dIcon.querySelector('span').textContent = app.name;
+      bindDesktopIcon(dIcon, () => createWindow(app));
+      desktopIconsEl.appendChild(dIcon);
+    });
+
+    // Live VFS /Desktop items
+    getChildren('/Desktop').forEach(item => {
+      const dIcon = document.createElement('div');
+      dIcon.className = 'desktop-icon';
+      const ico = item.type === 'dir' ? ICONS.folder : (item.name.endsWith('.png') ? ICONS.fileImg : ICONS.fileTxt);
+      dIcon.innerHTML = `${ico}<span></span>`;
+      dIcon.querySelector('span').textContent = item.name;
+      dIcon.dataset.vfsPath = item.path;
+      bindDesktopIcon(dIcon, () => openVFSFile(item.path));
+      desktopIconsEl.appendChild(dIcon);
+    });
+  }
+
+  function bindDesktopIcon(el, onOpen) {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!e.ctrlKey && !e.metaKey) {
+        document.querySelectorAll('.desktop-icon').forEach(i => i.classList.remove('selected'));
+      }
+      el.classList.toggle('selected');
+    });
+    el.addEventListener('dblclick', (e) => {
+      e.stopPropagation();
+      el.classList.remove('selected');
+      onOpen();
+    });
+  }
+
+  window.addEventListener('vfs-change', renderDesktopIcons);
+  renderDesktopIcons();
+
+  // Rubber-band marquee selection on Desktop
+  desktopEl.addEventListener('pointerdown', (e) => {
+    if (e.target !== desktopEl && e.target !== desktopIconsEl) return;
+    if (e.button !== 0) return;
+    document.querySelectorAll('.desktop-icon').forEach(i => i.classList.remove('selected'));
+
+    const rect = desktopEl.getBoundingClientRect();
+    const sx = e.clientX - rect.left;
+    const sy = e.clientY - rect.top;
+
+    selectionBox.style.display = 'block';
+    selectionBox.style.left = sx + 'px';
+    selectionBox.style.top = sy + 'px';
+    selectionBox.style.width = '0px';
+    selectionBox.style.height = '0px';
+
+    const onMove = (ev) => {
+      const cx = ev.clientX - rect.left;
+      const cy = ev.clientY - rect.top;
+      const x = Math.min(sx, cx), y = Math.min(sy, cy);
+      const w = Math.abs(cx - sx), h = Math.abs(cy - sy);
+      selectionBox.style.left = x + 'px';
+      selectionBox.style.top = y + 'px';
+      selectionBox.style.width = w + 'px';
+      selectionBox.style.height = h + 'px';
+
+      const boxRect = selectionBox.getBoundingClientRect();
+      document.querySelectorAll('.desktop-icon').forEach(ico => {
+        const r = ico.getBoundingClientRect();
+        const hit = !(r.right < boxRect.left || r.left > boxRect.right || r.bottom < boxRect.top || r.top > boxRect.bottom);
+        ico.classList.toggle('selected', hit);
+      });
+    };
+
+    const onUp = () => {
+      selectionBox.style.display = 'none';
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+    };
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  });
+
+  /* =========================================================
+     10. RIGHT-CLICK CONTEXT MENU
+  ========================================================= */
+  const ctxMenu = document.getElementById('context-menu');
+
+  function showContextMenu(x, y, items) {
+    ctxMenu.innerHTML = '';
+    items.forEach(item => {
+      if (item.sep) {
+        const s = document.createElement('div');
+        s.className = 'ctx-sep';
+        ctxMenu.appendChild(s);
+        return;
+      }
+      const el = document.createElement('div');
+      el.className = 'ctx-item';
+      el.innerHTML = `<span>${item.label}</span><span class="ctx-hint">${item.hint || ''}</span>`;
+      el.addEventListener('click', () => {
+        ctxMenu.classList.remove('open');
+        item.action();
+      });
+      ctxMenu.appendChild(el);
+    });
+    ctxMenu.classList.add('open');
+    const mw = 205, mh = ctxMenu.offsetHeight || 220;
+    ctxMenu.style.left = Math.min(x, window.innerWidth - mw - 8) + 'px';
+    ctxMenu.style.top = Math.min(y, window.innerHeight - 55 - mh) + 'px';
+  }
+
+  desktopEl.addEventListener('contextmenu', (e) => {
+    if (e.target.closest('.window')) return;
+    e.preventDefault();
+    const iconEl = e.target.closest('.desktop-icon');
+    if (iconEl && iconEl.dataset.vfsPath) {
+      const p = iconEl.dataset.vfsPath;
+      showContextMenu(e.clientX, e.clientY, [
+        { label: 'Open', action: () => openVFSFile(p) },
+        { sep: true },
+        { label: 'Delete from Desktop', action: () => { delete VFS[p]; saveVFS(); } }
+      ]);
+      return;
+    }
+
+    showContextMenu(e.clientX, e.clientY, [
+      { label: 'New Text File on Desktop', action: () => {
+        let i = 1, name = '/Desktop/Note.txt';
+        while (VFS[name]) name = `/Desktop/Note_${i++}.txt`;
+        VFS[name] = { type: 'file', content: '' };
+        saveVFS();
+        openVFSFile(name);
+      }},
+      { label: 'New Folder on Desktop', action: () => {
+        let i = 1, name = '/Desktop/New Folder';
+        while (VFS[name]) name = `/Desktop/New Folder ${i++}`;
+        VFS[name] = { type: 'dir' };
+        saveVFS();
+      }},
+      { sep: true },
+      { label: 'Open Terminal Here', hint: 'NovaSH', action: () => createWindow(getApp('terminal')) },
+      { label: 'Next Wallpaper', action: () => {
+        const cur = getComputedStyle(document.documentElement).getPropertyValue('--bg-wallpaper').trim();
+        const idx = (WALLPAPERS.indexOf(cur) + 1) % WALLPAPERS.length;
+        document.documentElement.style.setProperty('--bg-wallpaper', WALLPAPERS[idx]);
+        Store.set('novaos_wallpaper', WALLPAPERS[idx]);
+      }},
+      { sep: true },
+      { label: Physics.active ? 'Disable Window Gravity' : '🪐 Enable Window Gravity!', action: () => Physics.toggle() },
+      { label: 'Personalize Settings', action: () => createWindow(getApp('settings')) }
+    ]);
+  });
+
+  /* =========================================================
+     11. START MENU, CONTROL CENTER, CALENDAR & SPOTLIGHT
+  ========================================================= */
+  const startMenu = document.getElementById('start-menu');
+  const startBtn = document.getElementById('start-btn');
+  const startSearch = document.getElementById('start-search');
+  const startListEl = document.getElementById('start-app-list');
+  const controlCenter = document.getElementById('control-center');
+  const ccBtn = document.getElementById('cc-btn');
+
+  function renderStartApps(filter = '') {
+    startListEl.innerHTML = '';
+    const q = filter.toLowerCase().trim();
+    APPS.filter(a => !q || a.name.toLowerCase().includes(q) || a.desc.toLowerCase().includes(q)).forEach(app => {
+      const sItem = document.createElement('div');
+      sItem.className = 'start-item';
+      sItem.innerHTML = `${app.icon}<div><div>${app.name}</div><div class="start-item-sub">${app.desc}</div></div>`;
+      sItem.addEventListener('click', () => {
+        closeFlyouts();
+        createWindow(app);
+      });
+      startListEl.appendChild(sItem);
+    });
+  }
+  renderStartApps();
+  startSearch.addEventListener('input', () => renderStartApps(startSearch.value));
+
+  function closeFlyouts() {
+    startMenu.classList.remove('open');
+    startBtn.classList.remove('active');
+    controlCenter.classList.remove('open');
+    ccBtn.classList.remove('active');
+    ctxMenu.classList.remove('open');
+  }
+
+  startBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const willOpen = !startMenu.classList.contains('open');
+    closeFlyouts();
+    if (willOpen) {
+      startMenu.classList.add('open');
+      startBtn.classList.add('active');
+      startSearch.value = '';
+      renderStartApps();
+      setTimeout(() => startSearch.focus(), 30);
+    }
+  });
+
+  ccBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const willOpen = !controlCenter.classList.contains('open');
+    closeFlyouts();
+    if (willOpen) {
+      renderCalendar();
+      controlCenter.classList.add('open');
+      ccBtn.classList.add('active');
+    }
+  });
+
+  window.addEventListener('pointerdown', (e) => {
+    if (!e.target.closest('#start-menu') && !e.target.closest('#start-btn') &&
+        !e.target.closest('#control-center') && !e.target.closest('#cc-btn') &&
+        !e.target.closest('#context-menu')) {
+      closeFlyouts();
+    }
+  });
+
+  // Quick Settings Toggles
+  const updateSoundUI = () => {
+    document.getElementById('qs-sound').classList.toggle('active', SFX.enabled);
+    document.getElementById('qs-sound-sub').textContent = SFX.enabled ? 'Enabled' : 'Muted';
+    document.getElementById('tray-sound-ico').textContent = SFX.enabled ? '🔊' : '🔇';
+  };
+  updateSoundUI();
+
+  document.getElementById('qs-sound').addEventListener('click', () => {
+    SFX.enabled = !SFX.enabled;
+    Store.set('novaos_sound', SFX.enabled ? '1' : '0');
+    updateSoundUI();
+    if (SFX.enabled) SFX.open();
+  });
+
+  let nightLightOn = false;
+  document.getElementById('qs-night').addEventListener('click', () => {
+    nightLightOn = !nightLightOn;
+    document.getElementById('night-light').style.background = nightLightOn ? 'rgba(255, 135, 35, 0.24)' : 'rgba(255,140,40,0)';
+    document.getElementById('qs-night').classList.toggle('active', nightLightOn);
+    document.getElementById('qs-night-sub').textContent = nightLightOn ? 'Warm Filter On' : 'Off';
+  });
+
+  document.getElementById('qs-gravity').addEventListener('click', () => Physics.toggle());
+
+  document.getElementById('qs-fullscreen').addEventListener('click', () => {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+    else document.exitFullscreen?.();
+  });
+
+  function renderCalendar() {
+    const now = new Date();
+    const year = now.getFullYear(), month = now.getMonth();
+    document.getElementById('cal-month').textContent = now.toLocaleDateString([], { month: 'long', year: 'numeric' });
+    const grid = document.getElementById('cal-grid');
+    grid.innerHTML = '';
+    ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].forEach(d => {
+      const lbl = document.createElement('div');
+      lbl.className = 'cal-day-lbl';
+      lbl.textContent = d;
+      grid.appendChild(lbl);
+    });
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    for (let i = 0; i < firstDay; i++) {
+      const empty = document.createElement('div');
+      empty.className = 'cal-cell muted';
+      grid.appendChild(empty);
+    }
+    for (let d = 1; d <= daysInMonth; d++) {
+      const cell = document.createElement('div');
+      cell.className = 'cal-cell' + (d === now.getDate() ? ' today' : '');
+      cell.textContent = d;
+      grid.appendChild(cell);
+    }
+  }
+
+  // Spotlight Search (Ctrl+K)
+  const spotlight = document.getElementById('spotlight');
+  const spotIn = document.getElementById('spotlight-in');
+  const spotRes = document.getElementById('spotlight-results');
+  let spotActions = [];
+
+  function openSpotlight() {
+    closeFlyouts();
+    spotlight.classList.add('open');
+    spotIn.value = '';
+    renderSpotlight('');
+    setTimeout(() => spotIn.focus(), 20);
+  }
+
+  function closeSpotlight() {
+    spotlight.classList.remove('open');
+  }
+
+  function renderSpotlight(q) {
+    spotRes.innerHTML = '';
+    spotActions = [];
+    const clean = q.trim().toLowerCase();
+
+    // Instant safe math evaluation
+    if (clean && /^[0-9+\-*/().\s]+$/.test(clean) && /[+\-*/]/.test(clean)) {
+      try {
+        const val = Function(`"use strict"; return (${clean})`)();
+        if (typeof val === 'number' && isFinite(val)) {
+          spotActions.push({
+            icon: ICONS.calc,
+            title: `= ${Number(val.toPrecision(12))}`,
+            tag: 'Instant Math',
+            run: () => createWindow(getApp('calc'))
+          });
+        }
+      } catch {}
+    }
+
+    APPS.forEach(a => {
+      if (!clean || a.name.toLowerCase().includes(clean) || a.desc.toLowerCase().includes(clean)) {
+        spotActions.push({ icon: a.icon, title: a.name, tag: 'Application', run: () => createWindow(a) });
+      }
+    });
+
+    Object.keys(VFS).forEach(path => {
+      if (!clean || path.toLowerCase().includes(clean)) {
+        const node = VFS[path];
+        spotActions.push({
+          icon: node.type === 'dir' ? ICONS.folder : (path.endsWith('.png') ? ICONS.fileImg : ICONS.fileTxt),
+          title: path,
+          tag: node.type === 'dir' ? 'Folder' : 'File',
+          run: () => openVFSFile(path)
+        });
+      }
+    });
+
+    if (!clean || 'gravity physics zero-g'.includes(clean)) {
+      spotActions.push({
+        icon: ICONS.settings,
+        title: 'Toggle Newtonian Window Physics 🪐',
+        tag: 'Surprise Feature',
+        run: () => Physics.toggle()
+      });
+    }
+
+    spotActions.slice(0, 10).forEach((item, idx) => {
+      const el = document.createElement('div');
+      el.className = 'spot-item' + (idx === 0 ? ' active' : '');
+      el.innerHTML = `<div class="spot-left">${item.icon}<span></span></div><span class="spot-tag">${item.tag}</span>`;
+      el.querySelector('.spot-left span').textContent = item.title;
+      el.addEventListener('click', () => {
+        closeSpotlight();
+        item.run();
+      });
+      spotRes.appendChild(el);
+    });
+  }
+
+  document.getElementById('search-btn').addEventListener('click', openSpotlight);
+  spotlight.addEventListener('pointerdown', (e) => { if (e.target === spotlight) closeSpotlight(); });
+  spotIn.addEventListener('input', () => renderSpotlight(spotIn.value));
+  spotIn.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeSpotlight();
+    else if (e.key === 'Enter' && spotActions[0]) {
+      closeSpotlight();
+      spotActions[0].run();
+    }
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      if (spotlight.classList.contains('open')) closeSpotlight();
+      else openSpotlight();
+    }
+  });
+
+  /* =========================================================
+     12. LOCK SCREEN, CLOCK & BOOT SEQUENCE
+  ========================================================= */
+  const lockScreen = document.getElementById('lock-screen');
+  document.getElementById('lock-os-btn').addEventListener('click', () => {
+    closeFlyouts();
+    lockScreen.classList.add('active');
+  });
+  document.getElementById('unlock-btn').addEventListener('click', () => {
+    SFX.open();
+    lockScreen.classList.remove('active');
+  });
+  document.getElementById('reset-os-btn').addEventListener('click', () => {
+    Store.clearAll();
+    location.reload();
+  });
+
+  function updateClock() {
+    const now = new Date();
+    const tStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    document.getElementById('clock-time').textContent = tStr;
+    document.getElementById('clock-date').textContent = now.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
+    document.getElementById('lock-clock').textContent = tStr;
+    document.getElementById('lock-date').textContent = now.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' });
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // Boot Animation & Welcome Setup
+  requestAnimationFrame(() => {
+    document.getElementById('boot-fill').style.width = '100%';
+  });
+
+  setTimeout(() => {
+    document.getElementById('boot-screen').classList.add('hidden');
+    SFX.bootChord();
+    createWindow(getApp('notepad'));
+    setTimeout(() => {
+      notify(
+        'Welcome to NovaOS 2.4',
+        'Try Aero Snap on screen edges, Ctrl+K Search, or click here to unleash Newtonian Window Gravity! 🪐',
+        () => Physics.toggle(true)
+      );
+    }, 650);
+  }, 950);
+})();
+</script>
+</body>
+</html>

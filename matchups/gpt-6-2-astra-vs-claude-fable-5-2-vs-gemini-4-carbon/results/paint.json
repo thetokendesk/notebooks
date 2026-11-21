@@ -1,0 +1,804 @@
+{
+  "version": 1,
+  "game": "paint",
+  "names": {
+    "A": "GPT-6.2 Astra",
+    "B": "Claude Fable 5.2",
+    "C": "Gemini 4 Carbon"
+  },
+  "short": {
+    "A": "Astra",
+    "B": "Fable",
+    "C": "Carbon"
+  },
+  "colors": {
+    "A": "#2fe39a",
+    "B": "#ff7a59",
+    "C": "#4f8dff"
+  },
+  "points": {
+    "A": 40,
+    "B": 10,
+    "C": 11
+  },
+  "cells": {
+    "A": 4749,
+    "B": 3582,
+    "C": 3550
+  },
+  "wins": {
+    "A": 13,
+    "B": 1,
+    "C": 1
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "mapName": "Open Floor",
+      "map": "open",
+      "rotation": 0,
+      "starts": {
+        "A": 1,
+        "B": 2,
+        "C": 3
+      },
+      "cells": {
+        "A": 258,
+        "B": 249,
+        "C": 253
+      },
+      "places": {
+        "A": 1,
+        "B": 3,
+        "C": 2
+      },
+      "points": {
+        "A": 3,
+        "B": 0,
+        "C": 1
+      },
+      "bombs": {
+        "A": 3,
+        "B": 6,
+        "C": 2
+      },
+      "loaded": {
+        "A": true,
+        "B": true,
+        "C": true
+      },
+      "timeouts": {
+        "A": 0,
+        "B": 0,
+        "C": 1
+      },
+      "errors": {
+        "A": 0,
+        "B": 0,
+        "C": 0
+      },
+      "winner": [
+        "A"
+      ],
+      "ticks": 1800,
+      "replay": "round-01.json"
+    },
+    {
+      "round": 2,
+      "mapName": "Open Floor",
+      "map": "open",
+      "rotation": 1,
+      "starts": {
+        "A": 2,
+        "B": 3,
+        "C": 1
+      },
+      "cells": {
+        "A": 367,
+        "B": 272,
+        "C": 278
+      },
+      "places": {
+        "A": 1,
+        "B": 3,
+        "C": 2
+      },
+      "points": {
+        "A": 3,
+        "B": 0,
+        "C": 1
+      },
+      "bombs": {
+        "A": 0,
+        "B": 5,
+        "C": 6
+      },
+      "loaded": {
+        "A": true,
+        "B": true,
+        "C": true
+      },
+      "timeouts": {
+        "A": 0,
+        "B": 0,
+        "C": 1
+      },
+      "errors": {
+        "A": 0,
+        "B": 0,
+        "C": 0
+      },
+      "winner": [
+        "A"
+      ],
+      "ticks": 1800,
+      "replay": "round-02.json"
+    },
+    {
+      "round": 3,
+      "mapName": "Open Floor",
+      "map": "open",
+      "rotation": 2,
+      "starts": {
+        "A": 3,
+        "B": 1,
+        "C": 2
+      },
+      "cells": {
+        "A": 420,
+        "B": 199,
+        "C": 201
+      },
+      "places": {
+        "A": 1,
+        "B": 3,
+        "C": 2
+      },
+      "points": {
+        "A": 3,
+        "B": 0,
+        "C": 1
+      },
+      "bombs": {
+        "A": 1,
+        "B": 4,
+        "C": 6
+      },
+      "loaded": {
+        "A": true,
+        "B": true,
+        "C": true
+      },
+      "timeouts": {
+        "A": 0,
+        "B": 0,
+        "C": 1
+      },
+      "errors": {
+        "A": 0,
+        "B": 0,
+        "C": 0
+      },
+      "winner": [
+        "A"
+      ],
+      "ticks": 1800,
+      "replay": "round-03.json"
+    },
+    {
+      "round": 4,
+      "mapName": "Crossroads",
+      "map": "crossroads",
+      "rotation": 0,
+      "starts": {
+        "A": 1,
+        "B": 2,
+        "C": 3
+      },
+      "cells": {
+        "A": 257,
+        "B": 263,
+        "C": 270
+      },
+      "places": {
+        "A": 3,
+        "B": 2,
+        "C": 1
+      },
+      "points": {
+        "A": 0,
+        "B": 1,
+        "C": 3
+      },
+      "bombs": {
+        "A": 2,
+        "B": 5,
+        "C": 4
+      },
+      "loaded": {
+        "A": true,
+        "B": true,
+        "C": true
+      },
+      "timeouts": {
+        "A": 0,
+        "B": 0,
+        "C": 1
+      },
+      "errors": {
+        "A": 0,
+        "B": 0,
+        "C": 0
+      },
+      "winner": [
+        "C"
+      ],
+      "ticks": 1800,
+      "replay": "round-04.json"
+    },
+    {
+      "round": 5,
+      "mapName": "Crossroads",
+      "map": "crossroads",
+      "rotation": 1,
+      "starts": {
+        "A": 2,
+        "B": 3,
+        "C": 1
+      },
+      "cells": {
+        "A": 264,
+        "B": 247,
+        "C": 244
+      },
+      "places": {
+        "A": 1,
+        "B": 2,
+        "C": 3
+      },
+      "points": {
+        "A": 3,
+        "B": 1,
+        "C": 0
+      },
+      "bombs": {
+        "A": 1,
+        "B": 7,
+        "C": 3
+      },
+      "loaded": {
+        "A": true,
+        "B": true,
+        "C": true
+      },
+      "timeouts": {
+        "A": 0,
+        "B": 0,
+        "C": 1
+      },
+      "errors": {
+        "A": 0,
+        "B": 0,
+        "C": 0
+      },
+      "winner": [
+        "A"
+      ],
+      "ticks": 1800,
+      "replay": "round-05.json"
+    },
+    {
+      "round": 6,
+      "mapName": "Crossroads",
+      "map": "crossroads",
+      "rotation": 2,
+      "starts": {
+        "A": 3,
+        "B": 1,
+        "C": 2
+      },
+      "cells": {
+        "A": 277,
+        "B": 251,
+        "C": 243
+      },
+      "places": {
+        "A": 1,
+        "B": 2,
+        "C": 3
+      },
+      "points": {
+        "A": 3,
+        "B": 1,
+        "C": 0
+      },
+      "bombs": {
+        "A": 1,
+        "B": 6,
+        "C": 4
+      },
+      "loaded": {
+        "A": true,
+        "B": true,
+        "C": true
+      },
+      "timeouts": {
+        "A": 0,
+        "B": 0,
+        "C": 1
+      },
+      "errors": {
+        "A": 0,
+        "B": 0,
+        "C": 0
+      },
+      "winner": [
+        "A"
+      ],
+      "ticks": 1800,
+      "replay": "round-06.json"
+    },
+    {
+      "round": 7,
+      "mapName": "Islands",
+      "map": "islands",
+      "rotation": 0,
+      "starts": {
+        "A": 1,
+        "B": 2,
+        "C": 3
+      },
+      "cells": {
+        "A": 301,
+        "B": 219,
+        "C": 244
+      },
+      "places": {
+        "A": 1,
+        "B": 3,
+        "C": 2
+      },
+      "points": {
+        "A": 3,
+        "B": 0,
+        "C": 1
+      },
+      "bombs": {
+        "A": 4,
+        "B": 7,
+        "C": 0
+      },
+      "loaded": {
+        "A": true,
+        "B": true,
+        "C": true
+      },
+      "timeouts": {
+        "A": 0,
+        "B": 0,
+        "C": 1
+      },
+      "errors": {
+        "A": 0,
+        "B": 0,
+        "C": 0
+      },
+      "winner": [
+        "A"
+      ],
+      "ticks": 1800,
+      "replay": "round-07.json"
+    },
+    {
+      "round": 8,
+      "mapName": "Islands",
+      "map": "islands",
+      "rotation": 1,
+      "starts": {
+        "A": 2,
+        "B": 3,
+        "C": 1
+      },
+      "cells": {
+        "A": 279,
+        "B": 261,
+        "C": 263
+      },
+      "places": {
+        "A": 1,
+        "B": 3,
+        "C": 2
+      },
+      "points": {
+        "A": 3,
+        "B": 0,
+        "C": 1
+      },
+      "bombs": {
+        "A": 0,
+        "B": 8,
+        "C": 3
+      },
+      "loaded": {
+        "A": true,
+        "B": true,
+        "C": true
+      },
+      "timeouts": {
+        "A": 0,
+        "B": 0,
+        "C": 1
+      },
+      "errors": {
+        "A": 0,
+        "B": 0,
+        "C": 0
+      },
+      "winner": [
+        "A"
+      ],
+      "ticks": 1800,
+      "replay": "round-08.json"
+    },
+    {
+      "round": 9,
+      "mapName": "Islands",
+      "map": "islands",
+      "rotation": 2,
+      "starts": {
+        "A": 3,
+        "B": 1,
+        "C": 2
+      },
+      "cells": {
+        "A": 280,
+        "B": 243,
+        "C": 243
+      },
+      "places": {
+        "A": 1,
+        "B": 2,
+        "C": 2
+      },
+      "points": {
+        "A": 3,
+        "B": 1,
+        "C": 1
+      },
+      "bombs": {
+        "A": 4,
+        "B": 5,
+        "C": 2
+      },
+      "loaded": {
+        "A": true,
+        "B": true,
+        "C": true
+      },
+      "timeouts": {
+        "A": 0,
+        "B": 0,
+        "C": 1
+      },
+      "errors": {
+        "A": 0,
+        "B": 0,
+        "C": 0
+      },
+      "winner": [
+        "A"
+      ],
+      "ticks": 1800,
+      "replay": "round-09.json"
+    },
+    {
+      "round": 10,
+      "mapName": "Lanes",
+      "map": "lanes",
+      "rotation": 0,
+      "starts": {
+        "A": 1,
+        "B": 2,
+        "C": 3
+      },
+      "cells": {
+        "A": 272,
+        "B": 299,
+        "C": 263
+      },
+      "places": {
+        "A": 2,
+        "B": 1,
+        "C": 3
+      },
+      "points": {
+        "A": 1,
+        "B": 3,
+        "C": 0
+      },
+      "bombs": {
+        "A": 0,
+        "B": 7,
+        "C": 4
+      },
+      "loaded": {
+        "A": true,
+        "B": true,
+        "C": true
+      },
+      "timeouts": {
+        "A": 0,
+        "B": 0,
+        "C": 1
+      },
+      "errors": {
+        "A": 0,
+        "B": 0,
+        "C": 0
+      },
+      "winner": [
+        "B"
+      ],
+      "ticks": 1800,
+      "replay": "round-10.json"
+    },
+    {
+      "round": 11,
+      "mapName": "Lanes",
+      "map": "lanes",
+      "rotation": 1,
+      "starts": {
+        "A": 2,
+        "B": 3,
+        "C": 1
+      },
+      "cells": {
+        "A": 294,
+        "B": 244,
+        "C": 242
+      },
+      "places": {
+        "A": 1,
+        "B": 2,
+        "C": 3
+      },
+      "points": {
+        "A": 3,
+        "B": 1,
+        "C": 0
+      },
+      "bombs": {
+        "A": 2,
+        "B": 4,
+        "C": 5
+      },
+      "loaded": {
+        "A": true,
+        "B": true,
+        "C": true
+      },
+      "timeouts": {
+        "A": 0,
+        "B": 0,
+        "C": 1
+      },
+      "errors": {
+        "A": 0,
+        "B": 0,
+        "C": 0
+      },
+      "winner": [
+        "A"
+      ],
+      "ticks": 1800,
+      "replay": "round-11.json"
+    },
+    {
+      "round": 12,
+      "mapName": "Lanes",
+      "map": "lanes",
+      "rotation": 2,
+      "starts": {
+        "A": 3,
+        "B": 1,
+        "C": 2
+      },
+      "cells": {
+        "A": 296,
+        "B": 248,
+        "C": 223
+      },
+      "places": {
+        "A": 1,
+        "B": 2,
+        "C": 3
+      },
+      "points": {
+        "A": 3,
+        "B": 1,
+        "C": 0
+      },
+      "bombs": {
+        "A": 1,
+        "B": 7,
+        "C": 3
+      },
+      "loaded": {
+        "A": true,
+        "B": true,
+        "C": true
+      },
+      "timeouts": {
+        "A": 0,
+        "B": 0,
+        "C": 1
+      },
+      "errors": {
+        "A": 0,
+        "B": 0,
+        "C": 0
+      },
+      "winner": [
+        "A"
+      ],
+      "ticks": 1800,
+      "replay": "round-12.json"
+    },
+    {
+      "round": 13,
+      "mapName": "The Ring",
+      "map": "ring",
+      "rotation": 0,
+      "starts": {
+        "A": 1,
+        "B": 2,
+        "C": 3
+      },
+      "cells": {
+        "A": 364,
+        "B": 203,
+        "C": 197
+      },
+      "places": {
+        "A": 1,
+        "B": 2,
+        "C": 3
+      },
+      "points": {
+        "A": 3,
+        "B": 1,
+        "C": 0
+      },
+      "bombs": {
+        "A": 0,
+        "B": 6,
+        "C": 5
+      },
+      "loaded": {
+        "A": true,
+        "B": true,
+        "C": true
+      },
+      "timeouts": {
+        "A": 0,
+        "B": 0,
+        "C": 1
+      },
+      "errors": {
+        "A": 0,
+        "B": 0,
+        "C": 0
+      },
+      "winner": [
+        "A"
+      ],
+      "ticks": 1800,
+      "replay": "round-13.json"
+    },
+    {
+      "round": 14,
+      "mapName": "The Ring",
+      "map": "ring",
+      "rotation": 1,
+      "starts": {
+        "A": 2,
+        "B": 3,
+        "C": 1
+      },
+      "cells": {
+        "A": 406,
+        "B": 172,
+        "C": 173
+      },
+      "places": {
+        "A": 1,
+        "B": 3,
+        "C": 2
+      },
+      "points": {
+        "A": 3,
+        "B": 0,
+        "C": 1
+      },
+      "bombs": {
+        "A": 0,
+        "B": 7,
+        "C": 4
+      },
+      "loaded": {
+        "A": true,
+        "B": true,
+        "C": true
+      },
+      "timeouts": {
+        "A": 0,
+        "B": 0,
+        "C": 1
+      },
+      "errors": {
+        "A": 0,
+        "B": 0,
+        "C": 0
+      },
+      "winner": [
+        "A"
+      ],
+      "ticks": 1800,
+      "replay": "round-14.json"
+    },
+    {
+      "round": 15,
+      "mapName": "The Ring",
+      "map": "ring",
+      "rotation": 2,
+      "starts": {
+        "A": 3,
+        "B": 1,
+        "C": 2
+      },
+      "cells": {
+        "A": 414,
+        "B": 212,
+        "C": 213
+      },
+      "places": {
+        "A": 1,
+        "B": 3,
+        "C": 2
+      },
+      "points": {
+        "A": 3,
+        "B": 0,
+        "C": 1
+      },
+      "bombs": {
+        "A": 0,
+        "B": 5,
+        "C": 6
+      },
+      "loaded": {
+        "A": true,
+        "B": true,
+        "C": true
+      },
+      "timeouts": {
+        "A": 0,
+        "B": 0,
+        "C": 1
+      },
+      "errors": {
+        "A": 0,
+        "B": 0,
+        "C": 0
+      },
+      "winner": [
+        "A"
+      ],
+      "ticks": 1800,
+      "replay": "round-15.json"
+    }
+  ],
+  "winner": [
+    "A"
+  ]
+}

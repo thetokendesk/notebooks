@@ -1,0 +1,86 @@
+{
+  "astra": {
+    "model": "gpt-6.2-astra",
+    "setting": "reasoning high",
+    "turns": [
+      {
+        "turn": 1,
+        "seconds": 385,
+        "inputTokens": 704,
+        "outputTokens": 10843,
+        "listUsd": 0.4394
+      },
+      {
+        "turn": 2,
+        "seconds": 471,
+        "inputTokens": 11566,
+        "outputTokens": 15201,
+        "listUsd": 0.7006
+      },
+      {
+        "turn": 3,
+        "seconds": 407,
+        "inputTokens": 26800,
+        "outputTokens": 16445,
+        "listUsd": 0.8722
+      }
+    ],
+    "totalListUsd": 2.0122
+  },
+  "carbon": {
+    "model": "gemini-4-carbon",
+    "setting": "thinking high",
+    "turns": [
+      {
+        "turn": 1,
+        "seconds": 973,
+        "inputTokens": 66481,
+        "outputTokens": 75194,
+        "listUsd": 0.8849
+      },
+      {
+        "turn": 2,
+        "seconds": 577,
+        "inputTokens": 260642,
+        "outputTokens": 67589,
+        "listUsd": 1.1972
+      },
+      {
+        "turn": 3,
+        "seconds": 833,
+        "inputTokens": 440342,
+        "outputTokens": 81487,
+        "listUsd": 1.6956
+      }
+    ],
+    "totalListUsd": 3.7777
+  },
+  "fable": {
+    "model": "claude-fable-5-2",
+    "setting": "effort high",
+    "turns": [
+      {
+        "turn": 1,
+        "seconds": 1048,
+        "inputTokens": 80,
+        "outputTokens": 107267,
+        "listUsd": 4.2913
+      },
+      {
+        "turn": 2,
+        "seconds": 585,
+        "inputTokens": 107371,
+        "outputTokens": 67806,
+        "listUsd": 3.5712
+      },
+      {
+        "turn": 3,
+        "seconds": 490,
+        "inputTokens": 175219,
+        "outputTokens": 60222,
+        "listUsd": 3.8106
+      }
+    ],
+    "totalListUsd": 11.6731
+  }
+}

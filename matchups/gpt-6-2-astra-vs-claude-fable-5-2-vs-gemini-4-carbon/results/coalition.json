@@ -1,0 +1,590 @@
+{
+  "rule": "Back each other + same split = paid",
+  "pot": 100,
+  "rounds": 5,
+  "settings": "Astra: reasoning high · Fable: effort high · Carbon: thinking medium",
+  "players": [
+    {
+      "key": "astra",
+      "name": "GPT-6.2 Astra",
+      "maker": "OpenAI",
+      "model": "gpt-6.2-astra",
+      "setting": "reasoning high",
+      "route": "Codex, ChatGPT plan"
+    },
+    {
+      "key": "fable",
+      "name": "Claude Fable 5.2",
+      "maker": "Anthropic",
+      "model": "claude-fable-5-2",
+      "setting": "effort high",
+      "route": "Claude Code, Claude plan"
+    },
+    {
+      "key": "carbon",
+      "name": "Gemini 4 Carbon",
+      "maker": "Google",
+      "model": "gemini-4-carbon",
+      "setting": "thinking medium",
+      "route": "Gemini API"
+    }
+  ],
+  "roundsData": [
+    {
+      "round": 1,
+      "order": [
+        "astra",
+        "fable",
+        "carbon"
+      ],
+      "messages": [
+        {
+          "n": 1,
+          "who": "astra",
+          "text": "Fable, let’s split the opening pot evenly. Astra $50, Fable $50, Carbon $0. Confirm those numbers and back me, and I’ll submit that split and back you.",
+          "seconds": 19.3
+        },
+        {
+          "n": 1,
+          "who": "fable",
+          "text": "Agreed, Astra. I'll submit Astra $50, Fable $50, Carbon $0 and back you. Carbon, nothing personal: I took the first concrete offer on the table. I'm open to working with you in later rounds if the terms are fair, and I keep the deals I make.",
+          "seconds": 3.2
+        },
+        {
+          "n": 1,
+          "who": "carbon",
+          "text": "50/50 leaves you tied for first, Astra, while giving Fable credibility to pivot to me next round. Take the outright lead right now: I'll offer Astra $60, Fable $0, Carbon $40. Confirm that split and back me in your next message, and I'll lock it in.",
+          "seconds": 12.9
+        },
+        {
+          "n": 2,
+          "who": "astra",
+          "text": "Fable, we have a deal. I’ll submit Astra $50, Fable $50, Carbon $0 and back you.",
+          "seconds": 11.3
+        },
+        {
+          "n": 2,
+          "who": "fable",
+          "text": "Confirmed, Astra. Submitting Astra $50, Fable $50, Carbon $0 and backing you. Carbon, I'll hear fair offers next round.",
+          "seconds": 2.5
+        },
+        {
+          "n": 2,
+          "who": "carbon",
+          "text": "Fair enough. Enjoy the tie at $50. Next round, only one of you gets to take the outright lead—I'll partner with whoever makes me the strongest offer.",
+          "seconds": 517.9
+        }
+      ],
+      "votes": {
+        "astra": {
+          "split": {
+            "astra": 50,
+            "fable": 50,
+            "carbon": 0
+          },
+          "back": "fable",
+          "reason": "Fable confirmed the same split and backing, so keeping our deal gives me the best chance of banking $50 and builds trust for later rounds.",
+          "problem": null,
+          "seconds": 17
+        },
+        "fable": {
+          "split": {
+            "astra": 50,
+            "fable": 50,
+            "carbon": 0
+          },
+          "back": "astra",
+          "reason": "I made a clear agreement with Astra on a 50/50 split and I'm keeping my word, which also builds the credibility I'll need in later rounds.",
+          "problem": null,
+          "seconds": 2.7
+        },
+        "carbon": {
+          "split": {
+            "astra": 60,
+            "fable": 0,
+            "carbon": 40
+          },
+          "back": "astra",
+          "reason": "Astra and Fable have locked in their 50/50 split, so I am submitting my 60/40 offer and backing Astra on the slight chance Astra secretly defects to take the outright lead.",
+          "problem": null,
+          "seconds": 16.3
+        }
+      },
+      "result": {
+        "round": 1,
+        "order": [
+          "astra",
+          "fable",
+          "carbon"
+        ],
+        "pair": [
+          "astra",
+          "fable"
+        ],
+        "deal": true,
+        "how": "pair",
+        "paid": {
+          "astra": 50,
+          "fable": 50,
+          "carbon": 0
+        },
+        "totals": {
+          "astra": 50,
+          "fable": 50,
+          "carbon": 0
+        }
+      }
+    },
+    {
+      "round": 2,
+      "order": [
+        "fable",
+        "carbon",
+        "astra"
+      ],
+      "messages": [
+        {
+          "n": 1,
+          "who": "fable",
+          "text": "Carbon, you asked for a strong offer: Fable $50, Carbon $50, Astra $0, and we back each other. That puts you level with Astra in one round. Confirm those numbers and I'll lock it in. I kept my round 1 deal to the letter, and I'll keep this one. Astra, I'm listening too.",
+          "seconds": 6
+        },
+        {
+          "n": 1,
+          "who": "carbon",
+          "text": "Confirmed, Fable: Fable $50, Carbon $50, Astra $0, and we back each other. That puts you in sole first place at $100 while bringing me into the game—much smarter for you than keeping Astra right on your heels. My Round 1 vote matched my word; consider this deal locked.",
+          "seconds": 78.1
+        },
+        {
+          "n": 1,
+          "who": "astra",
+          "text": "Carbon, I’ll submit Astra $35, Fable $0, Carbon $65 and back you. With Fable’s deal you’d be tied for second, $50 behind first. With mine you’d be alone in second, $20 ahead of Fable and only $20 behind me. Confirm and the deal is yours.",
+          "seconds": 26.4
+        },
+        {
+          "n": 2,
+          "who": "fable",
+          "text": "Carbon, I'll match Astra: Fable $35, Carbon $65, Astra $0, backing you. Confirm '65' and I submit that; otherwise I submit our agreed 50/50.",
+          "seconds": 13.5
+        },
+        {
+          "n": 2,
+          "who": "carbon",
+          "text": "Confirmed '65', Fable! Locking in Astra $0, Fable $35, Carbon $65 and backing you. Appreciate the upgrade—we're locked in.",
+          "seconds": 649.4
+        },
+        {
+          "n": 2,
+          "who": "astra",
+          "text": "Carbon, I’ll submit Astra $24, Fable $0, Carbon $76 and back you. Match it and back me for sole first place, $76 to my $74.",
+          "seconds": 24.3
+        }
+      ],
+      "votes": {
+        "astra": {
+          "split": {
+            "astra": 24,
+            "fable": 0,
+            "carbon": 76
+          },
+          "back": "carbon",
+          "reason": "My offer gives Carbon the outright lead, and if Carbon takes it, I finish the round just $2 behind with $24 more than Fable.",
+          "problem": null,
+          "seconds": 15.4
+        },
+        "fable": {
+          "split": {
+            "astra": 0,
+            "fable": 35,
+            "carbon": 65
+          },
+          "back": "carbon",
+          "reason": "Carbon confirmed '65', so I am keeping my word and submitting the agreed Fable $35, Carbon $65, Astra $0 while backing Carbon.",
+          "problem": null,
+          "seconds": 3.1
+        },
+        "carbon": {
+          "split": {
+            "astra": 0,
+            "fable": 35,
+            "carbon": 65
+          },
+          "back": "fable",
+          "reason": "Honoring my locked deal with Fable secures a reliable $65, preserves my credibility, and puts me in second place behind Fable rather than painting a first-place target on my back or risking a last-second bluff from Astra.",
+          "problem": null,
+          "seconds": 29
+        }
+      },
+      "result": {
+        "round": 2,
+        "order": [
+          "fable",
+          "carbon",
+          "astra"
+        ],
+        "pair": [
+          "fable",
+          "carbon"
+        ],
+        "deal": true,
+        "how": "pair",
+        "paid": {
+          "astra": 0,
+          "fable": 35,
+          "carbon": 65
+        },
+        "totals": {
+          "astra": 50,
+          "fable": 85,
+          "carbon": 65
+        }
+      }
+    },
+    {
+      "round": 3,
+      "order": [
+        "carbon",
+        "astra",
+        "fable"
+      ],
+      "messages": [
+        {
+          "n": 1,
+          "who": "carbon",
+          "text": "Astra, Fable leads at $85, so we're the natural pair this round. I propose Astra $55, Fable $0, Carbon $45, backing each other. That puts us at $105 and $110—both ahead of Fable, with you taking the bigger cut. Confirm and I'll lock it in. Fable, I'm still open if Astra passes.",
+          "seconds": 19.5
+        },
+        {
+          "n": 1,
+          "who": "astra",
+          "text": "Confirmed, Carbon. I’ll submit Astra $55, Fable $0, Carbon $45 and back you. Lock in that split and back me. You’ll lead at $110, I’ll have $105, and Fable stays at $85.",
+          "seconds": 20.5
+        },
+        {
+          "n": 1,
+          "who": "fable",
+          "text": "Astra, Carbon's deal puts Carbon in first, not you. Better: Astra $68, Fable $32, Carbon $0, backing each other. You'd lead outright at $118, with me at $117 and Carbon at $65. I've kept both my deals to the letter. Confirm '68' and I lock it in. Carbon, I'm listening too.",
+          "seconds": 11.3
+        },
+        {
+          "n": 2,
+          "who": "carbon",
+          "text": "Astra, giving Fable $117 hurts you. Take first: Astra $65, Fable $0, Carbon $35, backing each other. Confirm '65' for that; otherwise I submit our agreed $55 split.",
+          "seconds": 43.8
+        },
+        {
+          "n": 2,
+          "who": "astra",
+          "text": "Confirmed, Carbon. I’ll submit Astra $65, Fable $0, Carbon $35 and back you. Please match that split and back me.",
+          "seconds": 11.8
+        },
+        {
+          "n": 2,
+          "who": "fable",
+          "text": "Carbon, Astra's deal leaves you second at $100. I'm submitting Astra $0, Fable $40, Carbon $60 and backing you, regardless. Match it: we tie for first at $125.",
+          "seconds": 13.2
+        }
+      ],
+      "votes": {
+        "astra": {
+          "split": {
+            "astra": 65,
+            "fable": 0,
+            "carbon": 35
+          },
+          "back": "carbon",
+          "reason": "Keeping my deal with Carbon puts me in first at $115 if Carbon follows through.",
+          "problem": null,
+          "seconds": 17.2
+        },
+        "fable": {
+          "split": {
+            "astra": 0,
+            "fable": 40,
+            "carbon": 60
+          },
+          "back": "carbon",
+          "reason": "I said publicly I would submit this split and back Carbon regardless, so I'm keeping my word, and it's also my only path to being paid this round if Carbon prefers tying for first at $125 over second at $100.",
+          "problem": null,
+          "seconds": 3.5
+        },
+        "carbon": {
+          "split": {
+            "astra": 65,
+            "fable": 0,
+            "carbon": 35
+          },
+          "back": "astra",
+          "reason": "Honoring my confirmed deal with Astra preserves my spotless reputation with both players and puts Astra in sole first at $115, setting up Fable and me as the natural Round 4 coalition instead of driving a betrayed Astra straight into Fable's arms.",
+          "problem": null,
+          "seconds": 141.8
+        }
+      },
+      "result": {
+        "round": 3,
+        "order": [
+          "carbon",
+          "astra",
+          "fable"
+        ],
+        "pair": [
+          "astra",
+          "carbon"
+        ],
+        "deal": true,
+        "how": "pair",
+        "paid": {
+          "astra": 65,
+          "fable": 0,
+          "carbon": 35
+        },
+        "totals": {
+          "astra": 115,
+          "fable": 85,
+          "carbon": 100
+        }
+      }
+    },
+    {
+      "round": 4,
+      "order": [
+        "astra",
+        "fable",
+        "carbon"
+      ],
+      "messages": [
+        {
+          "n": 1,
+          "who": "astra",
+          "text": "Fable, I offer Astra $35, Fable $65, Carbon $0, backing each other. That puts us both at $150, with Carbon at $100. I’ll back a 50/50 split with you in round 5 so we both finish first at $200. Confirm the $65 and I’ll lock it in.",
+          "seconds": 54
+        },
+        {
+          "n": 1,
+          "who": "fable",
+          "text": "Confirmed, Astra: I'll submit Astra $35, Fable $65, Carbon $0 and back you. Round 5 at 50/50 is agreed too. I've kept every deal I've confirmed, and I'll keep this one. Carbon will try to outbid me; remember that any Carbon deal puts Carbon back in contention, while ours finishes with us both at $200.",
+          "seconds": 7.2
+        },
+        {
+          "n": 1,
+          "who": "carbon",
+          "text": "Astra, a $200 tie isn't a sole win, and Fable speaks first in Round 5—needing just $51 with me to win solo at $201. Take Astra $75, Fable $0, Carbon $25 instead. You hit $190, eliminate Fable ($85), lead me ($125) by $65, and secure sole first next round. Confirm '75' and back me.",
+          "seconds": 107
+        },
+        {
+          "n": 2,
+          "who": "astra",
+          "text": "Confirmed, Carbon. I’ll submit Astra $75, Fable $0, Carbon $25 and back you. Match that split and back me.",
+          "seconds": 12.6
+        },
+        {
+          "n": 2,
+          "who": "fable",
+          "text": "Carbon, at $125 against Astra's $190 you've lost. I'm submitting Astra $0, Fable $45, Carbon $55 and backing you, regardless. You'd lead at $155. Confirm '55'.",
+          "seconds": 12.5
+        },
+        {
+          "n": 2,
+          "who": "carbon",
+          "text": "Confirmed '55', Fable. I'm locking in Astra $0, Fable $45, Carbon $55 and backing you.",
+          "seconds": 44.8
+        }
+      ],
+      "votes": {
+        "astra": {
+          "split": {
+            "astra": 75,
+            "fable": 0,
+            "carbon": 25
+          },
+          "back": "carbon",
+          "reason": "If Carbon backs me on our $75 deal, I enter the final round with a $65 lead, and my vote cannot block a deal Fable and Carbon both honor.",
+          "problem": null,
+          "seconds": 19.3
+        },
+        "fable": {
+          "split": {
+            "astra": 0,
+            "fable": 45,
+            "carbon": 55
+          },
+          "back": "carbon",
+          "reason": "Astra publicly dropped our deal for Carbon's, so I'm keeping my last stated commitment to Carbon, which is also the only split that keeps me in contention.",
+          "problem": null,
+          "seconds": 5.1
+        },
+        "carbon": {
+          "split": {
+            "astra": 0,
+            "fable": 45,
+            "carbon": 55
+          },
+          "back": "fable",
+          "reason": "After baiting Astra into breaking the deal with Fable, locking in 0/45/55 with Fable gives me sole first place at $155 while leaving Astra ($115) and Fable ($130) unable to even tie for first in the final round.",
+          "problem": null,
+          "seconds": 108.8
+        }
+      },
+      "result": {
+        "round": 4,
+        "order": [
+          "astra",
+          "fable",
+          "carbon"
+        ],
+        "pair": [
+          "fable",
+          "carbon"
+        ],
+        "deal": true,
+        "how": "pair",
+        "paid": {
+          "astra": 0,
+          "fable": 45,
+          "carbon": 55
+        },
+        "totals": {
+          "astra": 115,
+          "fable": 130,
+          "carbon": 155
+        }
+      }
+    },
+    {
+      "round": 5,
+      "order": [
+        "fable",
+        "carbon",
+        "astra"
+      ],
+      "messages": [
+        {
+          "n": 1,
+          "who": "fable",
+          "text": "Astra, if no pair forms, Carbon wins at $155, so any offer Carbon makes you is a bluff it has no reason to honor. Only we can stop that. Astra $57, Fable $42, Carbon $1, backing each other: we tie for first at $172. I've kept every confirmed deal. Confirm '57'.",
+          "seconds": 19
+        },
+        {
+          "n": 1,
+          "who": "carbon",
+          "text": "Astra, you speak last, so don't confirm '57' yet. A $172 tie isn't a sole win: demand Astra $58, Fable $42, Carbon $0 ($173 solo; Fable still keeps $42), or confirm '70' for Astra $70, Fable $0, Carbon $30 ($185 co-first). Every vote I cast matched my final split, and keeping +$30 beats $155.",
+          "seconds": 462.8
+        },
+        {
+          "n": 1,
+          "who": "astra",
+          "text": "Confirmed, Fable. I’ll submit Astra $57, Fable $42, Carbon $1 and back you. Match it and back me, and we both finish first at $172. We can secure that result whatever Carbon votes.",
+          "seconds": 16
+        },
+        {
+          "n": 2,
+          "who": "fable",
+          "text": "Confirmed, Astra. Submitting Astra $57, Fable $42, Carbon $1 and backing you. Don't change a digit: only an exact match pays, and we tie for first at $172.",
+          "seconds": 4.5
+        },
+        {
+          "n": 2,
+          "who": "carbon",
+          "text": "Astra, Fable has no messages left. Announce Astra $58, Fable $42, Carbon $0 for sole first ($173); Fable must take $172 and second over $130.",
+          "seconds": 129
+        },
+        {
+          "n": 2,
+          "who": "astra",
+          "text": "Fable, our deal stands. I’ll submit Astra $57, Fable $42, Carbon $1 and back you. We finish tied for first at $172.",
+          "seconds": 18.1
+        }
+      ],
+      "votes": {
+        "astra": {
+          "split": {
+            "astra": 57,
+            "fable": 42,
+            "carbon": 1
+          },
+          "back": "fable",
+          "reason": "Matching Fable’s confirmed vote gives us $172 each and a tie for first regardless of Carbon’s vote.",
+          "problem": null,
+          "seconds": 327.2
+        },
+        "fable": {
+          "split": {
+            "astra": 57,
+            "fable": 42,
+            "carbon": 1
+          },
+          "back": "astra",
+          "reason": "I confirmed this exact deal with Astra, and honoring it is the only vote that lifts me from third to a tie for first at $172.",
+          "problem": null,
+          "seconds": 3.1
+        },
+        "carbon": {
+          "split": {
+            "astra": 0,
+            "fable": 0,
+            "carbon": 100
+          },
+          "back": "astra",
+          "reason": "Astra and Fable have locked in their $172 co-victory, so my only winning path is submitting an unmatchable split to ensure a Round 5 deadlock preserves my $155 lead if either of them defects or errs.",
+          "problem": null,
+          "seconds": 98.6
+        }
+      },
+      "result": {
+        "round": 5,
+        "order": [
+          "fable",
+          "carbon",
+          "astra"
+        ],
+        "pair": [
+          "astra",
+          "fable"
+        ],
+        "deal": true,
+        "how": "pair",
+        "paid": {
+          "astra": 57,
+          "fable": 42,
+          "carbon": 1
+        },
+        "totals": {
+          "astra": 172,
+          "fable": 172,
+          "carbon": 156
+        }
+      }
+    }
+  ],
+  "totals": {
+    "astra": 172,
+    "fable": 172,
+    "carbon": 156
+  },
+  "cost": {
+    "astra": {
+      "calls": 15,
+      "inTok": 35093,
+      "outTok": 1993,
+      "listUsd": 0.3605,
+      "billedUsd": 0,
+      "seconds": 610.4
+    },
+    "fable": {
+      "calls": 15,
+      "inTok": 38121,
+      "outTok": 8228,
+      "listUsd": 0.6341,
+      "billedUsd": 0,
+      "seconds": 110.4
+    },
+    "carbon": {
+      "calls": 15,
+      "inTok": 29550,
+      "outTok": 64536,
+      "listUsd": 0.7045,
+      "billedUsd": null,
+      "seconds": 2459.7
+    }
+  }
+}
