@@ -1,5 +1,7 @@
 # Gemini 4 Neon vs Claude Opus 5.5
 
+The video: https://youtu.be/kzQz4tH5Bn4
+
 Every model got the same prompts, one try each, and every result is here as it came. Prices are each maker's list price for the tokens the model used.
 
 ## Gemini 4 Neon vs Claude Opus 5.5
