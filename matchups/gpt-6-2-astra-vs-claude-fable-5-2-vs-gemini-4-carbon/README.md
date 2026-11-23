@@ -1,7 +1,5 @@
 # GPT-6.2 Astra vs Claude Fable 5.2 vs Gemini 4 Carbon
 
-The video: https://youtu.be/JMRrTt8kXwE
-
 Every model got the same prompts, one try each, and every result is here as it came. Prices are each maker's list price for the tokens the model used.
 
 ## GPT-6.2 Astra vs Claude Fable 5.2 vs Gemini 4 Carbon
