@@ -1,5 +1,7 @@
 # GPT-6.2 Sol vs Claude Sonnet 5.5 vs Gemini 4 Hydrogen, and Sol vs Astra
 
+The video: https://youtu.be/NN4MTGozryE
+
 Every model got the same prompts, one try each, and every result is here as it came. Prices are each maker's list price for the tokens the model used.
 
 ## GPT-6.2 Sol vs Claude Sonnet 5.5 vs Gemini 4 Hydrogen, and Sol vs Astra
