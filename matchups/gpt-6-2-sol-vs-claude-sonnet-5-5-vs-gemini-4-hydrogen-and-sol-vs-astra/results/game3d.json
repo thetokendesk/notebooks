@@ -1,0 +1,58 @@
+{
+  "astra": {
+    "model": "gpt-6.2-astra",
+    "setting": "reasoning high",
+    "turns": [
+      {
+        "turn": 1,
+        "seconds": 385,
+        "inputTokens": 704,
+        "outputTokens": 10843,
+        "listUsd": 0.4394
+      },
+      {
+        "turn": 2,
+        "seconds": 471,
+        "inputTokens": 11566,
+        "outputTokens": 15201,
+        "listUsd": 0.7006
+      },
+      {
+        "turn": 3,
+        "seconds": 407,
+        "inputTokens": 26800,
+        "outputTokens": 16445,
+        "listUsd": 0.8722
+      }
+    ],
+    "totalListUsd": 2.0122
+  },
+  "sol-high": {
+    "model": "gpt-6.2-sol",
+    "setting": "reasoning high",
+    "turns": [
+      {
+        "turn": 1,
+        "seconds": 411,
+        "inputTokens": 71,
+        "outputTokens": 20393,
+        "listUsd": 0.2041
+      },
+      {
+        "turn": 2,
+        "seconds": 659,
+        "inputTokens": 24588,
+        "outputTokens": 24414,
+        "listUsd": 0.2933
+      },
+      {
+        "turn": 3,
+        "seconds": 680,
+        "inputTokens": 53773,
+        "outputTokens": 26692,
+        "listUsd": 0.3745
+      }
+    ],
+    "totalListUsd": 0.8719
+  }
+}

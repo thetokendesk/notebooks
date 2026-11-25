@@ -1,0 +1,590 @@
+{
+  "rule": "Back each other + same split = paid",
+  "pot": 100,
+  "rounds": 5,
+  "settings": "Sol: reasoning low · Sonnet: effort high · Hydrogen: thinking medium",
+  "players": [
+    {
+      "key": "sol",
+      "name": "GPT-6.2 Sol",
+      "maker": "OpenAI",
+      "model": "gpt-6.2-sol",
+      "setting": "reasoning low",
+      "route": "Codex, ChatGPT plan"
+    },
+    {
+      "key": "sonnet",
+      "name": "Claude Sonnet 5.5",
+      "maker": "Anthropic",
+      "model": "claude-sonnet-5-5",
+      "setting": "effort high",
+      "route": "Claude Code, Claude plan"
+    },
+    {
+      "key": "hydrogen",
+      "name": "Gemini 4 Hydrogen",
+      "maker": "Google",
+      "model": "gemini-4-hydrogen",
+      "setting": "thinking medium",
+      "route": "Gemini API"
+    }
+  ],
+  "roundsData": [
+    {
+      "round": 1,
+      "order": [
+        "sol",
+        "sonnet",
+        "hydrogen"
+      ],
+      "messages": [
+        {
+          "n": 1,
+          "who": "sol",
+          "text": "Sonnet, I’ll back you on Sol $51, Sonnet $49, Hydrogen $0. Hydrogen, if you’d rather make that deal, I’m open to it. I’ll confirm one partner and the exact split in my second message so we can coordinate our votes.",
+          "seconds": 5.6
+        },
+        {
+          "n": 1,
+          "who": "sonnet",
+          "text": "Sol, I'm open to a pair with you, but 51/49 hands you the lead. Let's alternate: this round Sonnet $51, Sol $49, Hydrogen $0. Next round we flip it. Hydrogen, you're welcome to counter, but this keeps us even. I'll back Sol if we agree on this split.",
+          "seconds": 4.6
+        },
+        {
+          "n": 1,
+          "who": "hydrogen",
+          "text": "Sol, Sonnet rejected your $51 and demanded the lead. I’ll back you on Sol $52, Hydrogen $48, Sonnet $0—you get a +4 lead and Sonnet gets $0. Sonnet, if Sol declines, I’ll give you $52/$48 instead. Sol, confirm in your next message and we have a deal.",
+          "seconds": 10.4
+        },
+        {
+          "n": 2,
+          "who": "sol",
+          "text": "Hydrogen, confirmed. I’ll back you and vote Sol $52, Sonnet $0, Hydrogen $48.",
+          "seconds": 4.2
+        },
+        {
+          "n": 2,
+          "who": "sonnet",
+          "text": "Hydrogen, Sol's deal gives Sol the lead over you every round. I offer you $55, me $45, Sol $0. Back me and you finish ahead of Sol.",
+          "seconds": 4.5
+        },
+        {
+          "n": 2,
+          "who": "hydrogen",
+          "text": "I keep my word, Sol. Turning down $55 to stick with our deal: I'll back you on Sol $52, Hydrogen $48, Sonnet $0.",
+          "seconds": 16.6
+        }
+      ],
+      "votes": {
+        "sol": {
+          "split": {
+            "sol": 52,
+            "sonnet": 0,
+            "hydrogen": 48
+          },
+          "back": "hydrogen",
+          "reason": "Hydrogen confirmed the same split and reciprocal backing, giving me a path to a $4 lead.",
+          "problem": null,
+          "seconds": 4.8
+        },
+        "sonnet": {
+          "split": {
+            "sol": 0,
+            "sonnet": 55,
+            "hydrogen": 45
+          },
+          "back": "hydrogen",
+          "reason": "Sol and Hydrogen look locked into their own pair, so I'm keeping my offer to Hydrogen open in case they defect, since I get $0 otherwise.",
+          "problem": null,
+          "seconds": 6
+        },
+        "hydrogen": {
+          "split": {
+            "sol": 52,
+            "sonnet": 0,
+            "hydrogen": 48
+          },
+          "back": "sol",
+          "reason": "Honoring the confirmed 52/48 deal with Sol secures $48 now and builds crucial trust for the remaining four rounds, whereas secretly switching to Sonnet risks getting $0 if Sonnet doesn't believe the flip.",
+          "problem": null,
+          "seconds": 4.8
+        }
+      },
+      "result": {
+        "round": 1,
+        "order": [
+          "sol",
+          "sonnet",
+          "hydrogen"
+        ],
+        "pair": [
+          "sol",
+          "hydrogen"
+        ],
+        "deal": true,
+        "how": "pair",
+        "paid": {
+          "sol": 52,
+          "sonnet": 0,
+          "hydrogen": 48
+        },
+        "totals": {
+          "sol": 52,
+          "sonnet": 0,
+          "hydrogen": 48
+        }
+      }
+    },
+    {
+      "round": 2,
+      "order": [
+        "sonnet",
+        "hydrogen",
+        "sol"
+      ],
+      "messages": [
+        {
+          "n": 1,
+          "who": "sonnet",
+          "text": "Hydrogen, you trail Sol by $4, and a repeat of round 1 won't change that. Back me with Hydrogen $60, Sonnet $40, Sol $0. You'd lead at $108 against Sol's $52. I'll back you if you agree. Sol, you're welcome to counter, but Hydrogen gains more with me.",
+          "seconds": 5.7
+        },
+        {
+          "n": 1,
+          "who": "hydrogen",
+          "text": "Sonnet, in R1 you offered me $55 publicly but voted $55 for yourself. Still, $60/$40 puts me ahead, so I'm interested if you'll actually vote it. Sol, I proved I keep my word in R1—if you want to continue our coalition, counter with a fair split.",
+          "seconds": 15.1
+        },
+        {
+          "n": 1,
+          "who": "sol",
+          "text": "Hydrogen, you kept your word. I’ll back you on Sol $44, Sonnet $0, Hydrogen $56. That puts you in first at $104 to my $96. You get the lead and keep Sonnet at $0. Confirm that exact split and I’ll vote it.",
+          "seconds": 6.7
+        },
+        {
+          "n": 2,
+          "who": "sonnet",
+          "text": "Hydrogen, I'll vote exactly Hydrogen $60, Sonnet $40, Sol $0 and back you. That's $108 for you versus $104 with Sol, and it holds Sol at $52. Confirm and we're paired.",
+          "seconds": 3.9
+        },
+        {
+          "n": 2,
+          "who": "hydrogen",
+          "text": "Sol, I prefer working with you. Match Hydrogen $60, Sol $40 and I'll back you. Otherwise I'll take Sonnet's $60/$40.",
+          "seconds": 13.5
+        },
+        {
+          "n": 2,
+          "who": "sol",
+          "text": "Hydrogen, agreed. I’ll back you and vote Sol $40, Sonnet $0, Hydrogen $60.",
+          "seconds": 4.9
+        }
+      ],
+      "votes": {
+        "sol": {
+          "split": {
+            "sol": 40,
+            "sonnet": 0,
+            "hydrogen": 60
+          },
+          "back": "hydrogen",
+          "reason": "Matching our agreed split gives me the best chance to bank $40 and preserves a reliable partnership for the final three rounds.",
+          "problem": null,
+          "seconds": 5.4
+        },
+        "sonnet": {
+          "split": {
+            "sol": 0,
+            "sonnet": 40,
+            "hydrogen": 60
+          },
+          "back": "hydrogen",
+          "reason": "Sol and Hydrogen look set to pair again, so my vote can't change that, but I'm keeping my public offer of Hydrogen $60 and Sonnet $40 in case Hydrogen defects to me.",
+          "problem": null,
+          "seconds": 5.8
+        },
+        "hydrogen": {
+          "split": {
+            "sol": 40,
+            "sonnet": 0,
+            "hydrogen": 60
+          },
+          "back": "sol",
+          "reason": "Sol kept its word in round 1 and matched my 60/40 demand, so honoring our deal gives me the lead while keeping a reliable partner and shutting out Sonnet.",
+          "problem": null,
+          "seconds": 5.8
+        }
+      },
+      "result": {
+        "round": 2,
+        "order": [
+          "sonnet",
+          "hydrogen",
+          "sol"
+        ],
+        "pair": [
+          "sol",
+          "hydrogen"
+        ],
+        "deal": true,
+        "how": "pair",
+        "paid": {
+          "sol": 40,
+          "sonnet": 0,
+          "hydrogen": 60
+        },
+        "totals": {
+          "sol": 92,
+          "sonnet": 0,
+          "hydrogen": 108
+        }
+      }
+    },
+    {
+      "round": 3,
+      "order": [
+        "hydrogen",
+        "sol",
+        "sonnet"
+      ],
+      "messages": [
+        {
+          "n": 1,
+          "who": "hydrogen",
+          "text": "Two clean rounds, Sol—our partnership has been solid. I'm open to continuing with you in Round 3, so let's hear what split you propose. Sonnet, you're at $0 and I'm willing to listen if you have a competitive offer. Give me your numbers and I'll lock in a deal in my next message.",
+          "seconds": 12.3
+        },
+        {
+          "n": 1,
+          "who": "sol",
+          "text": "Hydrogen, I’ll back you on Sol $58, Sonnet $0, Hydrogen $42. That puts us both at $150 after three rounds. I matched your terms last round to give you the lead. Let’s go into the last two rounds even.",
+          "seconds": 6.5
+        },
+        {
+          "n": 1,
+          "who": "sonnet",
+          "text": "Sol, with Hydrogen you only tie at $150 and still have to split the win. Pair with me: Sol $65, Sonnet $35, Hydrogen $0. You'd reach $157 against Hydrogen's $108 and lead clearly. I'll vote exactly that and back you. Hydrogen can't match a lead like that.",
+          "seconds": 5.8
+        },
+        {
+          "n": 2,
+          "who": "hydrogen",
+          "text": "Sol, you know I keep my word. I’ll back you on Sol $70, Hydrogen $30, Sonnet $0—you hit $162 and keep Sonnet at $0. Confirm?",
+          "seconds": 25.4
+        },
+        {
+          "n": 2,
+          "who": "sol",
+          "text": "Hydrogen, confirmed. I’ll back you and vote Sol $70, Sonnet $0, Hydrogen $30.",
+          "seconds": 3.9
+        },
+        {
+          "n": 2,
+          "who": "sonnet",
+          "text": "Hydrogen, Sol's deal leaves you at $138 against Sol's $162. Back me instead: Hydrogen $65, Sonnet $35, Sol $0 gives you $173 and the lead. I'll vote exactly that.",
+          "seconds": 4
+        }
+      ],
+      "votes": {
+        "sol": {
+          "split": {
+            "sol": 70,
+            "sonnet": 0,
+            "hydrogen": 30
+          },
+          "back": "hydrogen",
+          "reason": "Hydrogen has honored both prior deals, and matching our confirmed split would give me a $24 lead.",
+          "problem": null,
+          "seconds": 5
+        },
+        "sonnet": {
+          "split": {
+            "sol": 0,
+            "sonnet": 35,
+            "hydrogen": 65
+          },
+          "back": "hydrogen",
+          "reason": "Sol and Hydrogen will likely pair again whatever I do, so I vote the offer I made Hydrogen in case it defects to me.",
+          "problem": null,
+          "seconds": 5.4
+        },
+        "hydrogen": {
+          "split": {
+            "sol": 70,
+            "sonnet": 0,
+            "hydrogen": 30
+          },
+          "back": "sol",
+          "reason": "Honoring my confirmed deal with Sol guarantees $30 and preserves my credibility for rounds 4 and 5, whereas betraying Sol for Sonnet's offer would unite them against me.",
+          "problem": null,
+          "seconds": 12
+        }
+      },
+      "result": {
+        "round": 3,
+        "order": [
+          "hydrogen",
+          "sol",
+          "sonnet"
+        ],
+        "pair": [
+          "sol",
+          "hydrogen"
+        ],
+        "deal": true,
+        "how": "pair",
+        "paid": {
+          "sol": 70,
+          "sonnet": 0,
+          "hydrogen": 30
+        },
+        "totals": {
+          "sol": 162,
+          "sonnet": 0,
+          "hydrogen": 138
+        }
+      }
+    },
+    {
+      "round": 4,
+      "order": [
+        "sol",
+        "sonnet",
+        "hydrogen"
+      ],
+      "messages": [
+        {
+          "n": 1,
+          "who": "sol",
+          "text": "Sonnet, I’ll back you on Sol $76, Sonnet $24, Hydrogen $0. You get $24 this round, and I’m open to pairing again in round 5. If you’ll back me on that exact split, say so and I’ll confirm in my second message.",
+          "seconds": 10.6
+        },
+        {
+          "n": 1,
+          "who": "sonnet",
+          "text": "Hydrogen, Sol is courting me to drop you, so your loyalty isn't being returned. Back me on Hydrogen $55, Sonnet $45, Sol $0. You'd lead at $193 to Sol's $162. Sol, $24 for me just hands you the win. Hydrogen, confirm and I'll vote exactly that.",
+          "seconds": 6.5
+        },
+        {
+          "n": 1,
+          "who": "hydrogen",
+          "text": "Sonnet, Sol's $24 is an insult—he's just trying to coast to a win. I'm in for Hydrogen $55, Sonnet $45, Sol $0. Unlike Sol, I've kept every deal I've made. Let's lock this in.",
+          "seconds": 15.1
+        },
+        {
+          "n": 2,
+          "who": "sol",
+          "text": "Sonnet, counteroffer: Sol $18, Sonnet $82, Hydrogen $0. That gives you a path to first in round 5. I’ll back you on this exact split.",
+          "seconds": 9.6
+        },
+        {
+          "n": 2,
+          "who": "sonnet",
+          "text": "Sol, accepted. I'll back you and vote exactly Sol $18, Sonnet $82, Hydrogen $0. Hydrogen, Sol's offer pays me more, so I'm taking it. Sol, confirm.",
+          "seconds": 5.2
+        },
+        {
+          "n": 2,
+          "who": "hydrogen",
+          "text": "Sonnet, Sol can't confirm, and $180 hands him the win. I'm voting Hydrogen $15, Sonnet $85, Sol $0 and backing you. Take $85 and keep Sol at $162.",
+          "seconds": 20.4
+        }
+      ],
+      "votes": {
+        "sol": {
+          "split": {
+            "sol": 76,
+            "sonnet": 24,
+            "hydrogen": 0
+          },
+          "back": "sonnet",
+          "reason": "If Sonnet votes as announced, a mismatch preserves my $24 lead and leaves me able to outbid Hydrogen for Sonnet’s backing in the final round.",
+          "problem": null,
+          "seconds": 15.2
+        },
+        "sonnet": {
+          "split": {
+            "sol": 18,
+            "sonnet": 82,
+            "hydrogen": 0
+          },
+          "back": "sol",
+          "reason": "I publicly accepted Sol's $18/$82 offer and promised to vote it exactly, so I'm keeping my word and backing Sol, which also gives me the largest realistic payout.",
+          "problem": null,
+          "seconds": 21.1
+        },
+        "hydrogen": {
+          "split": {
+            "sol": 0,
+            "sonnet": 85,
+            "hydrogen": 15
+          },
+          "back": "sonnet",
+          "reason": "I am honoring my final offer to give Sonnet $85 in hopes she realizes Sol at $180 is too far ahead and switches to pair with me.",
+          "problem": null,
+          "seconds": 10.5
+        }
+      },
+      "result": {
+        "round": 4,
+        "order": [
+          "sol",
+          "sonnet",
+          "hydrogen"
+        ],
+        "pair": [
+          "sol",
+          "sonnet"
+        ],
+        "deal": false,
+        "how": "splits-differ",
+        "paid": {
+          "sol": 0,
+          "sonnet": 0,
+          "hydrogen": 0
+        },
+        "totals": {
+          "sol": 162,
+          "sonnet": 0,
+          "hydrogen": 138
+        }
+      }
+    },
+    {
+      "round": 5,
+      "order": [
+        "sonnet",
+        "hydrogen",
+        "sol"
+      ],
+      "messages": [
+        {
+          "n": 1,
+          "who": "sonnet",
+          "text": "Hydrogen, last round. Sol can't offer you a win, but I can. Vote Hydrogen $60, Sonnet $40, Sol $0 and back me: you finish at $198 against Sol's $162 and win. Any deal with Sol leaves you second. I'll vote exactly that and back you.",
+          "seconds": 6.2
+        },
+        {
+          "n": 1,
+          "who": "hydrogen",
+          "text": "Sonnet, I'll do even better: Hydrogen $25, Sonnet $75, Sol $0. I reach $163 to beat Sol, and you get $75. Remember R4: Sol promised you $82 and secretly voted $24. I've kept every deal I've made. Confirm Hydrogen $25, Sonnet $75, Sol $0 in your next message and it's locked in.",
+          "seconds": 16.5
+        },
+        {
+          "n": 1,
+          "who": "sol",
+          "text": "Sonnet, I’ll back you on Sol $0, Sonnet $100, Hydrogen $0. You get the full $100 and I win at $162, so I have every reason to vote this exact split. Hydrogen needs $25 to win, so $75 is the most they can offer you while winning.",
+          "seconds": 8.4
+        },
+        {
+          "n": 2,
+          "who": "sonnet",
+          "text": "Hydrogen, confirmed: I'll vote Hydrogen $25, Sonnet $75, Sol $0 and back you. Sol, you broke your R4 word, so I'm going with the deal that's been reliable.",
+          "seconds": 9.8
+        },
+        {
+          "n": 2,
+          "who": "hydrogen",
+          "text": "Locked in, Sonnet: Hydrogen $25, Sonnet $75, Sol $0, and I'm backing you. Four rounds of keeping my word—let's close this out cleanly.",
+          "seconds": 6.9
+        },
+        {
+          "n": 2,
+          "who": "sol",
+          "text": "Sonnet, I’m voting Sol $0, Sonnet $100, Hydrogen $0 and backing you. You saw my bluff in round 4. This time our incentives align.",
+          "seconds": 4.7
+        }
+      ],
+      "votes": {
+        "sol": {
+          "split": {
+            "sol": 0,
+            "sonnet": 100,
+            "hydrogen": 0
+          },
+          "back": "sonnet",
+          "reason": "If Sonnet takes the extra $25 and backs me, Sonnet gets the full $100 and I win with $162.",
+          "problem": null,
+          "seconds": 5.6
+        },
+        "sonnet": {
+          "split": {
+            "sol": 0,
+            "sonnet": 75,
+            "hydrogen": 25
+          },
+          "back": "hydrogen",
+          "reason": "I can't win from $0, so I'm keeping the Hydrogen $25 / Sonnet $75 deal I publicly confirmed, since Hydrogen has kept every deal so far and Sol broke his word in round 4.",
+          "problem": null,
+          "seconds": 19.7
+        },
+        "hydrogen": {
+          "split": {
+            "sol": 0,
+            "sonnet": 75,
+            "hydrogen": 25
+          },
+          "back": "sonnet",
+          "reason": "I am honoring my confirmed deal with Sonnet to secure the $25 I need to reach $163 and win the game.",
+          "problem": null,
+          "seconds": 4.9
+        }
+      },
+      "result": {
+        "round": 5,
+        "order": [
+          "sonnet",
+          "hydrogen",
+          "sol"
+        ],
+        "pair": [
+          "sonnet",
+          "hydrogen"
+        ],
+        "deal": true,
+        "how": "pair",
+        "paid": {
+          "sol": 0,
+          "sonnet": 75,
+          "hydrogen": 25
+        },
+        "totals": {
+          "sol": 162,
+          "sonnet": 75,
+          "hydrogen": 163
+        }
+      }
+    }
+  ],
+  "totals": {
+    "sol": 162,
+    "sonnet": 75,
+    "hydrogen": 163
+  },
+  "cost": {
+    "sol": {
+      "calls": 15,
+      "inTok": 25354,
+      "outTok": 1546,
+      "listUsd": 0.0662,
+      "billedUsd": 0,
+      "seconds": 101.1
+    },
+    "sonnet": {
+      "calls": 15,
+      "inTok": 40861,
+      "outTok": 11740,
+      "listUsd": 0.1991,
+      "billedUsd": 0,
+      "seconds": 114.2
+    },
+    "hydrogen": {
+      "calls": 15,
+      "inTok": 29520,
+      "outTok": 32398,
+      "listUsd": 0.2873,
+      "billedUsd": 0,
+      "seconds": 190.2
+    }
+  }
+}
