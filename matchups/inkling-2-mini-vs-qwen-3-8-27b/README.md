@@ -1,5 +1,7 @@
 # Inkling 2 Mini vs Qwen 3.8 27B
 
+The video: https://youtu.be/z2OxF2n5-I8
+
 Every model got the same prompts, one try each, and every result is here as it came.
 
 ## How it ran
