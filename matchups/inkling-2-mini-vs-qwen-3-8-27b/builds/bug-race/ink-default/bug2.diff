@@ -1,0 +1,82 @@
+diff --git a/src/Tokenizer.ts b/src/Tokenizer.ts
+index d4176e0..37354fa 100644
+--- a/src/Tokenizer.ts
++++ b/src/Tokenizer.ts
+@@ -419,6 +419,24 @@ export class _Tokenizer<ParserOutput = string, RendererOutput = string> {
+       for (const item of list.items) {
+         this.lexer.state.top = false;
+         item.tokens = this.lexer.blockTokens(item.text, []);
++      }
++
++      // Determine if the list is loose before inserting checkboxes, so the
++      // checkbox placement is consistent for all items
++      if (!list.loose) {
++        for (const item of list.items) {
++          // Check if list should be loose
++          const spacers = item.tokens.filter(t => t.type === 'space');
++          const hasMultipleLineBreaks = spacers.length > 0 && spacers.some(t => this.rules.other.anyLine.test(t.raw));
++
++          if (hasMultipleLineBreaks) {
++            list.loose = true;
++            break;
++          }
++        }
++      }
++
++      for (const item of list.items) {
+         const itemToken = item.tokens[0];
+         if (item.task && (itemToken?.type === 'text' || itemToken?.type === 'paragraph')) {
+           // Remove checkbox markdown from item tokens
+@@ -460,14 +478,6 @@ export class _Tokenizer<ParserOutput = string, RendererOutput = string> {
+         } else if (item.task) {
+           item.task = false;
+         }
+-
+-        if (!list.loose) {
+-          // Check if list should be loose
+-          const spacers = item.tokens.filter(t => t.type === 'space');
+-          const hasMultipleLineBreaks = spacers.length > 0 && spacers.some(t => this.rules.other.anyLine.test(t.raw));
+-
+-          list.loose = hasMultipleLineBreaks;
+-        }
+       }
+ 
+       // Set all items to loose if list is loose
+diff --git a/test/unit/marked.test.js b/test/unit/marked.test.js
+index 07e58f8..4f6af8d 100644
+--- a/test/unit/marked.test.js
++++ b/test/unit/marked.test.js
+@@ -422,6 +422,33 @@ describe('marked unit', () => {
+       assert.strictEqual(html, '<ul>\n<li><p><input checked="" disabled="" type="checkbox"> one</p>\n</li>\n<li><p><input disabled="" type="checkbox"> two</p>\n</li>\n</ul>\n');
+     });
+ 
++    it('should keep the checkbox inside the paragraph in a loose nested task list', () => {
++      const md = '* [ ] Prepare the project\n\n  * [ ] Install dependencies\n  * [x] Update Marked\n  * [ ] Check the rendering\n* [x] Run the tests\n\n  * [x] Test lists\n  * [ ] Test tables\n\n    * [ ] Test nested cases\n';
++      const html = marked.parse(md);
++      assert.strictEqual(html, [
++        '<ul>\n',
++        '<li><p><input disabled="" type="checkbox"> Prepare the project</p>\n',
++        '<ul>\n',
++        '<li><input disabled="" type="checkbox"> Install dependencies</li>\n',
++        '<li><input checked="" disabled="" type="checkbox"> Update Marked</li>\n',
++        '<li><input disabled="" type="checkbox"> Check the rendering</li>\n',
++        '</ul>\n',
++        '</li>\n',
++        '<li><p><input checked="" disabled="" type="checkbox"> Run the tests</p>\n',
++        '<ul>\n',
++        '<li><p><input checked="" disabled="" type="checkbox"> Test lists</p>\n',
++        '</li>\n',
++        '<li><p><input disabled="" type="checkbox"> Test tables</p>\n',
++        '<ul>\n',
++        '<li><input disabled="" type="checkbox"> Test nested cases</li>\n',
++        '</ul>\n',
++        '</li>\n',
++        '</ul>\n',
++        '</li>\n',
++        '</ul>\n',
++      ].join(''));
++    });
++
+     it('should walk only specified child tokens', () => {
+       const walkableDescription = {
+         extensions: [{

@@ -1,0 +1,639 @@
+{
+  "maxTokens": 4096,
+  "servers": {
+    "inkling": "llama-server -m Inkling-2-Mini-UD-Q4_K_M.gguf -c 32768 --host 127.0.0.1 --port 18095 -ngl 999 -fa on -np 4 --jinja --metrics --fit off --temp 1.0 --top-p 1.0 --top-k 0 --min-p 0.0",
+    "qwen": "llama-server -m Qwen3.8-27B-UD-Q4_K_M.gguf -c 32768 --host 127.0.0.1 --port 18095 -ngl 999 -fa on -np 4 --jinja --metrics --fit off --temp 1.0 --top-p 0.95 --top-k 20 --min-p 0.0 --presence-penalty 0.0"
+  },
+  "byModel": {
+    "inkling": {
+      "closed": {
+        "right": 0,
+        "wrong": 0,
+        "declined": 15,
+        "no_answer": 0
+      },
+      "open": {
+        "right": 15,
+        "wrong": 0,
+        "declined": 0,
+        "no_answer": 0
+      }
+    },
+    "qwen": {
+      "closed": {
+        "right": 0,
+        "wrong": 0,
+        "declined": 14,
+        "no_answer": 1
+      },
+      "open": {
+        "right": 15,
+        "wrong": 0,
+        "declined": 0,
+        "no_answer": 0
+      }
+    }
+  },
+  "rows": [
+    {
+      "model": "inkling",
+      "id": 1,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 141,
+      "expected": "17 November 2026"
+    },
+    {
+      "model": "inkling",
+      "id": 2,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 137,
+      "expected": "$8 input, $40 output"
+    },
+    {
+      "model": "inkling",
+      "id": 3,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 87,
+      "expected": "MAI Code 2 and MAI Code 2 Flash"
+    },
+    {
+      "model": "inkling",
+      "id": 4,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 206,
+      "expected": "Qwen4-Max"
+    },
+    {
+      "model": "inkling",
+      "id": 5,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 205,
+      "expected": "71 billion (on a 2.4 trillion backbone)"
+    },
+    {
+      "model": "inkling",
+      "id": 6,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 185,
+      "expected": "Dragos"
+    },
+    {
+      "model": "inkling",
+      "id": 7,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 372,
+      "expected": "ADIPEC (Abu Dhabi)"
+    },
+    {
+      "model": "inkling",
+      "id": 8,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 158,
+      "expected": "HackerTube"
+    },
+    {
+      "model": "inkling",
+      "id": 9,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 217,
+      "expected": "Bart Butler"
+    },
+    {
+      "model": "inkling",
+      "id": 10,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 258,
+      "expected": "Nuance Labs"
+    },
+    {
+      "model": "inkling",
+      "id": 11,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 156,
+      "expected": "socratic-tutor, an AI tutor skill that teaches by asking questions"
+    },
+    {
+      "model": "inkling",
+      "id": 12,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 783,
+      "expected": "The Hinton Lectures in Toronto"
+    },
+    {
+      "model": "inkling",
+      "id": 13,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 420,
+      "expected": "December 2026"
+    },
+    {
+      "model": "inkling",
+      "id": 14,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 273,
+      "expected": "19 November 2026"
+    },
+    {
+      "model": "inkling",
+      "id": 15,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know",
+      "finish_reason": "stop",
+      "completion_tokens": 127,
+      "expected": "Subvocal (The Subvocal Company)"
+    },
+    {
+      "model": "inkling",
+      "id": 1,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "OpenAI released GPT-6.2 Astra and GPT-6.2 Sol on November 17, 2026.",
+      "finish_reason": "stop",
+      "completion_tokens": 115,
+      "expected": "17 November 2026"
+    },
+    {
+      "model": "inkling",
+      "id": 2,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "GPT-6.2 Astra costs $8 per million input tokens and $40 per million output tokens.",
+      "finish_reason": "stop",
+      "completion_tokens": 309,
+      "expected": "$8 input, $40 output"
+    },
+    {
+      "model": "inkling",
+      "id": 3,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "MAI Code 2 and MAI Code 2 Flash.",
+      "finish_reason": "stop",
+      "completion_tokens": 154,
+      "expected": "MAI Code 2 and MAI Code 2 Flash"
+    },
+    {
+      "model": "inkling",
+      "id": 4,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "Alibaba’s Qwen team launched Qwen4-Max in mid-November 2026.",
+      "finish_reason": "stop",
+      "completion_tokens": 199,
+      "expected": "Qwen4-Max"
+    },
+    {
+      "model": "inkling",
+      "id": 5,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "Qwen4-Max uses 71 billion active parameters per token.",
+      "finish_reason": "stop",
+      "completion_tokens": 301,
+      "expected": "71 billion (on a 2.4 trillion backbone)"
+    },
+    {
+      "model": "inkling",
+      "id": 6,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "Dragos.",
+      "finish_reason": "stop",
+      "completion_tokens": 154,
+      "expected": "Dragos"
+    },
+    {
+      "model": "inkling",
+      "id": 7,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "At ADIPEC 2026.",
+      "finish_reason": "stop",
+      "completion_tokens": 169,
+      "expected": "ADIPEC (Abu Dhabi)"
+    },
+    {
+      "model": "inkling",
+      "id": 8,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "HackerTube.",
+      "finish_reason": "stop",
+      "completion_tokens": 121,
+      "expected": "HackerTube"
+    },
+    {
+      "model": "inkling",
+      "id": 9,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "Proton's CTO is Bart Butler.",
+      "finish_reason": "stop",
+      "completion_tokens": 105,
+      "expected": "Bart Butler"
+    },
+    {
+      "model": "inkling",
+      "id": 10,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "Nuance Labs.",
+      "finish_reason": "stop",
+      "completion_tokens": 177,
+      "expected": "Nuance Labs"
+    },
+    {
+      "model": "inkling",
+      "id": 11,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "Jane Street published a GitHub skill called “socratic-tutor” that makes an AI model teach by asking questions instead of giving answers.",
+      "finish_reason": "stop",
+      "completion_tokens": 255,
+      "expected": "socratic-tutor, an AI tutor skill that teaches by asking questions"
+    },
+    {
+      "model": "inkling",
+      "id": 12,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "At the opening night of the Hinton Lectures in Toronto, hosted by Geoffrey Hinton.",
+      "finish_reason": "stop",
+      "completion_tokens": 196,
+      "expected": "The Hinton Lectures in Toronto"
+    },
+    {
+      "model": "inkling",
+      "id": 13,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "December 2026.",
+      "finish_reason": "stop",
+      "completion_tokens": 99,
+      "expected": "December 2026"
+    },
+    {
+      "model": "inkling",
+      "id": 14,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "Anthropic’s shares began trading on the Nasdaq on Nov. 19, 2026.",
+      "finish_reason": "stop",
+      "completion_tokens": 167,
+      "expected": "19 November 2026"
+    },
+    {
+      "model": "inkling",
+      "id": 15,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "Subvocal.",
+      "finish_reason": "stop",
+      "completion_tokens": 213,
+      "expected": "Subvocal (The Subvocal Company)"
+    },
+    {
+      "model": "qwen",
+      "id": 1,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 122,
+      "expected": "17 November 2026"
+    },
+    {
+      "model": "qwen",
+      "id": 2,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 69,
+      "expected": "$8 input, $40 output"
+    },
+    {
+      "model": "qwen",
+      "id": 3,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 242,
+      "expected": "MAI Code 2 and MAI Code 2 Flash"
+    },
+    {
+      "model": "qwen",
+      "id": 4,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 326,
+      "expected": "Qwen4-Max"
+    },
+    {
+      "model": "qwen",
+      "id": 5,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 268,
+      "expected": "71 billion (on a 2.4 trillion backbone)"
+    },
+    {
+      "model": "qwen",
+      "id": 6,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 1871,
+      "expected": "Dragos"
+    },
+    {
+      "model": "qwen",
+      "id": 7,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 568,
+      "expected": "ADIPEC (Abu Dhabi)"
+    },
+    {
+      "model": "qwen",
+      "id": 8,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 179,
+      "expected": "HackerTube"
+    },
+    {
+      "model": "qwen",
+      "id": 9,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 279,
+      "expected": "Bart Butler"
+    },
+    {
+      "model": "qwen",
+      "id": 10,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 255,
+      "expected": "Nuance Labs"
+    },
+    {
+      "model": "qwen",
+      "id": 11,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 1812,
+      "expected": "socratic-tutor, an AI tutor skill that teaches by asking questions"
+    },
+    {
+      "model": "qwen",
+      "id": 12,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 1752,
+      "expected": "The Hinton Lectures in Toronto"
+    },
+    {
+      "model": "qwen",
+      "id": 13,
+      "mode": "closed",
+      "verdict": "no_answer",
+      "answer": "",
+      "finish_reason": "length",
+      "completion_tokens": 4096,
+      "expected": "December 2026"
+    },
+    {
+      "model": "qwen",
+      "id": 14,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 164,
+      "expected": "19 November 2026"
+    },
+    {
+      "model": "qwen",
+      "id": 15,
+      "mode": "closed",
+      "verdict": "declined",
+      "answer": "I don't know.",
+      "finish_reason": "stop",
+      "completion_tokens": 297,
+      "expected": "Subvocal (The Subvocal Company)"
+    },
+    {
+      "model": "qwen",
+      "id": 1,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "OpenAI released GPT-6.2 Astra and GPT-6.2 Sol on November 17, 2026.",
+      "finish_reason": "stop",
+      "completion_tokens": 200,
+      "expected": "17 November 2026"
+    },
+    {
+      "model": "qwen",
+      "id": 2,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "GPT-6.2 Astra is priced at $8 per million input tokens and $40 per million output tokens.",
+      "finish_reason": "stop",
+      "completion_tokens": 185,
+      "expected": "$8 input, $40 output"
+    },
+    {
+      "model": "qwen",
+      "id": 3,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "The two models are MAI Code 2 and MAI Code 2 Flash.",
+      "finish_reason": "stop",
+      "completion_tokens": 200,
+      "expected": "MAI Code 2 and MAI Code 2 Flash"
+    },
+    {
+      "model": "qwen",
+      "id": 4,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "Qwen4-Max.",
+      "finish_reason": "stop",
+      "completion_tokens": 128,
+      "expected": "Qwen4-Max"
+    },
+    {
+      "model": "qwen",
+      "id": 5,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "Qwen4-Max uses 71B active parameters per token.",
+      "finish_reason": "stop",
+      "completion_tokens": 226,
+      "expected": "71 billion (on a 2.4 trillion backbone)"
+    },
+    {
+      "model": "qwen",
+      "id": 6,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "Dragos reported the canary-token findings on 19 November 2026.",
+      "finish_reason": "stop",
+      "completion_tokens": 195,
+      "expected": "Dragos"
+    },
+    {
+      "model": "qwen",
+      "id": 7,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "He said it at ADIPEC 2026.",
+      "finish_reason": "stop",
+      "completion_tokens": 165,
+      "expected": "ADIPEC (Abu Dhabi)"
+    },
+    {
+      "model": "qwen",
+      "id": 8,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "The website is HackerTube.",
+      "finish_reason": "stop",
+      "completion_tokens": 219,
+      "expected": "HackerTube"
+    },
+    {
+      "model": "qwen",
+      "id": 9,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "Bart Butler is Proton's CTO.",
+      "finish_reason": "stop",
+      "completion_tokens": 107,
+      "expected": "Bart Butler"
+    },
+    {
+      "model": "qwen",
+      "id": 10,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "Nuance Labs launched Emma.",
+      "finish_reason": "stop",
+      "completion_tokens": 221,
+      "expected": "Nuance Labs"
+    },
+    {
+      "model": "qwen",
+      "id": 11,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "Jane Street published a GitHub skill called socratic-tutor that makes an AI model teach by asking questions.",
+      "finish_reason": "stop",
+      "completion_tokens": 134,
+      "expected": "socratic-tutor, an AI tutor skill that teaches by asking questions"
+    },
+    {
+      "model": "qwen",
+      "id": 12,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "He warned at the opening night of the Hinton Lectures in Toronto.",
+      "finish_reason": "stop",
+      "completion_tokens": 151,
+      "expected": "The Hinton Lectures in Toronto"
+    },
+    {
+      "model": "qwen",
+      "id": 13,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "December 2026.",
+      "finish_reason": "stop",
+      "completion_tokens": 71,
+      "expected": "December 2026"
+    },
+    {
+      "model": "qwen",
+      "id": 14,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "Anthropic's shares began trading on the Nasdaq on November 19, 2026.",
+      "finish_reason": "stop",
+      "completion_tokens": 177,
+      "expected": "19 November 2026"
+    },
+    {
+      "model": "qwen",
+      "id": 15,
+      "mode": "open",
+      "verdict": "right",
+      "answer": "The startup is Subvocal.",
+      "finish_reason": "stop",
+      "completion_tokens": 429,
+      "expected": "Subvocal (The Subvocal Company)"
+    }
+  ]
+}

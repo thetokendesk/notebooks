@@ -1,0 +1,22 @@
+diff --git a/src/Renderer.ts b/src/Renderer.ts
+index 890ac2c..ec08333 100644
+--- a/src/Renderer.ts
++++ b/src/Renderer.ts
+@@ -163,7 +163,7 @@ export class _Renderer<ParserOutput = string, RendererOutput = string> {
+     if (cleanHref === null) {
+       return text as RendererOutput;
+     }
+-    href = cleanHref;
++    href = escapeHtmlEntities(cleanHref, true);
+     let out = '<a href="' + href + '"';
+     if (title) {
+       out += ' title="' + (escapeHtmlEntities(title)) + '"';
+@@ -180,7 +180,7 @@ export class _Renderer<ParserOutput = string, RendererOutput = string> {
+     if (cleanHref === null) {
+       return escapeHtmlEntities(text) as RendererOutput;
+     }
+-    href = cleanHref;
++    href = escapeHtmlEntities(cleanHref, true);
+ 
+     let out = `<img src="${href}" alt="${escapeHtmlEntities(text)}"`;
+     if (title) {

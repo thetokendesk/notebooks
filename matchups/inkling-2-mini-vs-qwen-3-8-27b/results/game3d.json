@@ -1,0 +1,221 @@
+{
+  "inkling": [
+    {
+      "turn": 1,
+      "status": "cap",
+      "wall_seconds": 2400.5,
+      "agent_turns": 20,
+      "tool_calls": {
+        "bash": 19,
+        "write": 1
+      },
+      "tokens_out": 53173,
+      "decode_tok_s": 27.9,
+      "requests": 23,
+      "max_prompt_tokens": 42586,
+      "finish_reasons": {
+        "tool_calls": 19,
+        "stop": 2,
+        "length": 1,
+        "none": 1
+      },
+      "html_bytes": 48411,
+      "continued": false,
+      "session": "same session",
+      "last_stop": null
+    },
+    {
+      "turn": 2,
+      "status": "done",
+      "wall_seconds": 693.2,
+      "agent_turns": 8,
+      "tool_calls": {
+        "bash": 4,
+        "read": 2
+      },
+      "tokens_out": 13670,
+      "decode_tok_s": 26,
+      "requests": 8,
+      "max_prompt_tokens": 48078,
+      "finish_reasons": {
+        "length": 2,
+        "tool_calls": 6
+      },
+      "html_bytes": 48411,
+      "continued": true,
+      "session": "same session",
+      "last_stop": "length"
+    },
+    {
+      "turn": 3,
+      "status": "done",
+      "wall_seconds": 2.1,
+      "agent_turns": 2,
+      "tool_calls": {},
+      "tokens_out": 2,
+      "decode_tok_s": 1000000,
+      "requests": 2,
+      "max_prompt_tokens": 48088,
+      "finish_reasons": {
+        "length": 2
+      },
+      "html_bytes": 48411,
+      "continued": true,
+      "session": "same session",
+      "last_stop": "length"
+    },
+    {
+      "turn": 2,
+      "status": "done",
+      "wall_seconds": 1727.8,
+      "agent_turns": 22,
+      "tool_calls": {
+        "bash": 21
+      },
+      "tokens_out": 34656,
+      "decode_tok_s": 28.7,
+      "requests": 26,
+      "max_prompt_tokens": 36040,
+      "finish_reasons": {
+        "tool_calls": 21,
+        "stop": 4,
+        "none": 1
+      },
+      "html_bytes": 53731,
+      "continued": false,
+      "session": "fresh session (exhibition)",
+      "last_stop": "error"
+    },
+    {
+      "turn": 3,
+      "status": "cap",
+      "wall_seconds": 5400.5,
+      "agent_turns": 48,
+      "tool_calls": {
+        "bash": 48
+      },
+      "tokens_out": 105749,
+      "decode_tok_s": 28.7,
+      "requests": 60,
+      "max_prompt_tokens": 44724,
+      "finish_reasons": {
+        "tool_calls": 47,
+        "stop": 11,
+        "length": 1,
+        "none": 1
+      },
+      "html_bytes": 59932,
+      "continued": false,
+      "session": "fresh session (exhibition)",
+      "last_stop": "toolUse"
+    }
+  ],
+  "qwen": [
+    {
+      "turn": 1,
+      "status": "done",
+      "wall_seconds": 3344.4,
+      "agent_turns": 4,
+      "tool_calls": {
+        "bash": 2,
+        "write": 1
+      },
+      "tokens_out": 43573,
+      "decode_tok_s": 13.4,
+      "requests": 5,
+      "max_prompt_tokens": 43970,
+      "finish_reasons": {
+        "tool_calls": 3,
+        "stop": 1,
+        "length": 1
+      },
+      "html_bytes": 42930,
+      "continued": false,
+      "session": "same session",
+      "last_stop": null
+    },
+    {
+      "turn": 2,
+      "status": "done",
+      "wall_seconds": 87.7,
+      "agent_turns": 1,
+      "tool_calls": {},
+      "tokens_out": 1087,
+      "decode_tok_s": 12.5,
+      "requests": 1,
+      "max_prompt_tokens": 43985,
+      "finish_reasons": {
+        "length": 1
+      },
+      "html_bytes": 42930,
+      "continued": false,
+      "session": "same session",
+      "last_stop": null
+    },
+    {
+      "turn": 3,
+      "status": "done",
+      "wall_seconds": 87.4,
+      "agent_turns": 1,
+      "tool_calls": {},
+      "tokens_out": 1084,
+      "decode_tok_s": 12.5,
+      "requests": 1,
+      "max_prompt_tokens": 43994,
+      "finish_reasons": {
+        "length": 1
+      },
+      "html_bytes": 42930,
+      "continued": false,
+      "session": "same session",
+      "last_stop": null
+    },
+    {
+      "turn": 2,
+      "status": "done",
+      "wall_seconds": 3217.4,
+      "agent_turns": 16,
+      "tool_calls": {
+        "bash": 3,
+        "read": 4,
+        "edit": 7
+      },
+      "tokens_out": 40724,
+      "decode_tok_s": 13,
+      "requests": 17,
+      "max_prompt_tokens": 46337,
+      "finish_reasons": {
+        "tool_calls": 13,
+        "length": 3,
+        "stop": 1
+      },
+      "html_bytes": 50457,
+      "continued": true,
+      "session": "fresh session (exhibition)",
+      "last_stop": "length"
+    },
+    {
+      "turn": 3,
+      "status": "done",
+      "wall_seconds": 5035.2,
+      "agent_turns": 23,
+      "tool_calls": {
+        "bash": 9,
+        "read": 9,
+        "edit": 5
+      },
+      "tokens_out": 63696,
+      "decode_tok_s": 13.3,
+      "requests": 27,
+      "max_prompt_tokens": 38049,
+      "finish_reasons": {
+        "tool_calls": 22,
+        "stop": 5
+      },
+      "html_bytes": 55216,
+      "continued": false,
+      "session": "fresh session (exhibition)",
+      "last_stop": "stop"
+    }
+  ]
+}

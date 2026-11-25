@@ -1,0 +1,35 @@
+diff --git a/src/rules.ts b/src/rules.ts
+index beff8ba..43bb3c8 100644
+--- a/src/rules.ts
++++ b/src/rules.ts
+@@ -475,7 +475,7 @@ const inlineGfm: Record<InlineKeys, RegExp> = {
+     .getRegex(),
+   _backpedal: /(?:[^?!.,:;*_'"~()&]+|\([^)]*\)|&(?![a-zA-Z0-9]+;$)|[?!.,:;*_'"~)]+(?!$))+/,
+   del: /^(~~?)(?=[^\s~])((?:\\[\s\S]|[^\\])*?(?:\\[\s\S]|[^\s~\\]))\1(?=[^~]|$)/,
+-  text: edit(/^([`~]+|[^`~])(?:(?= {2,}\n)|(?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)|[\s\S]*?(?:(?=[\\<!\[`*~_]|\b_|protocol:\/\/|www\.|$)|[^ ](?= {2,}\n)|[^a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-](?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)))/)
++  text: edit(/^(~+|`+|[^`~])(?:(?= {2,}\n)|(?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)|[\s\S]*?(?:(?=[\\<!\[`*~_]|\b_|protocol:\/\/|www\.|$)|[^ ](?= {2,}\n)|[^a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-](?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)))/)
+     .replace('protocol', _caseInsensitiveProtocol)
+     .getRegex(),
+ };
+diff --git a/test/unit/marked.test.js b/test/unit/marked.test.js
+index b604c01..c1c30b2 100644
+--- a/test/unit/marked.test.js
++++ b/test/unit/marked.test.js
+@@ -58,6 +58,17 @@ describe('marked unit', () => {
+     });
+   });
+ 
++  describe('tilde followed by inline code', () => {
++    it('should keep the tilde literal and parse the code spans', () => {
++      const md = '~`0.1576` to measurement-window-only `0.00092`';
++      assert.strictEqual(marked.parse(md), '<p>~<code>0.1576</code> to measurement-window-only <code>0.00092</code></p>\n');
++    });
++
++    it('should keep a single tilde literal when a code span follows', () => {
++      assert.strictEqual(marked.parse('~`code`'), '<p>~<code>code</code></p>\n');
++    });
++  });
++
+   describe('use extension', () => {
+     it('should use custom block tokenizer + renderer extensions', () => {
+       const underline = {

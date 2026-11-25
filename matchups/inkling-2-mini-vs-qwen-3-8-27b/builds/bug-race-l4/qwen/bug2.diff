@@ -1,0 +1,20 @@
+diff --git a/src/Tokenizer.ts b/src/Tokenizer.ts
+index d4176e0..99e9d43 100644
+--- a/src/Tokenizer.ts
++++ b/src/Tokenizer.ts
+@@ -420,6 +420,7 @@ export class _Tokenizer<ParserOutput = string, RendererOutput = string> {
+         this.lexer.state.top = false;
+         item.tokens = this.lexer.blockTokens(item.text, []);
+         const itemToken = item.tokens[0];
++        console.error('ITEM', JSON.stringify(item.text.slice(0,25)), 'list.loose=', list.loose, 'tokens=', item.tokens.map(x=>x.type).join(','));
+         if (item.task && (itemToken?.type === 'text' || itemToken?.type === 'paragraph')) {
+           // Remove checkbox markdown from item tokens
+           item.text = item.text.replace(this.rules.other.listReplaceTask, '');
+@@ -468,6 +469,7 @@ export class _Tokenizer<ParserOutput = string, RendererOutput = string> {
+ 
+           list.loose = hasMultipleLineBreaks;
+         }
++        console.error('  after: list.loose=', list.loose);
+       }
+ 
+       // Set all items to loose if list is loose

@@ -1,0 +1,206 @@
+diff --git a/src/Tokenizer.ts b/src/Tokenizer.ts
+index e6f900d..baa29a8 100644
+--- a/src/Tokenizer.ts
++++ b/src/Tokenizer.ts
+@@ -218,6 +218,11 @@ export class _Tokenizer<ParserOutput = string, RendererOutput = string> {
+           text = text.substring(0, text.length - oldToken.raw.length) + newToken.raw;
+           lines = newText.substring(tokens.at(-1)!.raw.length).split('\n');
+           continue;
++        } else if (lastToken?.type !== 'paragraph' && lastToken?.type !== 'def' && lastToken?.type !== 'text') {
++          // a blockquote can only be lazily continued by the paragraph (or
++          // reference definition) before the continuation lines, so any other
++          // block ends the blockquote
++          break;
+         }
+       }
+ 
+diff --git a/src/rules.ts b/src/rules.ts
+index db8ebab..65e19bd 100644
+--- a/src/rules.ts
++++ b/src/rules.ts
+@@ -163,20 +163,29 @@ const html = edit(
+   .replace('attribute', / +[a-zA-Z:_][\w.:-]*(?: *= *"[^"\n]*"| *= *'[^'\n]*'| *= *[^\s"'=<>`]+)?/)
+   .getRegex();
+ 
+-const paragraph = edit(_paragraph)
+-  .replace('hr', hr)
+-  .replace('heading', ' {0,3}#{1,6}(?:\\s|$)')
+-  .replace('|lheading', '') // setext headings don't interrupt commonmark paragraphs
+-  .replace('|table', '')
+-  .replace('blockquote', ' {0,3}>')
+-  .replace('fences', ' {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n')
+-  .replace('list', ' {0,3}(?:[*+-]|1[.)])[ \\t]+[^ \\t\\n]') // only non-empty lists starting from 1 can interrupt
+-  .replace('html', '</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)')
+-  .replace('tag', _tag) // pars can be interrupted by type (6) html blocks
+-  .getRegex();
++function createParagraph(listInterrupt: string) {
++  return edit(_paragraph)
++    .replace('hr', hr)
++    .replace('heading', ' {0,3}#{1,6}(?:\\s|$)')
++    .replace('|lheading', '') // setext headings don't interrupt commonmark paragraphs
++    .replace('|table', '')
++    .replace('blockquote', ' {0,3}>')
++    .replace('fences', ' {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n')
++    .replace('list', listInterrupt)
++    .replace('html', '</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)')
++    .replace('tag', _tag); // pars can be interrupted by type (6) html blocks
++}
++
++// only non-empty lists starting from 1 can interrupt a paragraph
++const paragraph = createParagraph(' {0,3}(?:[*+-]|1[.)])[ \\t]+[^ \\t\\n]').getRegex();
++
++// In a blockquote, a line starting with a list marker ends the blockquote
++// (the list becomes a sibling block), so any list marker can interrupt the
++// paragraph, even one without content
++const blockquoteParagraph = createParagraph(' {0,3}(?:[*+-]|\\d{1,9}[.)])(?=[ \\t\n]|$)').getRegex();
+ 
+ const blockquote = edit(/^( {0,3}> ?(paragraph|[^\n]*)(?:\n|$))+/)
+-  .replace('paragraph', paragraph)
++  .replace('paragraph', blockquoteParagraph)
+   .getRegex();
+ 
+ /**
+diff --git a/tmp-repro/diff.mjs b/tmp-repro/diff.mjs
+new file mode 100644
+index 0000000..ed17360
+--- /dev/null
++++ b/tmp-repro/diff.mjs
+@@ -0,0 +1,114 @@
++import { marked } from '../lib/marked.esm.js';
++import { Parser, HtmlRenderer } from 'commonmark';
++
++const parser = new Parser();
++const renderer = new HtmlRenderer();
++
++// Normalize for comparison: collapse whitespace, strip trailing newline
++function norm(s) {
++  return s.replace(/\n+$/,'').replace(/\s+/g,' ').trim();
++}
++
++const cases = [
++  // reported bug cases
++  '1. test\n> blockquote\n2. test\n> blockquote',
++  '> blockquote\n2. test',
++  '> blockquote\n- test',
++  '> blockquote\n\n2. test',
++  '> blockquote\n    2. test',
++  '> a\n> 1. b\n>    c',
++  // ordered lists after blockquote
++  '> foo\n1. bar',
++  '> foo\n2. bar',
++  '> foo\n10. bar',
++  '> foo\n100. bar',
++  '> foo\n   2. bar',
++  '> foo\n  2.  bar',
++  '> foo\n2) bar',
++  '> foo\n2)\tbar',
++  '> foo\n-\tbar',
++  '> foo\n* bar',
++  '> foo\n+ bar',
++  // lazy continuation that must be preserved
++  '> foo\nbar',
++  '> foo\nbar\n2. baz',
++  '> foo\nbar\nbaz',
++  '> foo\n2. bar\nbaz',
++  '> foo\n    bar',
++  '> foo\n\tbar',
++  '> foo\n===',
++  '> foo\n---',
++  '> foo\n\nbar',
++  // lists inside blockquotes followed by list lines
++  '> - foo\n- bar',
++  '> - foo\n2. bar',
++  '> 1. foo\n2. bar',
++  '> 2. foo\n3. bar',
++  '> 1. foo\n- bar',
++  '> 1. foo\n1. bar',
++  '> 1. foo\n> 2. bar',
++  // lazy continuation into list items inside blockquotes
++  '> 1. foo\nbar',
++  '> - foo\nbar',
++  '> 1. foo\n    bar',
++  '> 1. foo\n\nbar',
++  '> - foo\n\nbar',
++  // headings / other blocks inside blockquote followed by lines
++  '> # h\n2. bar',
++  '> # h\nbar',
++  '> # h\n- bar',
++  '>     code\n2. bar',
++  '> ```\n> x\n> ```\n2. bar',
++  '> <div>\n2. bar',
++  // nested blockquotes
++  '> > foo\n2. bar',
++  '> > foo\n> > bar',
++  '>> foo\n2. bar',
++  '> > 1. foo\n> 2. bar',
++  '> > 1. foo\n> > 2. bar',
++  '> 1. > foo\n>    bar\n2. baz',
++  // lists before/around blockquotes
++  '- foo\n> bar\n- baz',
++  '1. foo\n> bar\n1. baz',
++  '- foo\n> bar\n2. baz',
++  '> bar\n- foo\n> bar',
++  '> bar\n1. foo\n> bar',
++  '> bar\n10. foo\n> bar',
++  // top-level paragraph interruption (must still only be 1.)
++  'foo\n2. bar',
++  'foo\n1. bar',
++  'foo\n- bar',
++  // mixed
++  '> 1. foo\n> 2. bar\n3. baz',
++  '> - foo\n> - bar\n- baz',
++  '> - foo\n\n- bar',
++  '> 1. foo\n\n2. bar',
++  // empty-ish list markers
++  '> foo\n-',
++  '> foo\n2.',
++  '> foo\n2. ',
++  '> foo\n- bar\nbaz',
++  '> foo\n2. bar\nbaz',
++  // indented blockquote markers
++  '  > foo\n2. bar',
++  '   > foo\n2. bar',
++  '> foo\n  > bar\n2. baz',
++  // task lists / gfm
++  '> - [ ] foo\n2. bar',
++  '> 1. foo\n> 2. bar\n> 3. baz\n4. qux',
++];
++
++let fail = 0;
++for (const md of cases) {
++  const expected = norm(renderer.render(parser.parse(md)));
++  const options = { gfm: true };
++  const actual = norm(marked.parse(md, options));
++  if (expected !== actual) {
++    fail++;
++    console.log('MISMATCH for ' + JSON.stringify(md));
++    console.log('--- expected ---\n' + expected);
++    console.log('--- actual ---\n' + actual);
++    console.log();
++  }
++}
++console.log(fail === 0 ? `ALL ${cases.length} CASES MATCH` : `${fail}/${cases.length} mismatches`);
+diff --git a/tmp-repro/repro.mjs b/tmp-repro/repro.mjs
+new file mode 100644
+index 0000000..696e3e6
+--- /dev/null
++++ b/tmp-repro/repro.mjs
+@@ -0,0 +1,18 @@
++import { marked } from '../lib/marked.esm.js';
++
++const cases = [
++  '1. test\n> blockquote\n2. test\n> blockquote',
++  '> blockquote\n2. test',
++  '> blockquote\n- test',
++  '> blockquote\n\n2. test',
++];
++
++for (const md of cases) {
++  console.log('=== INPUT ===');
++  console.log(md);
++  console.log('--- HTML ---');
++  console.log(marked.parse(md, { gfm: true, breaks: true }));
++  console.log('--- TOKENS ---');
++  console.log(JSON.stringify(marked.lexer(md, { gfm: true, breaks: true }), null, 1));
++  console.log();
++}

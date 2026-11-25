@@ -1,0 +1,42 @@
+diff --git a/src/rules.ts b/src/rules.ts
+index beff8ba..868157b 100644
+--- a/src/rules.ts
++++ b/src/rules.ts
+@@ -475,7 +475,7 @@ const inlineGfm: Record<InlineKeys, RegExp> = {
+     .getRegex(),
+   _backpedal: /(?:[^?!.,:;*_'"~()&]+|\([^)]*\)|&(?![a-zA-Z0-9]+;$)|[?!.,:;*_'"~)]+(?!$))+/,
+   del: /^(~~?)(?=[^\s~])((?:\\[\s\S]|[^\\])*?(?:\\[\s\S]|[^\s~\\]))\1(?=[^~]|$)/,
+-  text: edit(/^([`~]+|[^`~])(?:(?= {2,}\n)|(?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)|[\s\S]*?(?:(?=[\\<!\[`*~_]|\b_|protocol:\/\/|www\.|$)|[^ ](?= {2,}\n)|[^a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-](?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)))/)
++  text: edit(/^(`+|~+|[^`~])(?:(?= {2,}\n)|(?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)|[\s\S]*?(?:(?=[\\<!\[`*~_]|\b_|protocol:\/\/|www\.|$)|[^ ](?= {2,}\n)|[^a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-](?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)))/)
+     .replace('protocol', _caseInsensitiveProtocol)
+     .getRegex(),
+ };
+diff --git a/test/specs/new/tilde_before_codespan.html b/test/specs/new/tilde_before_codespan.html
+new file mode 100644
+index 0000000..286fd08
+--- /dev/null
++++ b/test/specs/new/tilde_before_codespan.html
+@@ -0,0 +1,6 @@
++<p>~<code>0.1576</code> to measurement-window-only <code>0.00092</code></p>
++<p>~<code>code</code></p>
++<p><del><code>code</code></del></p>
++<p><code>~~x~~</code></p>
++<p>~ <code>code</code></p>
++<p><del>struck</del> <code>code</code></p>
+diff --git a/test/specs/new/tilde_before_codespan.md b/test/specs/new/tilde_before_codespan.md
+new file mode 100644
+index 0000000..d8e7e4e
+--- /dev/null
++++ b/test/specs/new/tilde_before_codespan.md
+@@ -0,0 +1,11 @@
++~`0.1576` to measurement-window-only `0.00092`
++
++~`code`
++
++~~`code`~~
++
++`~~x~~`
++
++~ `code`
++
++~~struck~~ `code`

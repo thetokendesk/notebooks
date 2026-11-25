@@ -1,0 +1,62 @@
+diff --git a/src/Tokenizer.ts b/src/Tokenizer.ts
+index d4176e0..5be9406 100644
+--- a/src/Tokenizer.ts
++++ b/src/Tokenizer.ts
+@@ -258,7 +258,6 @@ export class _Tokenizer<ParserOutput = string, RendererOutput = string> {
+ 
+       // Get next list item
+       const itemRegex = this.rules.other.listItemRegex(bull);
+-      let endsWithBlankLine = false;
+       // Check if current bullet point can start a new List Item
+       while (src) {
+         let endEarly = false;
+@@ -383,15 +382,6 @@ export class _Tokenizer<ParserOutput = string, RendererOutput = string> {
+           }
+         }
+ 
+-        if (!list.loose) {
+-          // If the previous item ended with a blank line, the list is loose
+-          if (endsWithBlankLine) {
+-            list.loose = true;
+-          } else if (this.rules.other.doubleBlankLine.test(raw)) {
+-            endsWithBlankLine = true;
+-          }
+-        }
+-
+         list.items.push({
+           type: 'list_item',
+           raw,
+@@ -404,7 +394,7 @@ export class _Tokenizer<ParserOutput = string, RendererOutput = string> {
+         list.raw += raw;
+       }
+ 
+-      // Do not consume newlines at end of final item. Alternatively, make itemRegex *start* with any newlines to simplify/speed up endsWithBlankLine logic
++      // Do not consume newlines at end of final item. Alternatively, make itemRegex *start* with any newlines to simplify/speed up the loose-list check
+       const lastItem = list.items.at(-1);
+       if (lastItem) {
+         lastItem.raw = lastItem.raw.trimEnd();
+@@ -415,6 +405,10 @@ export class _Tokenizer<ParserOutput = string, RendererOutput = string> {
+       }
+       list.raw = list.raw.trimEnd();
+ 
++      // Determine whether the list is loose up front so that all items are
++      // styled consistently. A list is loose if any item's content contains a blank line.
++      list.loose = list.items.some(item => /\n[ \t]*\n/.test(item.raw));
++
+       // Item child tokens handled here at end because we needed to have the final item to trim it first
+       for (const item of list.items) {
+         this.lexer.state.top = false;
+@@ -461,13 +455,6 @@ export class _Tokenizer<ParserOutput = string, RendererOutput = string> {
+           item.task = false;
+         }
+ 
+-        if (!list.loose) {
+-          // Check if list should be loose
+-          const spacers = item.tokens.filter(t => t.type === 'space');
+-          const hasMultipleLineBreaks = spacers.length > 0 && spacers.some(t => this.rules.other.anyLine.test(t.raw));
+-
+-          list.loose = hasMultipleLineBreaks;
+-        }
+       }
+ 
+       // Set all items to loose if list is loose

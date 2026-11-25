@@ -1,0 +1,66 @@
+diff --git a/src/Tokenizer.ts b/src/Tokenizer.ts
+index d4176e0..6d47365 100644
+--- a/src/Tokenizer.ts
++++ b/src/Tokenizer.ts
+@@ -416,6 +416,10 @@ export class _Tokenizer<ParserOutput = string, RendererOutput = string> {
+       list.raw = list.raw.trimEnd();
+ 
+       // Item child tokens handled here at end because we needed to have the final item to trim it first
++      // Checkbox tokens are collected here and inserted below: whether a checkbox
++      // goes inside the first paragraph (loose) or before it (tight) depends on
++      // `list.loose`, which is only known once all items have been tokenized.
++      const taskItems: { item: Tokens.ListItem, checkboxToken: Tokens.Checkbox }[] = [];
+       for (const item of list.items) {
+         this.lexer.state.top = false;
+         item.tokens = this.lexer.blockTokens(item.text, []);
+@@ -440,22 +444,7 @@ export class _Tokenizer<ParserOutput = string, RendererOutput = string> {
+               checked: taskRaw[0] !== '[ ]',
+             };
+             item.checked = checkboxToken.checked;
+-            if (list.loose) {
+-              if (item.tokens[0] && ['paragraph', 'text'].includes(item.tokens[0].type) && 'tokens' in item.tokens[0] && item.tokens[0].tokens) {
+-                item.tokens[0].raw = checkboxToken.raw + item.tokens[0].raw;
+-                item.tokens[0].text = checkboxToken.raw + item.tokens[0].text;
+-                item.tokens[0].tokens.unshift(checkboxToken);
+-              } else {
+-                item.tokens.unshift({
+-                  type: 'paragraph',
+-                  raw: checkboxToken.raw,
+-                  text: checkboxToken.raw,
+-                  tokens: [checkboxToken],
+-                });
+-              }
+-            } else {
+-              item.tokens.unshift(checkboxToken);
+-            }
++            taskItems.push({ item, checkboxToken });
+           }
+         } else if (item.task) {
+           item.task = false;
+@@ -470,6 +459,26 @@ export class _Tokenizer<ParserOutput = string, RendererOutput = string> {
+         }
+       }
+ 
++      // Insert checkbox tokens now that the list's loose state is final
++      for (const { item, checkboxToken } of taskItems) {
++        if (list.loose) {
++          if (item.tokens[0] && ['paragraph', 'text'].includes(item.tokens[0].type) && 'tokens' in item.tokens[0] && item.tokens[0].tokens) {
++            item.tokens[0].raw = checkboxToken.raw + item.tokens[0].raw;
++            item.tokens[0].text = checkboxToken.raw + item.tokens[0].text;
++            item.tokens[0].tokens.unshift(checkboxToken);
++          } else {
++            item.tokens.unshift({
++              type: 'paragraph',
++              raw: checkboxToken.raw,
++              text: checkboxToken.raw,
++              tokens: [checkboxToken],
++            });
++          }
++        } else {
++          item.tokens.unshift(checkboxToken);
++        }
++      }
++
+       // Set all items to loose if list is loose
+       if (list.loose) {
+         for (const item of list.items) {

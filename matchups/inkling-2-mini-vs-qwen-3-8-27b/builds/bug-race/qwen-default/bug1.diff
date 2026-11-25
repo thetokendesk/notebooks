@@ -1,0 +1,42 @@
+diff --git a/src/Tokenizer.ts b/src/Tokenizer.ts
+index 6631542..8d3254c 100644
+--- a/src/Tokenizer.ts
++++ b/src/Tokenizer.ts
+@@ -266,7 +266,13 @@ export class _Tokenizer<ParserOutput = string, RendererOutput = string> {
+           const newToken = this.blockquote(newText)!;
+           tokens[tokens.length - 1] = newToken;
+ 
+-          raw = `${raw}\n${continuation}`;
++          // The nested blockquote does not necessarily consume all of the
++          // continuation (it consumes none when it cannot be lazily continued,
++          // e.g. because it holds no paragraph). Only the consumed lines belong
++          // to this blockquote; any remainder ends it and is re-lexed by the
++          // caller, like after a code block break.
++          const consumed = Math.max(newToken.raw.split('\n').length - oldToken.raw.split('\n').length, 0);
++          raw = consumed ? `${raw}\n${lines.slice(0, consumed).join('\n')}` : raw;
+           text = text.substring(0, text.length - oldToken.text.length) + newToken.text;
+           break;
+         } else if (lastToken?.type === 'list') {
+diff --git a/test/specs/new/empty_nested_blockquote_lazy_line.html b/test/specs/new/empty_nested_blockquote_lazy_line.html
+new file mode 100644
+index 0000000..f70ca82
+--- /dev/null
++++ b/test/specs/new/empty_nested_blockquote_lazy_line.html
+@@ -0,0 +1,8 @@
++<blockquote>
++<blockquote>
++</blockquote>
++</blockquote>
++<p>text</p>
++<blockquote>
++<p>more</p>
++</blockquote>
+diff --git a/test/specs/new/empty_nested_blockquote_lazy_line.md b/test/specs/new/empty_nested_blockquote_lazy_line.md
+new file mode 100644
+index 0000000..dbcdbd6
+--- /dev/null
++++ b/test/specs/new/empty_nested_blockquote_lazy_line.md
+@@ -0,0 +1,3 @@
++>>
++text
++> more

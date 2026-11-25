@@ -1,0 +1,120 @@
+{
+  "inkling": [
+    {
+      "bug": 1,
+      "status": "done",
+      "hidden_tests_pass": false,
+      "lines": {
+        "right": 9,
+        "of": 26
+      },
+      "new_spec_failures": [],
+      "new_unit_failures": [],
+      "wall_seconds": 4176.1,
+      "agent_turns": 43,
+      "tool_calls": {
+        "bash": 41
+      },
+      "tokens_out": 72350,
+      "decode_tok_s": 29.6,
+      "requests": 51,
+      "finish_reasons": {
+        "tool_calls": 41,
+        "stop": 9,
+        "length": 1
+      },
+      "continued": true,
+      "flags": [],
+      "diff_stat": ""
+    },
+    {
+      "bug": 2,
+      "status": "cap",
+      "hidden_tests_pass": true,
+      "lines": {
+        "right": 20,
+        "of": 20
+      },
+      "new_spec_failures": [
+        "Lists",
+        "Lists should pass example 307",
+        "Lists should pass example 318",
+        "Lists should pass example 319"
+      ],
+      "new_unit_failures": [],
+      "wall_seconds": 4500.5,
+      "agent_turns": 60,
+      "tool_calls": {
+        "bash": 60
+      },
+      "tokens_out": 96515,
+      "decode_tok_s": 28.9,
+      "requests": 69,
+      "finish_reasons": {
+        "tool_calls": 60,
+        "stop": 9
+      },
+      "continued": false,
+      "flags": [],
+      "diff_stat": "src/Tokenizer.ts | 23 +++++------------------\n 1 file changed, 5 insertions(+), 18 deletions(-)"
+    }
+  ],
+  "qwen": [
+    {
+      "bug": 1,
+      "status": "cap",
+      "hidden_tests_pass": false,
+      "lines": {
+        "right": 9,
+        "of": 26
+      },
+      "new_spec_failures": [],
+      "new_unit_failures": [],
+      "wall_seconds": 4500.5,
+      "agent_turns": 28,
+      "tool_calls": {
+        "bash": 27,
+        "read": 3
+      },
+      "tokens_out": 56253,
+      "decode_tok_s": 13.4,
+      "requests": 33,
+      "finish_reasons": {
+        "tool_calls": 28,
+        "stop": 4,
+        "none": 1
+      },
+      "continued": false,
+      "flags": [],
+      "diff_stat": ""
+    },
+    {
+      "bug": 2,
+      "status": "cap",
+      "hidden_tests_pass": false,
+      "lines": {
+        "right": 17,
+        "of": 20
+      },
+      "new_spec_failures": [],
+      "new_unit_failures": [],
+      "wall_seconds": 4500.5,
+      "agent_turns": 46,
+      "tool_calls": {
+        "bash": 36,
+        "read": 10
+      },
+      "tokens_out": 53709,
+      "decode_tok_s": 13.6,
+      "requests": 51,
+      "finish_reasons": {
+        "tool_calls": 46,
+        "stop": 4,
+        "none": 1
+      },
+      "continued": false,
+      "flags": [],
+      "diff_stat": "src/Tokenizer.ts | 2 ++\n 1 file changed, 2 insertions(+)"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+diff --git a/src/Tokenizer.ts b/src/Tokenizer.ts
+index 6631542..4b82883 100644
+--- a/src/Tokenizer.ts
++++ b/src/Tokenizer.ts
+@@ -266,7 +266,15 @@ export class _Tokenizer<ParserOutput = string, RendererOutput = string> {
+           const newToken = this.blockquote(newText)!;
+           tokens[tokens.length - 1] = newToken;
+ 
+-          raw = `${raw}\n${continuation}`;
++          // Only the continuation lines the re-parse actually consumed become
++          // part of the outer blockquote's raw; anything left over is left for
++          // the outer lexer to parse as sibling blocks. (Appending all the
++          // continuation lines would swallow lazy lines no token holds.)
++          const consumed = newToken.raw.substring(oldToken.raw.length);
++          if (consumed.length > 1) {
++            const consumedLines = consumed.slice(1).split('\n');
++            raw = `${raw}\n${lines.slice(0, consumedLines.length).join('\n')}`;
++          }
+           text = text.substring(0, text.length - oldToken.text.length) + newToken.text;
+           break;
+         } else if (lastToken?.type === 'list') {

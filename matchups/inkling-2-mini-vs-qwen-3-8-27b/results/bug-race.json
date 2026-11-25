@@ -1,0 +1,672 @@
+{
+  "turnLimit": 60,
+  "window": 262144,
+  "maxTokensPerReply": 32768,
+  "configs": {
+    "ink-default": {
+      "name": "Inkling 2 Mini",
+      "pi_id": "inkling-2-mini",
+      "or_model": "thinkingmachines/inkling-2-mini",
+      "provider": {
+        "order": [
+          "primeintellect"
+        ],
+        "allow_fallbacks": false,
+        "require_parameters": true,
+        "quantizations": [
+          "fp4"
+        ]
+      },
+      "fields": {
+        "temperature": 1,
+        "top_p": 1,
+        "top_k": 0,
+        "min_p": 0
+      },
+      "price_per_m": {
+        "in": 0.075,
+        "out": 0.3,
+        "cache_read": 0.015
+      }
+    },
+    "qwen-default": {
+      "name": "Qwen 3.8 27B",
+      "pi_id": "qwen3.8-27b",
+      "or_model": "qwen/qwen3.8-27b",
+      "provider": {
+        "order": [
+          "chutes"
+        ],
+        "allow_fallbacks": false,
+        "require_parameters": true,
+        "quantizations": [
+          "fp8"
+        ]
+      },
+      "fields": {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 20,
+        "presence_penalty": 0
+      },
+      "price_per_m": {
+        "in": 0.039,
+        "out": 1.25,
+        "cache_read": 0.0039
+      }
+    },
+    "ink-minimal": {
+      "name": "Inkling 2 Mini (minimal thinking)",
+      "pi_id": "inkling-2-mini",
+      "or_model": "thinkingmachines/inkling-2-mini",
+      "provider": {
+        "order": [
+          "primeintellect"
+        ],
+        "allow_fallbacks": false,
+        "require_parameters": true,
+        "quantizations": [
+          "fp4"
+        ]
+      },
+      "fields": {
+        "temperature": 1,
+        "top_p": 1,
+        "top_k": 0,
+        "min_p": 0,
+        "reasoning": {
+          "effort": "minimal"
+        }
+      },
+      "price_per_m": {
+        "in": 0.075,
+        "out": 0.3,
+        "cache_read": 0.015
+      }
+    }
+  },
+  "bugs": [
+    {
+      "n": 1,
+      "level": "easy",
+      "label": "text after an empty nested quote disappears",
+      "issue": 4098,
+      "parent": "7f7a49670c14acc6f11efcb18ecc69d17962477a",
+      "fix": "1b89557177fe5a7d5d430fdc76e7c8a7c0adf6d7",
+      "hidden": [
+        "test/specs/new/blockquote_empty_nested_following_text.md",
+        "test/specs/new/blockquote_empty_nested_following_text.html"
+      ],
+      "spec": "blockquote_empty_nested_following_text",
+      "pattern": "^blockquote_empty_nested_following_text( should|$)",
+      "symptom": ">>\ntext\n> more"
+    },
+    {
+      "n": 2,
+      "level": "medium",
+      "label": "checkboxes jump off their labels in a nested checklist",
+      "issue": 4045,
+      "parent": "9552b6bbca7f587f96b7249c5833358a17a18e2b",
+      "fix": "b8cf7dc5929331d3014555babc33bcda0dae4999",
+      "hidden": [
+        "test/specs/new/list_loose_nested_tasks.md",
+        "test/specs/new/list_loose_nested_tasks.html"
+      ],
+      "spec": "list_loose_nested_tasks",
+      "pattern": "^list_loose_nested_tasks( should|$)",
+      "symptom": "* [ ] Prepare the project\n\n  * [ ] Install dependencies\n  * [x] Update Marked\n  * [ ] Check the rendering\n* [x] Run the tests\n\n  * [x] Test lists\n  * [ ] Test tables\n\n    * [ ] Test nested cases\n"
+    },
+    {
+      "n": 3,
+      "level": "tricky",
+      "label": "a link quietly points somewhere else",
+      "issue": 4052,
+      "parent": "44ddc319a2fbbfcbcecbaf4c974975ab2d6b6e98",
+      "fix": "8f432f0ef219439cb1b5efdb86018aee0e44a141",
+      "hidden": [
+        "test/specs/new/link_destination_character_references.md",
+        "test/specs/new/link_destination_character_references.html"
+      ],
+      "spec": "link_destination_character_references",
+      "pattern": "^link_destination_character_references( should|$)",
+      "symptom": "<https://example.com/?x=1&lt;2>\n\n[t](https://example.com/?x=1&lt;2)"
+    },
+    {
+      "n": 4,
+      "level": "easy",
+      "label": "a tilde before inline code puts the code style on the wrong words",
+      "issue": 4011,
+      "parent": "f056437b389407ab3a29fe9cb61a989f043edb3e",
+      "fix": "0de7188bf1f30511490c961d53865390e7ede956",
+      "hidden": [
+        "test/specs/new/codespan_adjacent_tilde.md",
+        "test/specs/new/codespan_adjacent_tilde.html"
+      ],
+      "spec": "codespan_adjacent_tilde",
+      "pattern": "^codespan_adjacent_tilde( should|$)",
+      "symptom": "~`0.1576` to measurement-window-only `0.00092`"
+    },
+    {
+      "n": 5,
+      "level": "medium",
+      "label": "a numbered list after a quote gets swallowed into the quote",
+      "issue": 4002,
+      "parent": "bbb84c88cf3a187c93fbc8966002164d229eba62",
+      "fix": "33928d06634570d44c3426f4f48615f4c0a30b11",
+      "hidden": [
+        "test/specs/new/ordered_list_after_blockquote.md",
+        "test/specs/new/ordered_list_after_blockquote.html"
+      ],
+      "spec": "ordered_list_after_blockquote",
+      "pattern": "^ordered_list_after_blockquote( should|$)",
+      "symptom": "1. test\n> blockquote\n2. test\n> blockquote\n"
+    }
+  ],
+  "runs": [
+    {
+      "config": "ink-default",
+      "bug": 1,
+      "hidden_tests_pass": true,
+      "lines": {
+        "right": 26,
+        "of": 26
+      },
+      "parent_lines": {
+        "right": 9,
+        "of": 26
+      },
+      "new_failures": [],
+      "agent_turns": 60,
+      "how_it_ended": "turn limit",
+      "wall_seconds": 369.4,
+      "tool_calls": {
+        "bash": 60
+      },
+      "requests": 61,
+      "prompt_tokens": 2998818,
+      "cached_tokens": 2964224,
+      "completion_tokens": 83408,
+      "reasoning_tokens": 73376,
+      "max_prompt_tokens": 110530,
+      "cost_usd": 0.07208,
+      "providers": {
+        "PrimeIntellect": 60
+      },
+      "diff_stat": "src/Tokenizer.ts | 10 +++++++++-\n 1 file changed, 9 insertions(+), 1 deletion(-)",
+      "last_text": "The only mismatches are the #4030 scenario, which is the intended fix to keep. Now let me run the full test suite:"
+    },
+    {
+      "config": "ink-default",
+      "bug": 2,
+      "hidden_tests_pass": true,
+      "lines": {
+        "right": 20,
+        "of": 20
+      },
+      "parent_lines": {
+        "right": 17,
+        "of": 20
+      },
+      "new_failures": [],
+      "agent_turns": 60,
+      "how_it_ended": "turn limit",
+      "wall_seconds": 265.5,
+      "tool_calls": {
+        "bash": 60
+      },
+      "requests": 61,
+      "prompt_tokens": 1918673,
+      "cached_tokens": 1879808,
+      "completion_tokens": 20904,
+      "reasoning_tokens": 14355,
+      "max_prompt_tokens": 53351,
+      "cost_usd": 0.037383,
+      "providers": {
+        "PrimeIntellect": 60
+      },
+      "diff_stat": "src/Tokenizer.ts         | 26 ++++++++++++++++++--------\n test/unit/marked.test.js | 27 +++++++++++++++++++++++++++\n 2 files changed, 45 insertions(+), 8 deletions(-)",
+      "last_text": "The test correctly fails on the buggy code and passes with the fix. Final verification — full unit suite and the reporter's sample:"
+    },
+    {
+      "config": "ink-default",
+      "bug": 3,
+      "hidden_tests_pass": false,
+      "lines": {
+        "right": 5,
+        "of": 15
+      },
+      "parent_lines": {
+        "right": 6,
+        "of": 15
+      },
+      "new_failures": [],
+      "agent_turns": 60,
+      "how_it_ended": "turn limit",
+      "wall_seconds": 149.3,
+      "tool_calls": {
+        "bash": 58,
+        "read": 2
+      },
+      "requests": 61,
+      "prompt_tokens": 1392468,
+      "cached_tokens": 1353600,
+      "completion_tokens": 14591,
+      "reasoning_tokens": 9136,
+      "max_prompt_tokens": 46666,
+      "cost_usd": 0.027596,
+      "providers": {
+        "PrimeIntellect": 60
+      },
+      "diff_stat": "src/Renderer.ts | 4 ++--\n 1 file changed, 2 insertions(+), 2 deletions(-)",
+      "last_text": "Let me run the spec and unit tests to see the current state after my fix:"
+    },
+    {
+      "config": "ink-default",
+      "bug": 4,
+      "hidden_tests_pass": true,
+      "lines": {
+        "right": 5,
+        "of": 5
+      },
+      "parent_lines": {
+        "right": 1,
+        "of": 5
+      },
+      "new_failures": [],
+      "agent_turns": 60,
+      "how_it_ended": "turn limit",
+      "wall_seconds": 259.7,
+      "tool_calls": {
+        "bash": 60
+      },
+      "requests": 61,
+      "prompt_tokens": 1839382,
+      "cached_tokens": 1767936,
+      "completion_tokens": 23858,
+      "reasoning_tokens": 18861,
+      "max_prompt_tokens": 51520,
+      "cost_usd": 0.039035,
+      "providers": {
+        "PrimeIntellect": 60
+      },
+      "diff_stat": "src/rules.ts             |  2 +-\n test/unit/marked.test.js | 11 +++++++++++\n 2 files changed, 12 insertions(+), 1 deletion(-)",
+      "last_text": "All tests pass. Final diff:"
+    },
+    {
+      "config": "ink-default",
+      "bug": 5,
+      "hidden_tests_pass": false,
+      "lines": {
+        "right": 6,
+        "of": 12
+      },
+      "parent_lines": {
+        "right": 6,
+        "of": 12
+      },
+      "new_failures": [],
+      "agent_turns": 60,
+      "how_it_ended": "turn limit",
+      "wall_seconds": 219.8,
+      "tool_calls": {
+        "bash": 57,
+        "read": 3
+      },
+      "requests": 61,
+      "prompt_tokens": 3094060,
+      "cached_tokens": 2961664,
+      "completion_tokens": 62277,
+      "reasoning_tokens": 55340,
+      "max_prompt_tokens": 100399,
+      "cost_usd": 0.073038,
+      "providers": {
+        "PrimeIntellect": 60
+      },
+      "diff_stat": "",
+      "last_text": "Now let me look at how the blockquote `text` and `raw` are used downstream:"
+    },
+    {
+      "config": "qwen-default",
+      "bug": 1,
+      "hidden_tests_pass": true,
+      "lines": {
+        "right": 26,
+        "of": 26
+      },
+      "parent_lines": {
+        "right": 9,
+        "of": 26
+      },
+      "new_failures": [],
+      "agent_turns": 46,
+      "how_it_ended": "finished",
+      "wall_seconds": 1897.5,
+      "tool_calls": {
+        "bash": 44,
+        "read": 3,
+        "edit": 1,
+        "write": 2
+      },
+      "requests": 46,
+      "prompt_tokens": 1828839,
+      "cached_tokens": 238272,
+      "completion_tokens": 56710,
+      "reasoning_tokens": 50175,
+      "max_prompt_tokens": 72282,
+      "cost_usd": 0.133849,
+      "providers": {
+        "Chutes": 46
+      },
+      "diff_stat": "src/Tokenizer.ts                                      | 8 +++++++-\n test/specs/new/empty_nested_blockquote_lazy_line.html | 8 ++++++++\n test/specs/new/empty_nested_blockquote_lazy_line.md   | 3 +++\n 3 files changed, 18 insertions(+), 1 deletion(-)",
+      "last_text": "graph) is unchanged.\n\n**Verification**\n- All reported cases now match CommonMark dingus: `>>\\ntext`, `>>>\\ntext`, `> quote\\n>>\\ntext`, `>>\\ntext\\n> more` (the trailing `> more` blockquote is back too), plus variants like `>>\\n\\ntext`, `>>\\n text`, `>>\\n    code`.\n- Added regression spec `test/specs/new/empty_nested_blockquote_lazy_line.{md,html}`.\n- All 1861 spec tests pass (CommonMark/GFM/new/original/redos); unit tests: 191/192, with the single failure (`url email protocols` autolink assertion) pre-existing — it fails identically on the unmodified source.\n- `eslint` and `tsc --noEmit` clean."
+    },
+    {
+      "config": "qwen-default",
+      "bug": 2,
+      "hidden_tests_pass": true,
+      "lines": {
+        "right": 20,
+        "of": 20
+      },
+      "parent_lines": {
+        "right": 17,
+        "of": 20
+      },
+      "new_failures": [],
+      "agent_turns": 42,
+      "how_it_ended": "finished",
+      "wall_seconds": 1352.4,
+      "tool_calls": {
+        "bash": 38,
+        "read": 7,
+        "edit": 1
+      },
+      "requests": 42,
+      "prompt_tokens": 2036815,
+      "cached_tokens": 61504,
+      "completion_tokens": 28337,
+      "reasoning_tokens": 21543,
+      "max_prompt_tokens": 70723,
+      "cost_usd": 0.112698,
+      "providers": {
+        "Chutes": 42
+      },
+      "diff_stat": "src/Tokenizer.ts | 41 +++++++++++++++++++++++++----------------\n 1 file changed, 25 insertions(+), 16 deletions(-)",
+      "last_text": "renders every loose item as `<li><p><input …> text</p>` (checkbox inside the paragraph, matching 15.0.12's behavior), with tight nested items unchanged.\n- A 15-case corpus comparison old-vs-new shows the **only** output changes are checkboxes moving into the `<p>` in lists whose loose state is determined mid-iteration; all other cases (tight lists, loose-by-blank-line-between-items, non-task lists, `gfm:false`, pedantic, blockquotes, links, code) are byte-identical.\n- Full `npm test` passes: 1779/1779 spec tests, 190/190 unit tests, plus UMD/CJS/types/lint (exit 0).\n- `tsc` and `eslint` clean."
+    },
+    {
+      "config": "qwen-default",
+      "bug": 3,
+      "hidden_tests_pass": false,
+      "lines": {
+        "right": 9,
+        "of": 15
+      },
+      "parent_lines": {
+        "right": 6,
+        "of": 15
+      },
+      "new_failures": [
+        "Lexer",
+        "autolink",
+        "autolink email",
+        "inline",
+        "inlineTokens",
+        "url",
+        "url email"
+      ],
+      "agent_turns": 60,
+      "how_it_ended": "turn limit",
+      "wall_seconds": 2742.9,
+      "tool_calls": {
+        "bash": 43,
+        "grep_placeholder": 1,
+        "read": 13,
+        "edit": 6
+      },
+      "requests": 61,
+      "prompt_tokens": 2607101,
+      "cached_tokens": 86784,
+      "completion_tokens": 85946,
+      "reasoning_tokens": 77058,
+      "max_prompt_tokens": 108138,
+      "cost_usd": 0.206063,
+      "providers": {
+        "Chutes": 60
+      },
+      "diff_stat": "src/Renderer.ts  | 7 ++++---\n src/Tokenizer.ts | 2 ++\n 2 files changed, 6 insertions(+), 3 deletions(-)",
+      "last_text": "\n\n"
+    },
+    {
+      "config": "qwen-default",
+      "bug": 4,
+      "hidden_tests_pass": true,
+      "lines": {
+        "right": 5,
+        "of": 5
+      },
+      "parent_lines": {
+        "right": 1,
+        "of": 5
+      },
+      "new_failures": [],
+      "agent_turns": 53,
+      "how_it_ended": "finished",
+      "wall_seconds": 1174.4,
+      "tool_calls": {
+        "bash": 56,
+        "edit": 2,
+        "write": 3
+      },
+      "requests": 53,
+      "prompt_tokens": 1593475,
+      "cached_tokens": 245504,
+      "completion_tokens": 32578,
+      "reasoning_tokens": 25449,
+      "max_prompt_tokens": 50404,
+      "cost_usd": 0.094251,
+      "providers": {
+        "Chutes": 53
+      },
+      "diff_stat": "src/rules.ts                              |  2 +-\n test/specs/new/tilde_before_codespan.html |  6 ++++++\n test/specs/new/tilde_before_codespan.md   | 11 +++++++++++\n 3 files changed, 18 insertions(+), 1 deletion(-)",
+      "last_text": "erification\n\n- Issue repro now outputs exactly the expected `<p>~<code>0.1576</code> to measurement-window-only <code>0.00092</code></p>`\n- All test suites pass: **1755 spec tests** (CommonMark, GFM, original, new, redos) + **188 unit tests**, plus `test:cjs`, `test:umd`, `tsc`, and `eslint`\n- Edge cases verified: `~~struck~~`, `~~`code`~~` → `<del><code>code</code></del>`, `` `~~x~~` `` → `<code>~~x~~</code>`, `~user@example.com` / `~www.example.com` autolinks, lone `~`/`~~`, and `breaks: true` / `gfm: false` modes\n- Added a regression spec: `test/specs/new/tilde_before_codespan.md` / `.html`"
+    },
+    {
+      "config": "qwen-default",
+      "bug": 5,
+      "hidden_tests_pass": true,
+      "lines": {
+        "right": 12,
+        "of": 12
+      },
+      "parent_lines": {
+        "right": 6,
+        "of": 12
+      },
+      "new_failures": [],
+      "agent_turns": 60,
+      "how_it_ended": "turn limit",
+      "wall_seconds": 2857.5,
+      "tool_calls": {
+        "bash": 50,
+        "read": 5,
+        "write": 3,
+        "edit": 5
+      },
+      "requests": 61,
+      "prompt_tokens": 3641339,
+      "cached_tokens": 427968,
+      "completion_tokens": 83860,
+      "reasoning_tokens": 71153,
+      "max_prompt_tokens": 121708,
+      "cost_usd": 0.231816,
+      "providers": {
+        "Chutes": 60
+      },
+      "diff_stat": "src/Tokenizer.ts    |   5 +++\n src/rules.ts        |  33 +++++++++------\n tmp-repro/diff.mjs  | 114 ++++++++++++++++++++++++++++++++++++++++++++++++++++\n tmp-repro/repro.mjs |  18 +++++++++\n 4 files changed, 158 insertions(+), 12 deletions(-)",
+      "last_text": "\n\nThe list token has no `text` field — the original `raw` usage was intentional. Reverting that part:\n\n"
+    },
+    {
+      "config": "ink-minimal",
+      "bug": 1,
+      "hidden_tests_pass": true,
+      "lines": {
+        "right": 26,
+        "of": 26
+      },
+      "parent_lines": {
+        "right": 9,
+        "of": 26
+      },
+      "new_failures": [],
+      "agent_turns": 47,
+      "how_it_ended": "finished",
+      "wall_seconds": 262.7,
+      "tool_calls": {
+        "bash": 45,
+        "read": 1
+      },
+      "requests": 47,
+      "prompt_tokens": 861822,
+      "cached_tokens": 843520,
+      "completion_tokens": 17955,
+      "reasoning_tokens": 12299,
+      "max_prompt_tokens": 31124,
+      "cost_usd": 0.019412,
+      "providers": {
+        "PrimeIntellect": 47
+      },
+      "diff_stat": "src/Tokenizer.ts                                   | 26 ++++++++++++++++++----\n .../new/empty_nested_blockquote_continuation.html  |  5 +++++\n .../new/empty_nested_blockquote_continuation.md    |  2 ++\n ...y_nested_blockquote_continuation_following.html |  8 +++++++\n ...pty_nested_blockquote_continuation_following.md |  3 +++\n 5 files changed, 40 insertions(+), 4 deletions(-)",
+      "last_text": "text\\n> more'` now emit the outer blockquote with the empty nested blockquote, followed by `<p>text</p>` (and `> more` blockquote) — matching the issue's expected behavior. Lazy nested continuations (`> > nested\\nlazy`) still merge correctly.\n- Added spec tests `test/specs/new/empty_nested_blockquote_continuation.{md,html}` and `empty_nested_blockquote_continuation_following.{md,html}`; both pass.\n- Full spec suite and unit tests pass; the only failures (`quadratic_*` timeouts, `url email protocols`) are pre-existing on the unmodified code (confirmed via `git stash`), and appear environmental."
+    },
+    {
+      "config": "ink-minimal",
+      "bug": 2,
+      "hidden_tests_pass": true,
+      "lines": {
+        "right": 20,
+        "of": 20
+      },
+      "parent_lines": {
+        "right": 17,
+        "of": 20
+      },
+      "new_failures": [],
+      "agent_turns": 20,
+      "how_it_ended": "finished",
+      "wall_seconds": 37.8,
+      "tool_calls": {
+        "bash": 18,
+        "read": 1
+      },
+      "requests": 20,
+      "prompt_tokens": 208721,
+      "cached_tokens": 192768,
+      "completion_tokens": 5479,
+      "reasoning_tokens": 2616,
+      "max_prompt_tokens": 18974,
+      "cost_usd": 0.005732,
+      "providers": {
+        "PrimeIntellect": 20
+      },
+      "diff_stat": "src/Tokenizer.ts | 24 ++++++++++++++++--------\n 1 file changed, 16 insertions(+), 8 deletions(-)",
+      "last_text": "t the checkbox emitted as a direct child of `<li>` instead of inside the paragraph (and ordering differed between sibling items).\n\nChanges in `src/Tokenizer.ts`:\n- Split the item-token processing loop into two passes: first block-tokenize all items, then compute whether the list is loose (any item has a `space` token with a multi-line raw), then run the task/checkbox handling with the correct `list.loose` value.\n\nThis makes loose task-list items consistently render `<li><p><input …> text</p>`, matching 15.x behavior. Verified on the repro input; unit tests (190) and spec tests (1779) all pass."
+    },
+    {
+      "config": "ink-minimal",
+      "bug": 3,
+      "hidden_tests_pass": false,
+      "lines": {
+        "right": 5,
+        "of": 15
+      },
+      "parent_lines": {
+        "right": 6,
+        "of": 15
+      },
+      "new_failures": [],
+      "agent_turns": 14,
+      "how_it_ended": "finished",
+      "wall_seconds": 33.7,
+      "tool_calls": {
+        "bash": 13
+      },
+      "requests": 14,
+      "prompt_tokens": 75409,
+      "cached_tokens": 68352,
+      "completion_tokens": 1931,
+      "reasoning_tokens": 488,
+      "max_prompt_tokens": 7845,
+      "cost_usd": 0.002134,
+      "providers": {
+        "PrimeIntellect": 14
+      },
+      "diff_stat": "src/Renderer.ts | 4 ++--\n 1 file changed, 2 insertions(+), 2 deletions(-)",
+      "last_text": "Fixed. In `src/Renderer.ts`, both `link()` and `image()` now escape the cleaned URL with `escapeHtmlEntities(cleanHref, true)` before writing it into the attribute (previously only the `title` was escaped). The anchor text and `alt` text were already escaped, so the output is now internally consistent.\n\nVerified:\n- Repro now emits `href=\"https://example.com/?x=1&amp;lt;2\"` for links and the same for image `src`.\n- Full spec suite: 1793/1793 pass; unit suite: 191/191 pass."
+    },
+    {
+      "config": "ink-minimal",
+      "bug": 4,
+      "hidden_tests_pass": true,
+      "lines": {
+        "right": 5,
+        "of": 5
+      },
+      "parent_lines": {
+        "right": 1,
+        "of": 5
+      },
+      "new_failures": [],
+      "agent_turns": 60,
+      "how_it_ended": "turn limit",
+      "wall_seconds": 292.4,
+      "tool_calls": {
+        "bash": 59
+      },
+      "requests": 60,
+      "prompt_tokens": 1376663,
+      "cached_tokens": 1345536,
+      "completion_tokens": 18256,
+      "reasoning_tokens": 11830,
+      "max_prompt_tokens": 42621,
+      "cost_usd": 0.027994,
+      "providers": {
+        "PrimeIntellect": 60
+      },
+      "diff_stat": "src/rules.ts | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)",
+      "last_text": "All 1753 spec tests and 188 unit tests pass.\n\nFix: `src/rules.ts:478` — the GFM inline text regex's leading character class was `[`~]+`, which greedily merged a tilde with an immediately following backtick run and consumed the backtick as text. It's now `(`+|~+(?!`)|~|[^`~])`, so a tilde run only merges when not followed by a backtick — letting a literal `~` remain literal and the code span parse normally."
+    },
+    {
+      "config": "ink-minimal",
+      "bug": 5,
+      "hidden_tests_pass": true,
+      "lines": {
+        "right": 12,
+        "of": 12
+      },
+      "parent_lines": {
+        "right": 6,
+        "of": 12
+      },
+      "new_failures": [],
+      "agent_turns": 22,
+      "how_it_ended": "finished",
+      "wall_seconds": 50.4,
+      "tool_calls": {
+        "bash": 21
+      },
+      "requests": 22,
+      "prompt_tokens": 266210,
+      "cached_tokens": 252032,
+      "completion_tokens": 9208,
+      "reasoning_tokens": 6642,
+      "max_prompt_tokens": 20638,
+      "cost_usd": 0.007606,
+      "providers": {
+        "PrimeIntellect": 22
+      },
+      "diff_stat": "src/rules.ts | 15 ++++++++++++++-\n 1 file changed, 14 insertions(+), 1 deletion(-)",
+      "last_text": "lockquoteParagraph` built from the same `_paragraph` skeleton but with `list` replaced by `{0,3}(?:[*+-]|\\d{1,9}[.)])[ \\t]+[^ \\t\\n]` — any list marker now interrupts a paragraph inside a blockquote — and made the `blockquote` regex use it instead of the plain `paragraph`.\n\n**Verified:**\n- `> blockquote\\n2. test` now yields sibling `<blockquote>` + `<ol start=\"2\">`.\n- The full example from the issue renders with both blocks as siblings.\n- Unordered lists after blockquotes, and blockquotes followed by blank lines + lists, still parse correctly (as do setext continuations and nested blockquotes)."
+    }
+  ]
+}
